@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "NextWeb.DocumentPlatform.Engine/1.0.0": {
+        "dependencies": {
+          "NextWeb.DocumentPlatform.Domain": "1.0.0"
+        },
+        "runtime": {
+          "NextWeb.DocumentPlatform.Engine.dll": {}
+        }
+      },
+      "NextWeb.DocumentPlatform.Domain/1.0.0": {
+        "runtime": {
+          "NextWeb.DocumentPlatform.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "NextWeb.DocumentPlatform.Engine/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "NextWeb.DocumentPlatform.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

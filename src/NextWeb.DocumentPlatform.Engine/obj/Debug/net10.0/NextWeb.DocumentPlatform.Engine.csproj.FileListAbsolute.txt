@@ -1,0 +1,15 @@
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Engine\bin\Debug\net10.0\NextWeb.DocumentPlatform.Engine.deps.json
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Engine\bin\Debug\net10.0\NextWeb.DocumentPlatform.Engine.dll
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Engine\bin\Debug\net10.0\NextWeb.DocumentPlatform.Engine.pdb
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Engine\bin\Debug\net10.0\NextWeb.DocumentPlatform.Domain.dll
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Engine\bin\Debug\net10.0\NextWeb.DocumentPlatform.Domain.pdb
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Engine\obj\Debug\net10.0\NextWeb.DocumentPlatform.Engine.csproj.AssemblyReference.cache
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Engine\obj\Debug\net10.0\NextWeb.DocumentPlatform.Engine.GeneratedMSBuildEditorConfig.editorconfig
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Engine\obj\Debug\net10.0\NextWeb.DocumentPlatform.Engine.AssemblyInfoInputs.cache
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Engine\obj\Debug\net10.0\NextWeb.DocumentPlatform.Engine.AssemblyInfo.cs
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Engine\obj\Debug\net10.0\NextWeb.DocumentPlatform.Engine.csproj.CoreCompileInputs.cache
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Engine\obj\Debug\net10.0\NextWeb..4688C2B0.Up2Date
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Engine\obj\Debug\net10.0\NextWeb.DocumentPlatform.Engine.dll
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Engine\obj\Debug\net10.0\refint\NextWeb.DocumentPlatform.Engine.dll
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Engine\obj\Debug\net10.0\NextWeb.DocumentPlatform.Engine.pdb
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Engine\obj\Debug\net10.0\ref\NextWeb.DocumentPlatform.Engine.dll

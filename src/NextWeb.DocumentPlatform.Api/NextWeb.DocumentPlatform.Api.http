@@ -1,0 +1,6 @@
+@NextWeb.DocumentPlatform.Api_HostAddress = http://localhost:5029
+
+GET {{NextWeb.DocumentPlatform.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

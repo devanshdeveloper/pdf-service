@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/NextWeb.DocumentPlatform.Api/NextWeb.DocumentPlatform.Api.csproj" />
+    <Project Path="src/NextWeb.DocumentPlatform.Application/NextWeb.DocumentPlatform.Application.csproj" />
+    <Project Path="src/NextWeb.DocumentPlatform.Domain/NextWeb.DocumentPlatform.Domain.csproj" />
+    <Project Path="src/NextWeb.DocumentPlatform.Engine/NextWeb.DocumentPlatform.Engine.csproj" />
+    <Project Path="src/NextWeb.DocumentPlatform.Infrastructure/NextWeb.DocumentPlatform.Infrastructure.csproj" />
+    <Project Path="src/NextWeb.DocumentPlatform.Renderers/NextWeb.DocumentPlatform.Renderers.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/NextWeb.DocumentPlatform.IntegrationTests/NextWeb.DocumentPlatform.IntegrationTests.csproj" />
+    <Project Path="tests/NextWeb.DocumentPlatform.UnitTests/NextWeb.DocumentPlatform.UnitTests.csproj" />
+  </Folder>
+</Solution>

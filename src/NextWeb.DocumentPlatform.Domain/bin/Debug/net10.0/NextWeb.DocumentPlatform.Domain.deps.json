@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "NextWeb.DocumentPlatform.Domain/1.0.0": {
+        "runtime": {
+          "NextWeb.DocumentPlatform.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "NextWeb.DocumentPlatform.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

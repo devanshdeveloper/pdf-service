@@ -1,0 +1,8 @@
+{
+  "NextWeb.DocumentPlatform.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Api",
+  "NextWeb.DocumentPlatform.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application",
+  "NextWeb.DocumentPlatform.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain",
+  "NextWeb.DocumentPlatform.Engine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine",
+  "NextWeb.DocumentPlatform.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure",
+  "NextWeb.DocumentPlatform.Renderers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers"
+}
