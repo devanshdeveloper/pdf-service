@@ -36,3 +36,4 @@ C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\De
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\refint\NextWeb.DocumentPlatform.Renderers.dll
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb.DocumentPlatform.Renderers.pdb
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\ref\NextWeb.DocumentPlatform.Renderers.dll
+c:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb.DocumentPlatform.Renderers.sourcelink.json

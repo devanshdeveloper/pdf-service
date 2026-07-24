@@ -15,3 +15,4 @@ C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Application\obj\
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Application\obj\Debug\net10.0\refint\NextWeb.DocumentPlatform.Application.dll
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Application\obj\Debug\net10.0\NextWeb.DocumentPlatform.Application.pdb
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Application\obj\Debug\net10.0\ref\NextWeb.DocumentPlatform.Application.dll
+c:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Application\obj\Debug\net10.0\NextWeb.DocumentPlatform.Application.sourcelink.json

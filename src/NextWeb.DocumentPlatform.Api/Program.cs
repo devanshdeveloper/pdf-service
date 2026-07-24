@@ -24,7 +24,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Rende
 // Platform Services
 builder.Services.AddSingleton<IDocumentRegistry, DocumentRegistry>();
 builder.Services.AddSingleton<IDocumentRendererFactory, DocumentRendererFactory>();
-builder.Services.AddTransient<IErpForwardingService, MockErpForwardingService>();
+builder.Services.AddHttpClient<IErpForwardingService, ErpForwardingService>();
 
 // Renderers
 builder.Services.AddTransient<IDocumentRenderer, VoucherStandardRenderer>();

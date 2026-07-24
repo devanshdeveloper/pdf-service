@@ -9,3 +9,4 @@ C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Domain\obj\Debug
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Domain\obj\Debug\net10.0\refint\NextWeb.DocumentPlatform.Domain.dll
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Domain\obj\Debug\net10.0\NextWeb.DocumentPlatform.Domain.pdb
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Domain\obj\Debug\net10.0\ref\NextWeb.DocumentPlatform.Domain.dll
+c:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Domain\obj\Debug\net10.0\NextWeb.DocumentPlatform.Domain.sourcelink.json

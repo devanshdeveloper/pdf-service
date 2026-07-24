@@ -38,3 +38,4 @@ C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Infrastructure\o
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Infrastructure\obj\Debug\net10.0\refint\NextWeb.DocumentPlatform.Infrastructure.dll
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Infrastructure\obj\Debug\net10.0\NextWeb.DocumentPlatform.Infrastructure.pdb
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Infrastructure\obj\Debug\net10.0\ref\NextWeb.DocumentPlatform.Infrastructure.dll
+c:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Infrastructure\obj\Debug\net10.0\NextWeb.DocumentPlatform.Infrastructure.sourcelink.json

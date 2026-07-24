@@ -15,4 +15,11 @@
     <ProjectReference Include="..\NextWeb.DocumentPlatform.Infrastructure\NextWeb.DocumentPlatform.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\..\context\QUEST PDF.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>context\QUEST PDF.json</Link>
+    </Content>
+  </ItemGroup>
+
 </Project>
