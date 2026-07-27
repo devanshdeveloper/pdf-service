@@ -1,8 +1,3 @@
-C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb.DocumentPlatform.Renderers.csproj.AssemblyReference.cache
-C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb.DocumentPlatform.Renderers.GeneratedMSBuildEditorConfig.editorconfig
-C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb.DocumentPlatform.Renderers.AssemblyInfoInputs.cache
-C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb.DocumentPlatform.Renderers.AssemblyInfo.cs
-C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb.DocumentPlatform.Renderers.csproj.CoreCompileInputs.cache
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\bin\Debug\net10.0\LatoFont\Lato-Black.ttf
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\bin\Debug\net10.0\LatoFont\Lato-BlackItalic.ttf
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\bin\Debug\net10.0\LatoFont\Lato-Bold.ttf
@@ -31,9 +26,14 @@ C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\bin\De
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\bin\Debug\net10.0\NextWeb.DocumentPlatform.Engine.pdb
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\bin\Debug\net10.0\NextWeb.DocumentPlatform.Domain.pdb
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\bin\Debug\net10.0\NextWeb.DocumentPlatform.Application.pdb
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb.DocumentPlatform.Renderers.csproj.AssemblyReference.cache
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb.DocumentPlatform.Renderers.GeneratedMSBuildEditorConfig.editorconfig
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb.DocumentPlatform.Renderers.AssemblyInfoInputs.cache
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb.DocumentPlatform.Renderers.AssemblyInfo.cs
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb.DocumentPlatform.Renderers.csproj.CoreCompileInputs.cache
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb.DocumentPlatform.Renderers.sourcelink.json
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb..1501DC79.Up2Date
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb.DocumentPlatform.Renderers.dll
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\refint\NextWeb.DocumentPlatform.Renderers.dll
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb.DocumentPlatform.Renderers.pdb
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\ref\NextWeb.DocumentPlatform.Renderers.dll
-c:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Renderers\obj\Debug\net10.0\NextWeb.DocumentPlatform.Renderers.sourcelink.json

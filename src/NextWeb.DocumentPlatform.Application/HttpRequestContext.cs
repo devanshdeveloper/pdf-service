@@ -5,7 +5,7 @@ namespace NextWeb.DocumentPlatform.Application;
 public class HttpRequestContext
 {
     public string RouteDocumentType { get; set; } = string.Empty;
-    public string RouteTemplateName { get; set; } = string.Empty;
+    public string RouteDocumentId { get; set; } = string.Empty;
     
     // Auth and forwarding details
     public Dictionary<string, string> Headers { get; set; } = new();

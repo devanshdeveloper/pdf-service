@@ -18,6 +18,19 @@ QuestPDF.Settings.License = LicenseType.Community;
 // Add services to the container.
 builder.Services.AddControllers();
 
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              // Expose Content-Disposition so frontend can read filename if needed
+              .WithExposedHeaders("Content-Disposition");
+    });
+});
+
 // MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RenderDocumentCommand).Assembly));
 
@@ -28,7 +41,6 @@ builder.Services.AddHttpClient<IErpForwardingService, ErpForwardingService>();
 
 // Renderers
 builder.Services.AddTransient<IDocumentRenderer, VoucherStandardRenderer>();
-builder.Services.AddTransient<IDocumentRenderer, GstStandardRenderer>();
 
 // Health Checks
 builder.Services.AddHealthChecks();
@@ -42,6 +54,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 app.UseAuthorization();
 app.MapControllers();
 

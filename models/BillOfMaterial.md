@@ -15,13 +15,6 @@ const billOfMaterialSchema = new mongoose.Schema(
             required: true,
             minLength: 2,
         },
-        business: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Business",
-            resolveBy: "name",
-            required: true,
-            name: "Business",
-        },
         description: {
             type: String,
             name: "Bill of Material Description",

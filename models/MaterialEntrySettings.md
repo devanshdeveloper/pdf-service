@@ -25,6 +25,14 @@ const MaterialEntrySettingSchema = new mongoose.Schema(
             required: true,
             name: "Template",
         },
+                pdf_template: {
+            type: String,
+            trim: true,
+            maxlength: 100,
+            required: true,
+            name: "PDF Template",
+            default: "Standard"
+        },
         defaults: {
             terms: {
                 type: String,
@@ -66,11 +74,6 @@ const MaterialEntrySettingSchema = new mongoose.Schema(
             ref: "User", resolveBy: "username",
             required: true,
             name: "User",
-        },
-        business: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Business",
-            name: "Business",
         },
         isDeleted: {
             type: Boolean,

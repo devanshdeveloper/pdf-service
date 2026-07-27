@@ -7,7 +7,7 @@ using NextWeb.DocumentPlatform.Application.Commands;
 namespace NextWeb.DocumentPlatform.Api.Controllers;
 
 [ApiController]
-[Route("api/v1/render")]
+[Route("render")]
 public class RenderController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -17,13 +17,13 @@ public class RenderController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("voucher/{type}/{template}")]
-    public async Task<IActionResult> RenderVoucher([FromRoute] string type, [FromRoute] string template)
+    [HttpGet("{model}/{id}")]
+    public async Task<IActionResult> RenderDocument([FromRoute] string model, [FromRoute] string id)
     {
         var context = new HttpRequestContext
         {
-            RouteDocumentType = $"voucher/{type}",
-            RouteTemplateName = template,
+            RouteDocumentType = model,
+            RouteDocumentId = id,
             QueryString = Request.QueryString.Value ?? string.Empty
         };
 
@@ -37,7 +37,7 @@ public class RenderController : ControllerBase
         try
         {
             var pdfBytes = await _mediator.Send(command);
-            return File(pdfBytes, "application/pdf", $"{type}-{template}.pdf");
+            return File(pdfBytes, "application/pdf", $"{model}-{id}.pdf");
         }
         catch (System.Exception ex)
         {

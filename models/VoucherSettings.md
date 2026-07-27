@@ -45,6 +45,14 @@ const VoucherSettingsSchema = new mongoose.Schema(
             required: true,
             name: "Template",
         },
+                pdf_template: {
+            type: String,
+            trim: true,
+            maxlength: 100,
+            required: true,
+            name: "PDF Template",
+            default: "Standard"
+        },
         prefix: {
             type: String,
             name: "Prefix"

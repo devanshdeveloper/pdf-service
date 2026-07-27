@@ -10,9 +10,9 @@ C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Application\obj\
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Application\obj\Debug\net10.0\NextWeb.DocumentPlatform.Application.AssemblyInfoInputs.cache
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Application\obj\Debug\net10.0\NextWeb.DocumentPlatform.Application.AssemblyInfo.cs
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Application\obj\Debug\net10.0\NextWeb.DocumentPlatform.Application.csproj.CoreCompileInputs.cache
+C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Application\obj\Debug\net10.0\NextWeb.DocumentPlatform.Application.sourcelink.json
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Application\obj\Debug\net10.0\NextWeb..114E82ED.Up2Date
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Application\obj\Debug\net10.0\NextWeb.DocumentPlatform.Application.dll
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Application\obj\Debug\net10.0\refint\NextWeb.DocumentPlatform.Application.dll
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Application\obj\Debug\net10.0\NextWeb.DocumentPlatform.Application.pdb
 C:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Application\obj\Debug\net10.0\ref\NextWeb.DocumentPlatform.Application.dll
-c:\code\next-web-works\pdf-service\src\NextWeb.DocumentPlatform.Application\obj\Debug\net10.0\NextWeb.DocumentPlatform.Application.sourcelink.json

@@ -13,7 +13,7 @@ public class VoucherDataModel
     public BusinessDto? Business { get; set; }
 
     [JsonPropertyName("settings")]
-    public SettingsDto? Settings { get; set; }
+    public VoucherSettingsDto? Settings { get; set; }
 
     [JsonPropertyName("taxSummary")]
     public List<TaxSummaryDto> TaxSummary { get; set; } = new();
@@ -23,6 +23,8 @@ public class DocumentDto
 {
     [JsonPropertyName("_id")]
     public string Id { get; set; } = string.Empty;
+
+    
 
     [JsonPropertyName("number")]
     public string Number { get; set; } = string.Empty;
@@ -50,6 +52,7 @@ public class DocumentDto
 
     [JsonPropertyName("deliveryNote")]
     public string DeliveryNote { get; set; } = string.Empty;
+
 
     [JsonPropertyName("deliveryNoteDate")]
     public DateTime? DeliveryNoteDate { get; set; }
@@ -157,13 +160,37 @@ public class BusinessDto
     public AddressDto? Address { get; set; }
 }
 
-public class SettingsDto
+public class VoucherSettingsDto
 {
     [JsonPropertyName("_id")]
     public string Id { get; set; } = string.Empty;
 
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
+
+    [JsonPropertyName("logo")]
+    public string Logo { get; set; } = string.Empty;
+
     [JsonPropertyName("template")]
     public string Template { get; set; } = string.Empty;
+
+    [JsonPropertyName("pdf_template")]
+    public string PdfTemplate { get; set; } = "Standard";
+
+    [JsonPropertyName("prefix")]
+    public string Prefix { get; set; } = string.Empty;
+
+    [JsonPropertyName("counter")]
+    public int Counter { get; set; }
+
+    [JsonPropertyName("type")]
+    public string Type { get; set; } = string.Empty;
+
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = string.Empty;
+
+    [JsonPropertyName("defaultCurrency")]
+    public string DefaultCurrency { get; set; } = string.Empty;
 
     [JsonPropertyName("defaults")]
     public DefaultsDto? Defaults { get; set; }
@@ -173,6 +200,9 @@ public class DefaultsDto
 {
     [JsonPropertyName("terms")]
     public string Terms { get; set; } = string.Empty;
+
+    [JsonPropertyName("notes")]
+    public string Notes { get; set; } = string.Empty;
 }
 
 public class PartyDto

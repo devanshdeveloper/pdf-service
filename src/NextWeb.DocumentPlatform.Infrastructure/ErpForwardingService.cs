@@ -10,34 +10,27 @@ namespace NextWeb.DocumentPlatform.Infrastructure;
 
 public class ErpForwardingService : IErpForwardingService
 {
+    private readonly string _baseUpstreamUrl;
     private readonly HttpClient _httpClient;
-    private readonly IConfiguration _configuration;
 
     public ErpForwardingService(HttpClient httpClient, IConfiguration configuration)
     {
         _httpClient = httpClient;
-        _configuration = configuration;
+        _baseUpstreamUrl = configuration["DocumentPlatform:UpstreamApi:BaseUrl"] ?? throw new ArgumentException("BaseUrl is not configured.");
     }
 
     public async Task<string> GetDocumentDataAsync(HttpRequestContext requestContext, CancellationToken cancellationToken)
     {
-        var baseUrl = _configuration["DocumentPlatform:UpstreamApi:BaseUrl"];
-        if (string.IsNullOrEmpty(baseUrl))
-        {
-            throw new Exception("Upstream API BaseUrl is not configured.");
-        }
+        var model = requestContext.RouteDocumentType;
+        var id = requestContext.RouteDocumentId;
 
-        // Parse id from query string e.g. "?id=123"
-        var queryDictionary = System.Web.HttpUtility.ParseQueryString(requestContext.QueryString);
-        var id = queryDictionary["id"];
-
-        if (string.IsNullOrEmpty(id))
+        if (string.IsNullOrEmpty(model) || string.IsNullOrEmpty(id))
         {
-            throw new Exception("Missing 'id' parameter in query string.");
+            throw new Exception("Missing 'model' or 'id' route parameters.");
         }
 
         // Construct target URL
-        var targetUrl = $"{baseUrl.TrimEnd('/')}/api/voucher/{id}/print";
+        var targetUrl = $"{_baseUpstreamUrl.TrimEnd('/')}/api/{model}/{id}/print";
         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, targetUrl);
 
         // Forward headers

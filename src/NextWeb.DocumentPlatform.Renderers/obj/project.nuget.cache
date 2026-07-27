@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "CjvzpVvvxM4=",
+  "dgSpecHash": "asnexLoXTcE=",
   "success": true,
-  "projectFilePath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\NextWeb.DocumentPlatform.Renderers.csproj",
+  "projectFilePath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\NextWeb.DocumentPlatform.Renderers.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\devan\\.nuget\\packages\\mediatr\\14.2.0\\mediatr.14.2.0.nupkg.sha512",
     "C:\\Users\\devan\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
