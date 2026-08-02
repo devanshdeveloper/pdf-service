@@ -372,8 +372,8 @@ public class TaxDto
     [JsonPropertyName("value")]
     public decimal Value { get; set; }
 
-    [JsonPropertyName("taxCategory")]
-    public string TaxCategory { get; set; } = string.Empty;
+    [JsonPropertyName("taxType")]
+    public string TaxType { get; set; } = string.Empty;
 
     [JsonPropertyName("amount")]
     public decimal Amount { get; set; }
