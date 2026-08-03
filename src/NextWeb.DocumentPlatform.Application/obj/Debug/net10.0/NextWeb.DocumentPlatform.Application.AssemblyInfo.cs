@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NextWeb.DocumentPlatform.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+afe0a45db686ab9082c7593e0d1ae768bc578805")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7a13a0e9edf1084814ec49140d5d5a63b671ec8c")]
 [assembly: System.Reflection.AssemblyProductAttribute("NextWeb.DocumentPlatform.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NextWeb.DocumentPlatform.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

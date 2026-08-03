@@ -29,8 +29,9 @@ public class ErpForwardingService : IErpForwardingService
             throw new Exception("Missing 'model' or 'id' route parameters.");
         }
 
-        // Construct target URL
-        var targetUrl = $"{_baseUpstreamUrl.TrimEnd('/')}/api/{model}/{id}/print";
+        // Construct target URL — upstream ERP routes use kebab-case (e.g. material-entry), not PascalCase.
+        var upstreamModel = UpstreamApiRouteResolver.Resolve(model);
+        var targetUrl = $"{_baseUpstreamUrl.TrimEnd('/')}/api/{upstreamModel}/{id}/print";
         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, targetUrl);
 
         // Forward headers

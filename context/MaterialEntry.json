@@ -1,0 +1,286 @@
+{
+    "errors": [],
+    "success": true,
+    "data": {
+      "document": {
+        "_id": "6a702d1f71e1f079f2ac90b3",
+        "number": "DC-1",
+        "date": "2026-08-03T05:54:34.968Z",
+        "location": {
+          "_id": "6a6de0cd59b3315a69f6b659",
+          "name": "Ram Offset",
+          "business": "6a679baab34e60bbcaa13869",
+          "user": "6a67984e832bbd4b741cc108",
+          "isDeleted": false,
+          "createdAt": "2026-08-01T12:04:29.077Z",
+          "updatedAt": "2026-08-01T12:04:29.077Z"
+        },
+        "products": [
+          {
+            "product": {
+              "_id": "6a6ec24559b3315a69f6d056",
+              "images": [],
+              "name": "LABLE KALASH GANGA",
+              "hsn": "9969",
+              "unit": "6a6deed17be048f343e2027c",
+              "featured": false,
+              "categories": [
+                "6a6a32209e84121ebd42b992"
+              ],
+              "productType": "Goods",
+              "taxes": [
+                {
+                  "taxId": "6a6ebcf606c40986ed133d45",
+                  "name": "GST",
+                  "type": "percentage",
+                  "value": 18,
+                  "_id": "6a6fb661ecd82d5f99804d55"
+                }
+              ],
+              "fields": [
+                {
+                  "label": "Size",
+                  "value": "",
+                  "_id": "6a6ec24559b3315a69f6d058"
+                },
+                {
+                  "label": "Step Size",
+                  "value": "",
+                  "_id": "6a6ec24559b3315a69f6d059"
+                },
+                {
+                  "label": "GSM",
+                  "value": "",
+                  "_id": "6a6ec24559b3315a69f6d05a"
+                },
+                {
+                  "label": "Color",
+                  "value": "",
+                  "_id": "6a6ec24559b3315a69f6d05b"
+                },
+                {
+                  "label": "Coating",
+                  "value": "",
+                  "_id": "6a6ec24559b3315a69f6d05c"
+                }
+              ],
+              "discountType": "fixed",
+              "hidden": false,
+              "status": "active",
+              "business": "6a679baab34e60bbcaa13869",
+              "user": "6a67984e832bbd4b741cc108",
+              "isDeleted": false,
+              "prices": [],
+              "variants": [],
+              "createdAt": "2026-08-02T04:06:29.509Z",
+              "updatedAt": "2026-08-02T21:28:01.613Z",
+              "slug": "lable-kalash-ganga"
+            },
+            "name": "LABLE KALASH GANGA",
+            "quantity": 1,
+            "unit": {
+              "_id": "6a6deed17be048f343e2027c",
+              "name": "Number",
+              "value": "nos",
+              "status": "active",
+              "user": "6a67984e832bbd4b741cc108",
+              "business": "6a679baab34e60bbcaa13869",
+              "isPredefined": false,
+              "conversionFactor": 1,
+              "isDeleted": false,
+              "createdAt": "2026-08-01T13:04:17.077Z",
+              "updatedAt": "2026-08-01T13:06:46.173Z"
+            },
+            "_id": "6a6ec24559b3315a69f6d056"
+          },
+          {
+            "product": {
+              "_id": "6a6ec24559b3315a69f6d04f",
+              "images": [],
+              "name": "LABLE EVER FRESH",
+              "hsn": "9969",
+              "unit": "6a6deed17be048f343e2027c",
+              "featured": false,
+              "categories": [
+                "6a6a32209e84121ebd42b992"
+              ],
+              "productType": "Goods",
+              "taxes": [
+                {
+                  "taxId": "6a6ebcf606c40986ed133d45",
+                  "name": "GST",
+                  "type": "percentage",
+                  "value": 18,
+                  "_id": "6a6f95e2909cd955d8122d93"
+                }
+              ],
+              "fields": [
+                {
+                  "label": "Size",
+                  "value": "",
+                  "_id": "6a6ec24559b3315a69f6d051"
+                },
+                {
+                  "label": "Step Size",
+                  "value": "",
+                  "_id": "6a6ec24559b3315a69f6d052"
+                },
+                {
+                  "label": "GSM",
+                  "value": "",
+                  "_id": "6a6ec24559b3315a69f6d053"
+                },
+                {
+                  "label": "Color",
+                  "value": "",
+                  "_id": "6a6ec24559b3315a69f6d054"
+                },
+                {
+                  "label": "Coating",
+                  "value": "",
+                  "_id": "6a6ec24559b3315a69f6d055"
+                }
+              ],
+              "discountType": "fixed",
+              "hidden": false,
+              "status": "active",
+              "business": "6a679baab34e60bbcaa13869",
+              "user": "6a67984e832bbd4b741cc108",
+              "isDeleted": false,
+              "prices": [],
+              "variants": [],
+              "createdAt": "2026-08-02T04:06:29.509Z",
+              "updatedAt": "2026-08-02T19:09:22.198Z",
+              "slug": "lable-ever-fresh"
+            },
+            "name": "LABLE EVER FRESH",
+            "quantity": 1,
+            "unit": {
+              "_id": "6a6deed17be048f343e2027c",
+              "name": "Number",
+              "value": "nos",
+              "status": "active",
+              "user": "6a67984e832bbd4b741cc108",
+              "business": "6a679baab34e60bbcaa13869",
+              "isPredefined": false,
+              "conversionFactor": 1,
+              "isDeleted": false,
+              "createdAt": "2026-08-01T13:04:17.077Z",
+              "updatedAt": "2026-08-01T13:06:46.173Z"
+            },
+            "_id": "6a6ec24559b3315a69f6d04f"
+          }
+        ],
+        "signature": {
+          "_id": "6a67d581541fb1e1245d29c4",
+          "name": "My Signature",
+          "url": "https://next-web-erps-acls.s3.eu-north-1.amazonaws.com/uploads/6a67984e832bbd4b741cc108/signatures/signature.png",
+          "status": "active",
+          "user": "6a67984e832bbd4b741cc108",
+          "isDeleted": false,
+          "createdAt": "2026-07-27T22:02:41.938Z",
+          "updatedAt": "2026-07-27T22:02:41.938Z"
+        },
+        "status": "Pending",
+        "type": "Delivery Challan",
+        "business": {
+          "_id": "6a679baab34e60bbcaa13869",
+          "name": "SARRAF INDUSTRIES",
+          "description": "MANUFACTURER OF SAFETY MATCHES",
+          "email": "sarrafindustries1985@gmail.com",
+          "phone": "+91 9443152578",
+          "phoneNumbers": [
+            "+91 9791363749",
+            "+91 7000782675"
+          ],
+          "website": "www.aadisarrafinternational.com",
+          "address": {
+            "streetAddress": "Sidco Industrial Estate",
+            "apartment": "Plot no. 61",
+            "city": "Kovilpati",
+            "state": "Tamil Nadu",
+            "stateCode": "33",
+            "postalCode": "628501",
+            "country": "India",
+            "createdAt": "2026-07-27T17:55:54.721Z",
+            "updatedAt": "2026-07-27T17:55:54.721Z"
+          },
+          "logo": "https://next-web-erps-acls.s3.eu-north-1.amazonaws.com/uploads/6a67984e832bbd4b741cc108/business/logo/savera-matches.jpg",
+          "gst": "33ABRPJ6963H1Z8",
+          "status": "active",
+          "user": "6a67984e832bbd4b741cc108",
+          "isDeleted": false,
+          "baseCurrency": "INR",
+          "createdAt": "2026-07-27T17:55:54.721Z",
+          "updatedAt": "2026-07-27T17:55:54.721Z"
+        },
+        "user": "6a67984e832bbd4b741cc108",
+        "isDeleted": false,
+        "createdAt": "2026-08-03T05:54:39.530Z",
+        "updatedAt": "2026-08-03T06:02:47.534Z"
+      },
+      "business": {
+        "_id": "6a679baab34e60bbcaa13869",
+        "name": "SARRAF INDUSTRIES",
+        "description": "MANUFACTURER OF SAFETY MATCHES",
+        "email": "sarrafindustries1985@gmail.com",
+        "phone": "+91 9443152578",
+        "phoneNumbers": [
+          "+91 9791363749",
+          "+91 7000782675"
+        ],
+        "website": "www.aadisarrafinternational.com",
+        "address": {
+          "streetAddress": "Sidco Industrial Estate",
+          "apartment": "Plot no. 61",
+          "city": "Kovilpati",
+          "state": "Tamil Nadu",
+          "stateCode": "33",
+          "postalCode": "628501",
+          "country": "India",
+          "createdAt": "2026-07-27T17:55:54.721Z",
+          "updatedAt": "2026-07-27T17:55:54.721Z"
+        },
+        "logo": "https://next-web-erps-acls.s3.eu-north-1.amazonaws.com/uploads/6a67984e832bbd4b741cc108/business/logo/savera-matches.jpg",
+        "gst": "33ABRPJ6963H1Z8",
+        "status": "active",
+        "user": "6a67984e832bbd4b741cc108",
+        "isDeleted": false,
+        "baseCurrency": "INR",
+        "createdAt": "2026-07-27T17:55:54.721Z",
+        "updatedAt": "2026-07-27T17:55:54.721Z"
+      },
+      "location": {
+        "_id": "6a6de0cd59b3315a69f6b659",
+        "name": "Ram Offset",
+        "business": "6a679baab34e60bbcaa13869",
+        "user": "6a67984e832bbd4b741cc108",
+        "isDeleted": false,
+        "createdAt": "2026-08-01T12:04:29.077Z",
+        "updatedAt": "2026-08-01T12:04:29.077Z"
+      },
+      "settings": {
+        "_id": "6a702d1671e1f079f2ac9092",
+        "name": "Default Delivery Challan Settings",
+        "logo": "https://next-web-erps-acls.s3.eu-north-1.amazonaws.com/uploads/6a67984e832bbd4b741cc108/business/logo/savera-matches.jpg",
+        "template": "{{prefix}}-{{counter}}",
+        "pdf_template": "Standard",
+        "defaults": {
+          "terms": "",
+          "notes": "",
+          "signature": "6a67d581541fb1e1245d29c4"
+        },
+        "prefix": "DC",
+        "counter": 1,
+        "type": "Delivery Challan",
+        "status": "active",
+        "user": "6a67984e832bbd4b741cc108",
+        "business": "6a679baab34e60bbcaa13869",
+        "isDeleted": false,
+        "createdAt": "2026-08-03T05:54:30.465Z",
+        "updatedAt": "2026-08-03T05:54:30.465Z"
+      }
+    },
+    "message": "Retrieved successfully for print",
+    "pagination": {}
+  }

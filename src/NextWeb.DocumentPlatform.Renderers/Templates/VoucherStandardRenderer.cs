@@ -15,7 +15,13 @@ namespace NextWeb.DocumentPlatform.Renderers.Templates;
 
 public class VoucherStandardRenderer : IDocumentRenderer
 {
-    public string DocumentType => "voucher";
+    private const string AccentColor = "#4338CA";
+    private const string AccentLight = "#EEF2FF";
+    private const string SurfaceMuted = "#F3F4F6";
+    private const string TextMuted = "#6B7280";
+    private const string BorderLight = "#E5E7EB";
+
+    public string DocumentType => "Voucher";
     public string TemplateName => "Standard";
 
     public Task<byte[]> RenderAsync(string jsonPayload, DocumentConfiguration config, CancellationToken cancellationToken)
@@ -32,31 +38,29 @@ public class VoucherStandardRenderer : IDocumentRenderer
         var doc = model.Document;
         var biz = model.Business;
         var settings = model.Settings;
-        var taxSummary = model.TaxSummary;
-
-        // Consignee fallback: if consignee is not set, fallback to party.
-        var consignee = doc.Consignee ?? doc.Party;
+        var currency = ResolveCurrency(doc, settings, biz);
 
         var document = Document.Create(container =>
         {
             container.Page(page =>
             {
                 page.Size(PageSizes.A4);
-                page.Margin(0.5f, Unit.Centimetre);
+                page.Margin(1.2f, Unit.Centimetre);
                 page.PageColor(Colors.White);
-                page.DefaultTextStyle(x => x.FontSize(9).FontFamily("Arial"));
+                page.DefaultTextStyle(x => x.FontSize(9).FontFamily("Arial").FontColor(Colors.Black));
 
-                page.Header().Element(c => ComposeHeader(c, doc, biz));
-                
-                page.Content().PaddingVertical(0.5f, Unit.Centimetre).Column(col =>
+                page.Content().Column(col =>
                 {
-                    string currency = !string.IsNullOrWhiteSpace(settings?.DefaultCurrency) ? settings.DefaultCurrency : "INR";
-
-                    ComposePartyBlock(col, doc, biz, consignee);
-                    ComposeMetaBlock(col, doc);
-                    col.Item().Element(c => ComposeLineItems(c, doc, currency));
-                    col.Item().Element(c => ComposeTaxSummary(c, doc, taxSummary, currency));
-                    col.Item().Element(c => ComposeFooter(c, doc, biz, settings));
+                    col.Item().Element(c => ComposeHeader(c, doc, biz, settings));
+                    col.Item().PaddingTop(16).Element(c => ComposeParties(c, doc));
+                    col.Item().PaddingTop(12).Element(c => ComposeOptionalMeta(c, doc));
+                    col.Item().PaddingTop(16).Element(c => ComposeLineItems(c, doc, currency));
+                    col.Item().PaddingTop(12).Element(c => ComposeTotalsBlock(c, doc, currency));
+                    if (ShouldShowTaxes(doc))
+                    {
+                        col.Item().PaddingTop(16).Element(c => ComposeTaxSummary(c, doc, currency));
+                    }
+                    col.Item().PaddingTop(16).Element(c => ComposeFooter(c, doc, biz, settings));
                 });
             });
         });
@@ -64,7 +68,21 @@ public class VoucherStandardRenderer : IDocumentRenderer
         return Task.FromResult(document.GeneratePdf());
     }
 
-    private string FormatCurrency(decimal amount, string currencyCode = "INR")
+    private static bool ShouldShowTaxes(DocumentDto doc) => VoucherTypes.ShouldShowTaxes(doc.Type);
+
+    private static bool ShouldShowShipping(DocumentDto doc) => VoucherTypes.ShouldShowShipping(doc.Type);
+
+    private static bool ShouldShowPaymentStatus(DocumentDto doc) => VoucherTypes.ShouldShowPaymentStatus(doc.Type);
+
+    private static string ResolveCurrency(DocumentDto doc, VoucherSettingsDto? settings, BusinessDto biz)
+    {
+        if (!string.IsNullOrWhiteSpace(doc.Currency)) return doc.Currency;
+        if (!string.IsNullOrWhiteSpace(settings?.DefaultCurrency)) return settings.DefaultCurrency;
+        if (!string.IsNullOrWhiteSpace(biz.BaseCurrency)) return biz.BaseCurrency;
+        return "INR";
+    }
+
+    private static string FormatCurrency(decimal amount, string currencyCode)
     {
         string symbol = currencyCode switch
         {
@@ -77,20 +95,238 @@ public class VoucherStandardRenderer : IDocumentRenderer
         return $"{symbol}{amount:N2}";
     }
 
-    private void ComposeHeader(IContainer container, DocumentDto doc, BusinessDto biz)
+    private static string GetPartyName(PartyDto? party)
     {
-        container.Row(row =>
+        if (party == null) return string.Empty;
+        if (!string.IsNullOrWhiteSpace(party.BusinessName)) return party.BusinessName;
+        return $"{party.FirstName} {party.LastName}".Trim();
+    }
+
+    private static string FormatAddressLines(AddressDto? address)
+    {
+        if (address == null) return string.Empty;
+        if (!string.IsNullOrWhiteSpace(address.FullAddress)) return address.FullAddress;
+
+        var lines = new List<string>();
+        var street = $"{address.StreetAddress} {address.Apartment}".Trim();
+        if (!string.IsNullOrWhiteSpace(street)) lines.Add(street);
+
+        var cityLine = $"{address.City}, {address.State} {address.PostalCode}".Trim(',', ' ');
+        if (!string.IsNullOrWhiteSpace(cityLine)) lines.Add(cityLine);
+        if (!string.IsNullOrWhiteSpace(address.Country)) lines.Add(address.Country);
+
+        return string.Join("\n", lines);
+    }
+
+    private static string GetNotes(DocumentDto doc, VoucherSettingsDto? settings)
+    {
+        if (!string.IsNullOrWhiteSpace(doc.Notes)) return doc.Notes!;
+        return settings?.Defaults?.Notes ?? string.Empty;
+    }
+
+    private static string GetTerms(DocumentDto doc, VoucherSettingsDto? settings)
+    {
+        if (!string.IsNullOrWhiteSpace(doc.Terms)) return doc.Terms!;
+        return settings?.Defaults?.Terms ?? string.Empty;
+    }
+
+    private static ComputedTaxDto? FindTax(IEnumerable<ComputedTaxDto> taxes, string name) =>
+        taxes.FirstOrDefault(t => string.Equals(t.Name, name, StringComparison.OrdinalIgnoreCase));
+
+    private void ComposeHeader(IContainer container, DocumentDto doc, BusinessDto biz, VoucherSettingsDto? settings)
+    {
+        container.Column(col =>
         {
-            row.RelativeItem().Text(doc.Type).FontFamily("Montserrat").FontSize(18).SemiBold();
+            col.Item().Row(row =>
+            {
+                row.RelativeItem().Column(left =>
+                {
+                    left.Item().Text(biz.Name).FontFamily("Montserrat").FontSize(16).SemiBold().FontColor(AccentColor);
+                    if (!string.IsNullOrWhiteSpace(biz.Description))
+                        left.Item().PaddingTop(2).Text(biz.Description).FontSize(8).FontColor(TextMuted);
+
+                    if (biz.Address != null)
+                    {
+                        var addrText = FormatAddressLines(biz.Address);
+                        if (!string.IsNullOrWhiteSpace(addrText))
+                            left.Item().PaddingTop(6).Text(addrText).FontSize(8).LineHeight(1.3f);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(biz.Gst))
+                        left.Item().PaddingTop(4).Text($"GSTIN: {biz.Gst}").FontSize(8);
+
+                    var contactParts = new List<string>();
+                    if (!string.IsNullOrWhiteSpace(biz.Phone)) contactParts.Add(biz.Phone);
+                    if (!string.IsNullOrWhiteSpace(biz.Email)) contactParts.Add(biz.Email);
+                    if (contactParts.Count > 0)
+                        left.Item().PaddingTop(2).Text(string.Join(" · ", contactParts)).FontSize(8).FontColor(TextMuted);
+                });
+
+                row.ConstantItem(200).AlignRight().Column(right =>
+                {
+                    right.Item().Text(doc.Type).FontFamily("Montserrat").FontSize(20).SemiBold().FontColor(AccentColor);
+                    right.Item().PaddingTop(4).Text($"#{doc.Number}").FontSize(11).SemiBold();
+
+                    right.Item().PaddingTop(8).Row(chipRow =>
+                    {
+                        chipRow.AutoItem().Element(c => ComposeStatusChip(c, doc.Status, false));
+                        if (ShouldShowPaymentStatus(doc) && !string.IsNullOrWhiteSpace(doc.PaymentStatus))
+                        {
+                            chipRow.AutoItem().PaddingLeft(6).Element(c => ComposeStatusChip(c, doc.PaymentStatus, true));
+                        }
+                    });
+
+                    right.Item().PaddingTop(10).Table(meta =>
+                    {
+                        meta.ColumnsDefinition(cols =>
+                        {
+                            cols.ConstantColumn(70);
+                            cols.RelativeColumn();
+                        });
+
+                        void MetaRow(string label, string value)
+                        {
+                            meta.Cell().PaddingVertical(2).Text(label).FontSize(8).FontColor(TextMuted);
+                            meta.Cell().PaddingVertical(2).AlignRight().Text(value).FontSize(8).SemiBold();
+                        }
+
+                        MetaRow("Date", doc.Date.ToString("dd MMM yyyy"));
+                        if (doc.DueDate != default)
+                            MetaRow("Due Date", doc.DueDate.ToString("dd MMM yyyy"));
+                        if (!string.IsNullOrWhiteSpace(doc.PaymentMethod))
+                            MetaRow("Payment", doc.PaymentMethod);
+                    });
+                });
+            });
+
+            col.Item().PaddingTop(12).LineHorizontal(1).LineColor(BorderLight);
         });
     }
 
-    private void ComposePartyBlock(ColumnDescriptor col, DocumentDto doc, BusinessDto biz, PartyDto? consignee)
+    private void ComposeStatusChip(IContainer container, string label, bool isPayment)
     {
-        col.Item().Border(1).Table(table =>
+        var (bg, fg) = GetStatusColors(label, isPayment);
+        container
+            .Background(bg)
+            .PaddingVertical(3)
+            .PaddingHorizontal(8)
+            .Text(label)
+            .FontSize(8)
+            .SemiBold()
+            .FontColor(fg);
+    }
+
+    private static (string bg, string fg) GetStatusColors(string status, bool isPayment)
+    {
+        var normalized = status.Trim().ToLowerInvariant();
+        if (isPayment)
+        {
+            if (normalized is "paid") return ("#DCFCE7", "#166534");
+            if (normalized is "unpaid" or "overdue") return ("#FEF3C7", "#92400E");
+            if (normalized.Contains("partial")) return ("#FFEDD5", "#9A3412");
+        }
+        else
+        {
+            if (normalized is "approved") return (AccentLight, AccentColor);
+            if (normalized is "draft" or "pending") return ("#FEF3C7", "#92400E");
+            if (normalized is "rejected" or "cancelled") return ("#FEE2E2", "#991B1B");
+        }
+        return (SurfaceMuted, TextMuted);
+    }
+
+    private void ComposeParties(IContainer container, DocumentDto doc)
+    {
+        var showShipping = ShouldShowShipping(doc);
+        var consignee = doc.Consignee ?? doc.Party;
+
+        container.Row(row =>
+        {
+            row.RelativeItem().Element(c => ComposePartyCard(c, "Bill To", doc.Party));
+            if (showShipping)
+            {
+                row.ConstantItem(16);
+                row.RelativeItem().Element(c => ComposePartyCard(c, "Ship To", consignee));
+            }
+        });
+    }
+
+    private void ComposePartyCard(IContainer container, string title, PartyDto? party)
+    {
+        container.Background(SurfaceMuted).Padding(12).Column(col =>
+        {
+            col.Item().Text(title).FontSize(8).SemiBold().FontColor(TextMuted);
+            col.Item().PaddingTop(4).Text(GetPartyName(party)).FontSize(10).SemiBold();
+
+            var address = title == "Ship To" ? party?.ShippingAddress : party?.BillingAddress;
+            var addressText = FormatAddressLines(address);
+            if (!string.IsNullOrWhiteSpace(addressText))
+                col.Item().PaddingTop(4).Text(addressText).FontSize(8).LineHeight(1.35f);
+
+            if (address?.StateCode is { Length: > 0 })
+                col.Item().PaddingTop(2).Text($"State Code: {address.StateCode}").FontSize(8).FontColor(TextMuted);
+
+            if (!string.IsNullOrWhiteSpace(party?.Gst))
+                col.Item().PaddingTop(2).Text($"GSTIN: {party.Gst}").FontSize(8);
+        });
+    }
+
+    private void ComposeOptionalMeta(IContainer container, DocumentDto doc)
+    {
+        var rows = new List<(string Label, string Value)>();
+
+        if (!string.IsNullOrWhiteSpace(doc.ReferenceNumber))
+            rows.Add(("Reference", FormatOptionalDate(doc.ReferenceNumber, doc.ReferenceDate)));
+        if (!string.IsNullOrWhiteSpace(doc.DeliveryNote))
+            rows.Add(("Delivery Note", FormatOptionalDate(doc.DeliveryNote, doc.DeliveryNoteDate)));
+        if (!string.IsNullOrWhiteSpace(doc.BuyersOrderNo))
+            rows.Add(("Buyer Order", FormatOptionalDate(doc.BuyersOrderNo, doc.BuyersOrderDate)));
+        if (!string.IsNullOrWhiteSpace(doc.DispatchDocNo))
+            rows.Add(("Dispatch Doc", doc.DispatchDocNo!));
+        if (!string.IsNullOrWhiteSpace(doc.DispatchedThrough))
+            rows.Add(("Dispatched Via", doc.DispatchedThrough!));
+        if (!string.IsNullOrWhiteSpace(doc.Destination))
+            rows.Add(("Destination", doc.Destination!));
+        if (!string.IsNullOrWhiteSpace(doc.TermsOfDelivery))
+            rows.Add(("Delivery Terms", doc.TermsOfDelivery!));
+        if (!string.IsNullOrWhiteSpace(doc.Address))
+            rows.Add(("Address", doc.Address));
+
+        if (rows.Count == 0) return;
+
+        container.Column(col =>
+        {
+            col.Item().Text("Additional Details").FontSize(8).SemiBold().FontColor(TextMuted);
+            col.Item().PaddingTop(6).Table(table =>
+            {
+                table.ColumnsDefinition(cols =>
+                {
+                    cols.ConstantColumn(100);
+                    cols.RelativeColumn();
+                });
+
+                foreach (var (label, value) in rows)
+                {
+                    table.Cell().PaddingVertical(2).Text(label).FontSize(8).FontColor(TextMuted);
+                    table.Cell().PaddingVertical(2).Text(value).FontSize(8);
+                }
+            });
+        });
+    }
+
+    private static string FormatOptionalDate(string text, DateTime? date) =>
+        date.HasValue ? $"{text} ({date.Value:dd MMM yyyy})" : text;
+
+    private void ComposeLineItems(IContainer container, DocumentDto doc, string currency)
+    {
+        container.Table(table =>
         {
             table.ColumnsDefinition(columns =>
             {
+                columns.ConstantColumn(24);
+                columns.RelativeColumn(3);
+                columns.RelativeColumn();
+                columns.RelativeColumn();
+                columns.RelativeColumn();
                 columns.RelativeColumn();
                 columns.RelativeColumn();
                 columns.RelativeColumn();
@@ -98,329 +334,272 @@ public class VoucherStandardRenderer : IDocumentRenderer
 
             table.Header(header =>
             {
-                header.Cell().Padding(4).BorderRight(1).BorderBottom(1).Text("Seller").SemiBold();
-                header.Cell().Padding(4).BorderRight(1).BorderBottom(1).Text("Consignee (Ship To)").SemiBold();
-                header.Cell().Padding(4).BorderBottom(1).Text("Buyer (Bill To)").SemiBold();
+                header.Cell().Element(HeaderCell).Text("#");
+                header.Cell().Element(HeaderCell).Text("Description");
+                header.Cell().Element(HeaderCell).Text("HSN/SAC");
+                header.Cell().Element(HeaderCell).AlignRight().Text("Qty");
+                header.Cell().Element(HeaderCell).AlignRight().Text("Rate");
+                header.Cell().Element(HeaderCell).AlignRight().Text("Disc");
+                header.Cell().Element(HeaderCell).AlignRight().Text("Tax%");
+                header.Cell().Element(HeaderCell).AlignRight().Text("Amount");
+
+                static IContainer HeaderCell(IContainer c) =>
+                    c.Background(AccentColor)
+                        .PaddingVertical(6)
+                        .PaddingHorizontal(6)
+                        .DefaultTextStyle(x => x.FontSize(8).SemiBold().FontColor(Colors.White));
             });
 
-            table.Cell().Padding(4).BorderRight(1).Column(c => 
-            {
-                c.Item().Text(biz.Name).SemiBold();
-                if (biz.Address != null)
-                {
-                    c.Item().Text($"{biz.Address.StreetAddress} {biz.Address.Apartment}".Trim());
-                    c.Item().Text($"{biz.Address.City}, {biz.Address.State} {biz.Address.PostalCode}".Trim());
-                    c.Item().Text($"State Code: {biz.Address.StateCode}");
-                }
-                c.Item().Text($"GSTIN: {biz.Gst}");
-            });
+            decimal totalQty = 0;
+            decimal productsTotal = 0;
+            int index = 0;
 
-            table.Cell().Padding(4).BorderRight(1).Column(c => 
+            foreach (var item in doc.Products)
             {
-                c.Item().Text(consignee?.BusinessName ?? $"{consignee?.FirstName} {consignee?.LastName}".Trim()).SemiBold();
-                if (consignee?.ShippingAddress != null)
-                {
-                    c.Item().Text($"{consignee.ShippingAddress.StreetAddress} {consignee.ShippingAddress.Apartment}".Trim());
-                    c.Item().Text($"{consignee.ShippingAddress.City}, {consignee.ShippingAddress.State} {consignee.ShippingAddress.PostalCode}".Trim());
-                    c.Item().Text($"State Code: {consignee.ShippingAddress.StateCode}");
-                }
-                c.Item().Text($"GSTIN: {consignee?.Gst}");
-            });
+                index++;
+                totalQty += item.Quantity;
+                productsTotal += item.Amount;
+                bool shaded = index % 2 == 0;
 
-            table.Cell().Padding(4).Column(c => 
-            {
-                c.Item().Text(doc.Party?.BusinessName ?? $"{doc.Party?.FirstName} {doc.Party?.LastName}".Trim()).SemiBold();
-                if (doc.Party?.BillingAddress != null)
-                {
-                    c.Item().Text($"{doc.Party.BillingAddress.StreetAddress} {doc.Party.BillingAddress.Apartment}".Trim());
-                    c.Item().Text($"{doc.Party.BillingAddress.City}, {doc.Party.BillingAddress.State} {doc.Party.BillingAddress.PostalCode}".Trim());
-                    c.Item().Text($"State Code: {doc.Party.BillingAddress.StateCode}");
-                }
-                c.Item().Text($"GSTIN: {doc.Party?.Gst}");
-            });
+                string hsn = !string.IsNullOrWhiteSpace(item.Hsn)
+                    ? item.Hsn
+                    : item.Product?.Hsn ?? string.Empty;
+
+                decimal totalTaxRate = item.Taxes?
+                    .Where(t => t.Type == "percentage" || string.IsNullOrEmpty(t.Type))
+                    .Sum(t => t.Value) ?? 0;
+
+                table.Cell().Element(c => RowCell(c, shaded)).Text(index.ToString());
+                table.Cell().Element(c => RowCell(c, shaded)).Text(item.Name);
+                table.Cell().Element(c => RowCell(c, shaded)).Text(hsn);
+                table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
+                    .Text($"{item.Quantity:0.##} {item.Unit?.Name}".Trim());
+                table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
+                    .Text(FormatCurrency(item.Price, currency));
+                table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
+                    .Text(item.DiscountValue > 0 ? $"{item.DiscountValue}" : "—");
+                table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
+                    .Text(totalTaxRate > 0 ? $"{totalTaxRate}%" : "—");
+                table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
+                    .Text(FormatCurrency(item.Amount, currency)).SemiBold();
+            }
+
+            static IContainer RowCell(IContainer c, bool shaded) =>
+                shaded
+                    ? c.Background(SurfaceMuted).PaddingVertical(5).PaddingHorizontal(6)
+                    : c.PaddingVertical(5).PaddingHorizontal(6);
+
+            table.Cell().ColumnSpan(3).Element(FooterCell).AlignRight().Text("Items Total").SemiBold();
+            table.Cell().Element(FooterCell).AlignRight().Text($"{totalQty:0.##}").SemiBold();
+            table.Cell().ColumnSpan(3).Element(FooterCell);
+            table.Cell().Element(FooterCell).AlignRight()
+                .Text(FormatCurrency(productsTotal, currency)).SemiBold();
+
+            static IContainer FooterCell(IContainer c) =>
+                c.BorderTop(1).BorderColor(BorderLight).PaddingVertical(6).PaddingHorizontal(6);
         });
     }
 
-    private void ComposeMetaBlock(ColumnDescriptor col, DocumentDto doc)
+    private void ComposeTotalsBlock(IContainer container, DocumentDto doc, string currency)
     {
-        col.Item().Border(1).Table(table =>
+        container.AlignRight().Width(240).Background(AccentLight).Padding(12).Column(col =>
         {
-            table.ColumnsDefinition(columns =>
+            void TotalRow(string label, string value, bool bold = false)
             {
-                columns.RelativeColumn();
-                columns.RelativeColumn();
-                columns.RelativeColumn();
-                columns.RelativeColumn();
-            });
-
-            string GetDate(DateTime? dt) => dt.HasValue ? dt.Value.ToString("d") : "";
-            string GetStr(string? val) => string.IsNullOrWhiteSpace(val) ? "" : val;
-
-            table.Cell().BorderRight(1).BorderBottom(1).Padding(4).Text($"{GetStr(doc.Type)} No: {GetStr(doc.Number)}").SemiBold();
-            table.Cell().BorderRight(1).BorderBottom(1).Padding(4).Text($"Dated: {doc.Date:d}").SemiBold();
-            table.Cell().BorderRight(1).BorderBottom(1).Padding(4).Text($"Delivery Note: {GetStr(doc.DeliveryNote)} {GetDate(doc.DeliveryNoteDate)}".Trim());
-            table.Cell().BorderBottom(1).Padding(4).Text($"Mode of Payment: {GetStr(doc.PaymentMethod)}");
-            
-            table.Cell().BorderRight(1).BorderBottom(1).Padding(4).Text($"Ref No: {GetStr(doc.ReferenceNumber)} {GetDate(doc.ReferenceDate)}".Trim());
-            table.Cell().BorderRight(1).BorderBottom(1).Padding(4).Text($"Buyer Order: {GetStr(doc.BuyersOrderNo)} {GetDate(doc.BuyersOrderDate)}".Trim());
-            table.Cell().BorderRight(1).BorderBottom(1).Padding(4).Text($"Dispatch Doc No: {GetStr(doc.DispatchDocNo)}");
-            table.Cell().BorderBottom(1).Padding(4).Text($"Dispatched Through: {GetStr(doc.DispatchedThrough)}");
-
-            table.Cell().BorderRight(1).Padding(4).Text($"Destination: {GetStr(doc.Destination)}");
-            table.Cell().ColumnSpan(3).Padding(4).Text($"Terms of Delivery: {GetStr(doc.TermsOfDelivery)}");
-        });
-    }
-
-    private void ComposeLineItems(IContainer container, DocumentDto doc, string currency)
-    {
-        container.Column(col =>
-        {
-            col.Item().PaddingTop(4).Table(table =>
-            {
-                table.ColumnsDefinition(columns =>
+                col.Item().PaddingVertical(2).Row(row =>
                 {
-                    columns.ConstantColumn(25); // #
-                    columns.RelativeColumn(3);  // Description
-                    columns.RelativeColumn();   // HSN/SAC
-                    columns.RelativeColumn();   // Qty
-                    columns.RelativeColumn();   // Rate
-                    columns.RelativeColumn();   // Disc%
-                    columns.RelativeColumn();   // Tax%
-                    columns.RelativeColumn();   // Amount
-                });
-
-                table.Header(header =>
-                {
-                    header.Cell().Element(HeaderStyle).Text("#");
-                    header.Cell().Element(HeaderStyle).Text("Description");
-                    header.Cell().Element(HeaderStyle).Text("HSN/SAC");
-                    header.Cell().Element(HeaderStyle).AlignRight().Text("Qty");
-                    header.Cell().Element(HeaderStyle).AlignRight().Text("Rate");
-                    header.Cell().Element(HeaderStyle).AlignRight().Text("Disc%");
-                    header.Cell().Element(HeaderStyle).AlignRight().Text("Tax%");
-                    header.Cell().Element(HeaderStyle).AlignRight().Text("Amount");
-
-                    static IContainer HeaderStyle(IContainer container)
+                    if (bold)
                     {
-                           return container
-        .Border(1)
-        .Padding(4)
-        .DefaultTextStyle(x => x.SemiBold());
+                        row.RelativeItem().Text(label).FontSize(8).SemiBold();
+                        row.ConstantItem(90).AlignRight().Text(value).FontSize(10).SemiBold();
+                    }
+                    else
+                    {
+                        row.RelativeItem().Text(label).FontSize(8);
+                        row.ConstantItem(90).AlignRight().Text(value).FontSize(8);
                     }
                 });
+            }
 
-                decimal totalQty = 0;
-                decimal productsTotal = 0;
+            TotalRow("Subtotal", FormatCurrency(doc.TotalTaxableAmount, currency));
 
-                if (doc.Products != null)
-                {
-                    int index = 1;
-                    foreach (var item in doc.Products)
-                    {
-                        totalQty += item.Quantity;
-                        productsTotal += item.Amount;
+            if (doc.TotalDiscount > 0)
+                TotalRow("Discount", $"-{FormatCurrency(doc.TotalDiscount, currency)}");
 
-                        string hsn = !string.IsNullOrWhiteSpace(item.Product?.Hsn) ? item.Product.Hsn : "";
+            if (ShouldShowTaxes(doc) && doc.TotalTaxAmount > 0)
+                TotalRow("Tax", FormatCurrency(doc.TotalTaxAmount, currency));
 
-                        table.Cell().Element(CellStyle).Text(index++.ToString());
-                        table.Cell().Element(CellStyle).Text(item.Name ?? ""); 
-                        table.Cell().Element(CellStyle).Text(hsn);
-                        table.Cell().Element(CellStyle).AlignRight().Text($"{item.Quantity:0.##} {item.Unit?.Name}");
-                        table.Cell().Element(CellStyle).AlignRight().Text(FormatCurrency(item.Price, currency));
-                        table.Cell().Element(CellStyle).AlignRight().Text($"{item.DiscountValue}");
+            if (ShouldShowShipping(doc) && doc.Cost.Count > 0)
+            {
+                foreach (var cost in doc.Cost)
+                    TotalRow(cost.Name, FormatCurrency(cost.Value, currency));
+            }
 
-                        decimal totalTaxRate = item.Taxes?.Where(t => t.Type == "percentage" || string.IsNullOrEmpty(t.Type)).Sum(t => t.Value) ?? 0;
-                        table.Cell().Element(CellStyle).AlignRight().Text($"{totalTaxRate}%");
-
-                        table.Cell().Element(CellStyle).AlignRight().Text(FormatCurrency(item.Amount, currency));
-                        
-                        static IContainer CellStyle(IContainer container)
-                        {
-                            return container.Border(1).BorderColor(Colors.Black).Padding(4);
-                        }
-                    }
-                }
-                
-                table.Cell().ColumnSpan(3).Element(TotalStyle).AlignRight().Text("Total").SemiBold();
-                table.Cell().Element(TotalStyle).AlignRight().Text($"{totalQty:0.##}").SemiBold();
-                table.Cell().ColumnSpan(3).Element(TotalStyle);
-                table.Cell().Element(TotalStyle).AlignRight().Text(FormatCurrency(productsTotal, currency)).SemiBold();
-
-                if (doc.Cost != null && doc.Cost.Any())
-                {
-                    foreach (var cost in doc.Cost)
-                    {
-                        table.Cell().ColumnSpan(7).Element(TotalStyle).AlignRight().Text(cost.Name);
-                        table.Cell().Element(TotalStyle).AlignRight().Text(FormatCurrency(cost.Value, currency));
-                    }
-                }
-
-                if (doc.TotalDiscountAmount > 0)
-                {
-                    table.Cell().ColumnSpan(7).Element(TotalStyle).AlignRight().Text("Discount");
-                    table.Cell().Element(TotalStyle).AlignRight().Text($"-{FormatCurrency(doc.TotalDiscountAmount, currency)}");
-                }
-
-                table.Cell().ColumnSpan(7).Element(TotalStyle).AlignRight().Text("Grand Total").SemiBold();
-                table.Cell().Element(TotalStyle).AlignRight().Text(FormatCurrency(doc.GrandTotal, currency)).SemiBold();
-                
-                static IContainer TotalStyle(IContainer container)
-                {
-                    return container.Border(1).Padding(4);
-                }
+            col.Item().PaddingTop(4).LineHorizontal(1).LineColor(AccentColor);
+            col.Item().PaddingTop(6).Row(row =>
+            {
+                row.RelativeItem().Text("Grand Total").FontSize(11).SemiBold().FontColor(AccentColor);
+                row.ConstantItem(90).AlignRight()
+                    .Text(FormatCurrency(doc.TotalAmount, currency))
+                    .FontSize(12)
+                    .SemiBold()
+                    .FontColor(AccentColor);
             });
 
             if (!string.IsNullOrWhiteSpace(doc.AmountInWords))
             {
-                col.Item().Row(row =>
+                col.Item().PaddingTop(8).Text(text =>
                 {
-                    row.RelativeItem().Text(text =>
-                    {
-                        text.Span("Amount Chargeable (in words): ").SemiBold();
-                        text.Span(doc.AmountInWords);
-                    });
-                    row.AutoItem().AlignRight().Text("E. & O.E").SemiBold();
+                    text.Span("In words: ").FontSize(7).SemiBold().FontColor(TextMuted);
+                    text.Span(doc.AmountInWords).FontSize(7);
                 });
             }
         });
     }
 
-    private void ComposeTaxSummary(IContainer container, DocumentDto doc, List<TaxSummaryDto>? taxSummary, string currency)
+    private void ComposeTaxSummary(IContainer container, DocumentDto doc, string currency)
     {
-        if (taxSummary == null || !taxSummary.Any())
-            return;
+        if (doc.Summary == null || doc.Summary.Count == 0) return;
 
         bool isIgst = doc.TaxType == "IGST";
         bool isUtgst = doc.TaxType == "CGST_UTGST";
-        
+
         container.Column(col =>
         {
-            col.Item().Table(table =>
+            col.Item().Text("Tax Summary").FontSize(9).SemiBold().FontColor(AccentColor);
+            col.Item().PaddingTop(6).Table(table =>
             {
                 table.ColumnsDefinition(columns =>
                 {
-                    columns.RelativeColumn(2); // HSN
-                    columns.RelativeColumn();  // Taxable Value
+                    columns.RelativeColumn(2);
+                    columns.RelativeColumn();
                     if (isIgst)
                     {
-                        columns.RelativeColumn(); // IGST Rate
-                        columns.RelativeColumn(); // IGST Amount
+                        columns.RelativeColumn();
+                        columns.RelativeColumn();
                     }
                     else
                     {
-                        columns.RelativeColumn(); // Central Tax Rate
-                        columns.RelativeColumn(); // Central Tax Amount
-                        columns.RelativeColumn(); // State/UT Tax Rate
-                        columns.RelativeColumn(); // State/UT Tax Amount
+                        columns.RelativeColumn();
+                        columns.RelativeColumn();
+                        columns.RelativeColumn();
+                        columns.RelativeColumn();
                     }
-                    columns.RelativeColumn(); // Total Tax Amount
+                    columns.RelativeColumn();
                 });
 
                 table.Header(header =>
                 {
-                    header.Cell().Element(HeaderStyle).Text("HSN/SAC");
-                    header.Cell().Element(HeaderStyle).AlignRight().Text("Taxable Value");
-
+                    header.Cell().Element(TaxHeader).Text("HSN/SAC");
+                    header.Cell().Element(TaxHeader).AlignRight().Text("Taxable Value");
                     if (isIgst)
                     {
-                        header.Cell().Element(HeaderStyle).AlignRight().Text("IGST Rate");
-                        header.Cell().Element(HeaderStyle).AlignRight().Text("IGST Amount");
+                        header.Cell().Element(TaxHeader).AlignRight().Text("IGST %");
+                        header.Cell().Element(TaxHeader).AlignRight().Text("IGST Amt");
                     }
                     else
                     {
-                        header.Cell().Element(HeaderStyle).AlignRight().Text("Central Tax Rate");
-                        header.Cell().Element(HeaderStyle).AlignRight().Text("Central Tax Amount");
-                        header.Cell().Element(HeaderStyle).AlignRight().Text(isUtgst ? "UT Tax Rate" : "State Tax Rate");
-                        header.Cell().Element(HeaderStyle).AlignRight().Text(isUtgst ? "UT Tax Amount" : "State Tax Amount");
+                        header.Cell().Element(TaxHeader).AlignRight().Text("Central %");
+                        header.Cell().Element(TaxHeader).AlignRight().Text("Central Amt");
+                        header.Cell().Element(TaxHeader).AlignRight().Text(isUtgst ? "UT %" : "State %");
+                        header.Cell().Element(TaxHeader).AlignRight().Text(isUtgst ? "UT Amt" : "State Amt");
                     }
+                    header.Cell().Element(TaxHeader).AlignRight().Text("Total Tax");
 
-                    header.Cell().Element(HeaderStyle).AlignRight().Text("Total Tax Amount");
-
-                    static IContainer HeaderStyle(IContainer container)
-                    {
-                        return container.DefaultTextStyle(x => x.SemiBold()).Border(1).Padding(4);
-                    }
+                    static IContainer TaxHeader(IContainer c) =>
+                        c.Background(SurfaceMuted).Padding(5).DefaultTextStyle(x => x.FontSize(8).SemiBold());
                 });
 
-                foreach (var item in taxSummary)
+                decimal sumTaxable = 0;
+                decimal sumCentral = 0;
+                decimal sumState = 0;
+                decimal sumIgst = 0;
+                decimal sumTotalTax = 0;
+
+                foreach (var item in doc.Summary)
                 {
-                    table.Cell().Element(CellStyle).Text(item.Hsn);
-                    table.Cell().Element(CellStyle).AlignRight().Text(FormatCurrency(item.TaxableAmount, currency));
+                    var igst = FindTax(item.ComputedTaxes, "IGST");
+                    var cgst = FindTax(item.ComputedTaxes, "CGST");
+                    var sgst = FindTax(item.ComputedTaxes, "SGST");
+                    var utgst = FindTax(item.ComputedTaxes, "UTGST");
+
+                    sumTaxable += item.TaxableValue;
+                    sumTotalTax += item.TotalTaxAmount;
+                    if (isIgst)
+                        sumIgst += igst?.Amount ?? 0;
+                    else
+                    {
+                        sumCentral += cgst?.Amount ?? 0;
+                        sumState += isUtgst ? utgst?.Amount ?? 0 : sgst?.Amount ?? 0;
+                    }
+
+                    table.Cell().Element(TaxCell).Text(item.Hsn);
+                    table.Cell().Element(TaxCell).AlignRight()
+                        .Text(FormatCurrency(item.TaxableValue, currency));
 
                     if (isIgst)
                     {
-                        table.Cell().Element(CellStyle).AlignRight().Text($"{item.IgstRate}%");
-                        table.Cell().Element(CellStyle).AlignRight().Text(FormatCurrency(item.IgstAmount, currency));
+                        table.Cell().Element(TaxCell).AlignRight().Text(igst != null ? $"{igst.Value}%" : "—");
+                        table.Cell().Element(TaxCell).AlignRight()
+                            .Text(FormatCurrency(igst?.Amount ?? 0, currency));
                     }
                     else
                     {
-                        table.Cell().Element(CellStyle).AlignRight().Text($"{item.CgstRate}%");
-                        table.Cell().Element(CellStyle).AlignRight().Text(FormatCurrency(item.CgstAmount, currency));
+                        table.Cell().Element(TaxCell).AlignRight().Text(cgst != null ? $"{cgst.Value}%" : "—");
+                        table.Cell().Element(TaxCell).AlignRight()
+                            .Text(FormatCurrency(cgst?.Amount ?? 0, currency));
                         if (isUtgst)
                         {
-                            table.Cell().Element(CellStyle).AlignRight().Text($"{item.UtgstRate}%");
-                            table.Cell().Element(CellStyle).AlignRight().Text(FormatCurrency(item.UtgstAmount, currency));
+                            table.Cell().Element(TaxCell).AlignRight().Text(utgst != null ? $"{utgst.Value}%" : "—");
+                            table.Cell().Element(TaxCell).AlignRight()
+                                .Text(FormatCurrency(utgst?.Amount ?? 0, currency));
                         }
                         else
                         {
-                            table.Cell().Element(CellStyle).AlignRight().Text($"{item.SgstRate}%");
-                            table.Cell().Element(CellStyle).AlignRight().Text(FormatCurrency(item.SgstAmount, currency));
+                            table.Cell().Element(TaxCell).AlignRight().Text(sgst != null ? $"{sgst.Value}%" : "—");
+                            table.Cell().Element(TaxCell).AlignRight()
+                                .Text(FormatCurrency(sgst?.Amount ?? 0, currency));
                         }
                     }
 
-                    decimal totalTax = isIgst ? item.IgstAmount : (item.CgstAmount + (isUtgst ? item.UtgstAmount : item.SgstAmount));
-                    totalTax += item.CessAmount;
-
-                    table.Cell().Element(CellStyle).AlignRight().Text(FormatCurrency(totalTax, currency));
-
-                    static IContainer CellStyle(IContainer container)
-                    {
-                        return container.Border(1).BorderColor(Colors.Black).Padding(4);
-                        
-                    }
+                    table.Cell().Element(TaxCell).AlignRight()
+                        .Text(FormatCurrency(item.TotalTaxAmount, currency));
                 }
 
-                table.Cell().Element(TotalStyle).AlignRight().Text("Total").SemiBold();
-                table.Cell().Element(TotalStyle).AlignRight().Text(FormatCurrency(taxSummary.Sum(x => x.TaxableAmount), currency)).SemiBold();
-
+                table.Cell().Element(TaxFooter).AlignRight().Text("Total").SemiBold();
+                table.Cell().Element(TaxFooter).AlignRight()
+                    .Text(FormatCurrency(sumTaxable, currency)).SemiBold();
                 if (isIgst)
                 {
-                    table.Cell().Element(TotalStyle);
-                    table.Cell().Element(TotalStyle).AlignRight().Text(FormatCurrency(taxSummary.Sum(x => x.IgstAmount), currency)).SemiBold();
+                    table.Cell().Element(TaxFooter);
+                    table.Cell().Element(TaxFooter).AlignRight()
+                        .Text(FormatCurrency(sumIgst, currency)).SemiBold();
                 }
                 else
                 {
-                    table.Cell().Element(TotalStyle);
-                    table.Cell().Element(TotalStyle).AlignRight().Text(FormatCurrency(taxSummary.Sum(x => x.CgstAmount), currency)).SemiBold();
-                    table.Cell().Element(TotalStyle);
-                    if (isUtgst)
-                    {
-                        table.Cell().Element(TotalStyle).AlignRight().Text(FormatCurrency(taxSummary.Sum(x => x.UtgstAmount), currency)).SemiBold();
-                    }
-                    else
-                    {
-                        table.Cell().Element(TotalStyle).AlignRight().Text(FormatCurrency(taxSummary.Sum(x => x.SgstAmount), currency)).SemiBold();
-                    }
+                    table.Cell().Element(TaxFooter);
+                    table.Cell().Element(TaxFooter).AlignRight()
+                        .Text(FormatCurrency(sumCentral, currency)).SemiBold();
+                    table.Cell().Element(TaxFooter);
+                    table.Cell().Element(TaxFooter).AlignRight()
+                        .Text(FormatCurrency(sumState, currency)).SemiBold();
                 }
+                table.Cell().Element(TaxFooter).AlignRight()
+                    .Text(FormatCurrency(sumTotalTax, currency)).SemiBold();
 
-                decimal overallTax = taxSummary.Sum(x => (isIgst ? x.IgstAmount : (x.CgstAmount + (isUtgst ? x.UtgstAmount : x.SgstAmount))) + x.CessAmount);
-                table.Cell().Element(TotalStyle).AlignRight().Text(FormatCurrency(overallTax, currency)).SemiBold();
+                static IContainer TaxCell(IContainer c) =>
+                    c.BorderBottom(1).BorderColor(BorderLight).Padding(5).DefaultTextStyle(x => x.FontSize(8));
 
-                static IContainer TotalStyle(IContainer container)
-                {
-                    return container.Border(1).Padding(4);
-                }
+                static IContainer TaxFooter(IContainer c) =>
+                    c.BorderTop(1).BorderColor(BorderLight).Padding(5).DefaultTextStyle(x => x.FontSize(8));
             });
 
             if (!string.IsNullOrWhiteSpace(doc.TotalTaxAmountInWords))
             {
-                col.Item().Row(row =>
+                col.Item().PaddingTop(6).Text(text =>
                 {
-                    row.RelativeItem().Text(text =>
-                    {
-                        text.Span("Tax Amount (in words): ").SemiBold();
-                        text.Span(doc.TotalTaxAmountInWords);
-                    });
+                    text.Span("Tax amount in words: ").FontSize(8).SemiBold();
+                    text.Span(doc.TotalTaxAmountInWords).FontSize(8);
                 });
             }
         });
@@ -428,43 +607,57 @@ public class VoucherStandardRenderer : IDocumentRenderer
 
     private void ComposeFooter(IContainer container, DocumentDto doc, BusinessDto biz, VoucherSettingsDto? settings)
     {
-  
+        var bank = doc.Bank;
+        var notes = GetNotes(doc, settings);
+        var terms = GetTerms(doc, settings);
+
         container.Column(col =>
         {
-            if (!string.IsNullOrWhiteSpace(doc.Notes))
+            if (bank != null)
             {
-                col.Item() .PaddingTop(10).Row(row =>
+                col.Item().PaddingTop(8).Column(b =>
                 {
-                    row.RelativeItem().Column(c =>
+                    b.Item().Text("Bank Details").FontSize(8).SemiBold().FontColor(TextMuted);
+                    b.Item().PaddingTop(4).DefaultTextStyle(x => x.FontSize(8)).Text(text =>
                     {
-                        c.Item().Text("Notes:").SemiBold();
-                        c.Item().Text(doc.Notes);
+                        text.Span($"{bank.BankName}").SemiBold();
+                        if (!string.IsNullOrWhiteSpace(bank.Branch))
+                            text.Span($" · {bank.Branch}");
                     });
+                    b.Item().PaddingTop(2).Text(
+                        $"A/C: {bank.AccountNumber} · IFSC: {bank.Ifsc} · {bank.AccountType}").FontSize(8);
+                    if (!string.IsNullOrWhiteSpace(bank.BranchAddress))
+                        b.Item().PaddingTop(2).Text(bank.BranchAddress).FontSize(7).FontColor(TextMuted);
                 });
             }
 
-            if (!string.IsNullOrWhiteSpace(doc.Terms))
+            if (!string.IsNullOrWhiteSpace(notes))
             {
-                col.Item() .PaddingTop(10).Row(row =>
+                col.Item().PaddingTop(10).Column(c =>
                 {
-                    row.RelativeItem().Column(c =>
-                    {
-                        c.Item().Text("Terms & Conditions:").SemiBold();
-                        c.Item().Text(doc.Terms);
-                    });
+                    c.Item().Text("Notes").FontSize(8).SemiBold().FontColor(TextMuted);
+                    c.Item().PaddingTop(2).Text(notes).FontSize(8);
                 });
             }
 
-           col.Item().Row(row =>
-{
-    row.RelativeItem()
-        .AlignRight()
-        .Column(c =>
-        {
-            c.Item().Text($"for {biz.Name}").SemiBold();
-            c.Item().Text("Authorised Signatory").SemiBold();
-        });
-});
+            if (!string.IsNullOrWhiteSpace(terms))
+            {
+                col.Item().PaddingTop(10).Column(c =>
+                {
+                    c.Item().Text("Terms & Conditions").FontSize(8).SemiBold().FontColor(TextMuted);
+                    c.Item().PaddingTop(2).Text(terms).FontSize(8);
+                });
+            }
+
+            col.Item().PaddingTop(20).Row(row =>
+            {
+                row.RelativeItem();
+                row.ConstantItem(180).AlignRight().Column(c =>
+                {
+                    c.Item().Text($"For {biz.Name}").FontSize(8).SemiBold();
+                    c.Item().PaddingTop(24).Text("Authorised Signatory").FontSize(8).SemiBold().FontColor(TextMuted);
+                });
+            });
         });
     }
 }

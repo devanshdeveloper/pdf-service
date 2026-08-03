@@ -3,618 +3,323 @@
   "success": true,
   "data": {
     "document": {
-      "_id": "6a61be54cfc2809fe2131bfa",
-      "number": "S-1",
-      "party": {
-        "_id": "6a61ba0ccfc2809fe2131add",
-        "businessType": "Company",
-        "firstName": "Manoj",
-        "lastName": "Agrawal",
-        "phone": "9800000098",
-        "email": "manoj.agrawal99@example.com",
-        "businessName": "Premium Boards Branch 76",
-        "head": "Owner",
-        "dateOfBirth": "1988-01-01T00:00:00.000Z",
-        "gender": "Male",
-        "billingAddress": {
-          "streetAddress": "198 Industrial Area",
-          "apartment": "A-1",
-          "city": "Ahmedabad",
-          "district": "Ahmedabad",
-          "state": "Gujarat",
-          "stateCode": "24",
-          "postalCode": "450099",
-          "geo": {
-            "lat": 23.0323,
-            "lng": 72.5812
-          },
+      "_id": "6a6f8daf909cd955d8122bd9",
+      "number": "S-2",
+      "currency": "INR",
+      "exchangeRate": 1,
+      "taxType": "CGST_SGST",
+      "placeOfSupplyStateCode": "6",
+      "sellerStateCode": "33",
+      "user": "6a67984e832bbd4b741cc108",
+      "business": {
+        "_id": "6a679baab34e60bbcaa13869",
+        "name": "SARRAF INDUSTRIES",
+        "description": "MANUFACTURER OF SAFETY MATCHES",
+        "email": "sarrafindustries1985@gmail.com",
+        "phone": "+91 9443152578",
+        "phoneNumbers": [
+          "+91 9791363749",
+          "+91 7000782675"
+        ],
+        "website": "www.aadisarrafinternational.com",
+        "address": {
+          "streetAddress": "Sidco Industrial Estate",
+          "apartment": "Plot no. 61",
+          "city": "Kovilpati",
+          "state": "Tamil Nadu",
+          "stateCode": "33",
+          "postalCode": "628501",
           "country": "India",
-          "createdAt": "2026-07-23T06:51:56.638Z",
-          "updatedAt": "2026-07-23T06:51:56.638Z"
+          "createdAt": "2026-07-27T17:55:54.721Z",
+          "updatedAt": "2026-07-27T17:55:54.721Z"
+        },
+        "logo": "https://next-web-erps-acls.s3.eu-north-1.amazonaws.com/uploads/6a67984e832bbd4b741cc108/business/logo/savera-matches.jpg",
+        "gst": "33ABRPJ6963H1Z8",
+        "status": "active",
+        "user": "6a67984e832bbd4b741cc108",
+        "isDeleted": false,
+        "baseCurrency": "INR",
+        "createdAt": "2026-07-27T17:55:54.721Z",
+        "updatedAt": "2026-07-27T17:55:54.721Z"
+      },
+      "location": {
+        "_id": "6a6de0cd59b3315a69f6b659",
+        "name": "Ram Offset",
+        "business": "6a679baab34e60bbcaa13869",
+        "user": "6a67984e832bbd4b741cc108",
+        "isDeleted": false,
+        "createdAt": "2026-08-01T12:04:29.077Z",
+        "updatedAt": "2026-08-01T12:04:29.077Z"
+      },
+      "party": {
+        "_id": "6a6ec22db607d92962551704",
+        "businessType": "Individual",
+        "partyType": "Customer",
+        "businessName": "RAJESHWAR PARSAD & SONS",
+        "billingAddress": {
+          "city": "KARNAL",
+          "state": "HARYANA",
+          "stateCode": "6",
+          "createdAt": "2026-08-02T04:06:05.665Z",
+          "updatedAt": "2026-08-02T04:06:05.665Z"
         },
         "shippingAddress": {
-          "streetAddress": "198 Industrial Area",
-          "apartment": "A-1",
-          "city": "Ahmedabad",
-          "district": "Ahmedabad",
-          "state": "Gujarat",
-          "stateCode": "24",
-          "postalCode": "450099",
-          "geo": {
-            "lat": 23.0323,
-            "lng": 72.5812
-          },
-          "country": "India",
-          "createdAt": "2026-07-23T06:51:56.638Z",
-          "updatedAt": "2026-07-23T06:51:56.638Z"
+          "city": "KARNAL",
+          "state": "HARYANA",
+          "stateCode": "6",
+          "createdAt": "2026-08-02T04:06:05.665Z",
+          "updatedAt": "2026-08-02T04:06:05.665Z"
         },
-        "preferredPaymentTerms": "RTGS",
-        "bank": {
-          "name": "Premium Boards Branch 76",
-          "bankName": "State Bank of India",
-          "branch": "Main Branch",
-          "branchAddress": "Ahmedabad Main Branch",
-          "accountType": "Current",
-          "accountNumber": "501000000098",
-          "ifsc": "SBIN0100098"
-        },
-        "notes": "Preferred vendor for furniture manufacturing",
-        "gst": "23ABCDE10098F1Z5",
-        "fields": [
-          {
-            "label": "Category",
-            "value": "Vendor",
-            "_id": "6a61ba0ccfc2809fe2131ade"
-          },
-          {
-            "label": "Rating",
-            "value": "A",
-            "_id": "6a61ba0ccfc2809fe2131adf"
-          }
-        ],
-        "documents": [
-          {
-            "label": "GST",
-            "value": "https://example.com/gst.pdf"
-          },
-          {
-            "label": "PAN",
-            "value": "https://example.com/pan.pdf"
-          }
-        ],
-        "username": "manoj99",
-        "password": "Pass@1098",
-        "user": "6953a7427d58c62932d2c80b",
+        "business": "6a679baab34e60bbcaa13869",
+        "user": "6a67984e832bbd4b741cc108",
         "status": "active",
         "isDeleted": false,
-        "createdAt": "2026-07-23T06:51:56.638Z",
-        "updatedAt": "2026-07-23T06:51:56.638Z"
+        "fields": [],
+        "documents": [],
+        "createdAt": "2026-08-02T04:06:05.665Z",
+        "updatedAt": "2026-08-02T04:06:05.665Z"
       },
-      "date": "2026-07-23T07:07:30.143Z",
-      "dueDate": "2026-08-22T07:07:30.143Z",
-      "referenceNumber": "INV-103",
+      "date": "2026-08-02T18:34:06.390Z",
+      "dueDate": "2026-09-01T18:34:06.390Z",
       "paymentMethod": "Cash",
-      "address": "198 Industrial Area, A-1, Ahmedabad, Gujarat, 450099, India",
+      "address": "KARNAL, HARYANA",
       "products": [
         {
           "product": {
-            "_id": "6a61bd427fa9a86374185100",
-            "images": [
-              "walnut-kids-beds-19.jpg"
-            ],
-            "name": "Walnut Kids Beds 19",
-            "description": "Custom kids beds manufactured to order.",
-            "slug": "walnut-kids-beds-19",
-            "sku": "NWF-KID-019",
-            "sortPriority": 19,
-            "views": 2364,
-            "sales": 328,
-            "purchasePrice": 7634,
-            "price": 10305,
-            "stock": 15,
-            "stockAlert": 6,
-            "category": "6a60fc68f7099ec873517711",
-            "unit": "6a60fdfbf7099ec873517a81",
+            "_id": "6a6ec24559b3315a69f6d04f",
+            "images": [],
+            "name": "LABLE EVER FRESH",
+            "hsn": "9969",
+            "unit": "6a6deed17be048f343e2027c",
             "featured": false,
             "categories": [
-              "6a60fc68f7099ec8735176e7",
-              "6a60fc68f7099ec873517711"
+              "6a6a32209e84121ebd42b992"
             ],
-            "openingStockLocation": "6a61b3d7cfc2809fe2131416",
             "productType": "Goods",
-            "preferredVendor": "6a61ba0ccfc2809fe21319bd",
-            "prices": [
-              {
-                "min": 1,
-                "max": 10,
-                "price": 10305,
-                "_id": "6a61bd427fa9a86374185101"
-              },
-              {
-                "min": 11,
-                "max": 50,
-                "price": 9789,
-                "_id": "6a61bd427fa9a86374185102"
-              }
-            ],
-            "variants": [
-              {
-                "name": "Color",
-                "value": "Teak",
-                "_id": "6a61bd427fa9a86374185103"
-              },
-              {
-                "name": "Material",
-                "value": "Engineered Wood",
-                "_id": "6a61bd427fa9a86374185104"
-              }
-            ],
             "taxes": [
               {
+                "taxId": "6a6ebcf606c40986ed133d45",
                 "name": "GST",
+                "type": "percentage",
                 "value": 18,
-                "_id": "6a61bd427fa9a86374185105"
+                "_id": "6a6f95e2909cd955d8122d93"
               }
             ],
             "fields": [
               {
-                "label": "Warranty",
-                "value": "5 Years",
-                "_id": "6a61bd427fa9a86374185106"
+                "label": "Size",
+                "value": "",
+                "_id": "6a6ec24559b3315a69f6d051"
               },
               {
-                "label": "Brand",
-                "value": "Next Web Furniture",
-                "_id": "6a61bd427fa9a86374185107"
+                "label": "Step Size",
+                "value": "",
+                "_id": "6a6ec24559b3315a69f6d052"
+              },
+              {
+                "label": "GSM",
+                "value": "",
+                "_id": "6a6ec24559b3315a69f6d053"
+              },
+              {
+                "label": "Color",
+                "value": "",
+                "_id": "6a6ec24559b3315a69f6d054"
+              },
+              {
+                "label": "Coating",
+                "value": "",
+                "_id": "6a6ec24559b3315a69f6d055"
               }
             ],
-            "discountType": "percentage",
-            "discountValue": 0,
+            "discountType": "fixed",
             "hidden": false,
             "status": "active",
-            "user": "6953a7427d58c62932d2c80b",
+            "business": "6a679baab34e60bbcaa13869",
+            "user": "6a67984e832bbd4b741cc108",
             "isDeleted": false,
-            "createdAt": "2026-01-01T00:00:00.000Z",
-            "updatedAt": "2026-07-22T00:00:00.000Z"
+            "prices": [],
+            "variants": [],
+            "createdAt": "2026-08-02T04:06:29.509Z",
+            "updatedAt": "2026-08-02T19:09:22.198Z",
+            "slug": "lable-ever-fresh"
           },
-          "name": "Walnut Kids Beds 19",
+          "name": "LABLE EVER FRESH",
+          "hsn": "9969",
           "quantity": 1,
-          "price": 10305,
+          "price": 150,
           "unit": {
-            "_id": "6a60fdfbf7099ec873517a81",
-            "name": "Nos",
-            "value": "Nos",
+            "_id": "6a6deed17be048f343e2027c",
+            "name": "Number",
+            "value": "nos",
             "status": "active",
-            "user": "6953a7427d58c62932d2c80b",
+            "user": "6a67984e832bbd4b741cc108",
+            "business": "6a679baab34e60bbcaa13869",
+            "isPredefined": false,
+            "conversionFactor": 1,
             "isDeleted": false,
-            "createdAt": "2026-07-22T17:29:31.528Z",
-            "updatedAt": "2026-07-22T17:30:28.706Z"
+            "createdAt": "2026-08-01T13:04:17.077Z",
+            "updatedAt": "2026-08-01T13:06:46.173Z"
           },
           "discountType": "fixed",
           "discountValue": 0,
           "discountAmount": 0,
           "taxes": [
             {
-              "name": "GST 5%",
-              "value": 5,
-              "_id": "6a61be54cfc2809fe2131bfc"
+              "name": "GST",
+              "type": "percentage",
+              "value": 18,
+              "amount": 0,
+              "taxId": "6a6ebcf606c40986ed133d45",
+              "_id": "6a6f8daf909cd955d8122bdb"
             }
           ],
-          "taxAmount": 515.25,
-          "taxableAmount": 10305,
-          "amount": 10820.25,
-          "_id": "6a61bd427fa9a86374185100"
-        },
-        {
-          "product": {
-            "_id": "6a61bd427fa9a863741850c0",
-            "images": [
-              "walnut-office-desks-11.jpg"
-            ],
-            "name": "Walnut Office Desks 11",
-            "description": "Custom office desks manufactured to order.",
-            "slug": "walnut-office-desks-11",
-            "sku": "NWF-OFF-011",
-            "sortPriority": 11,
-            "views": 516,
-            "sales": 437,
-            "purchasePrice": 14381,
-            "price": 19414,
-            "stock": 11,
-            "stockAlert": 10,
-            "category": "6a60fc68f7099ec873517702",
-            "unit": "6a60fdfbf7099ec873517a81",
-            "featured": false,
-            "categories": [
-              "6a60fc68f7099ec8735176e4",
-              "6a60fc68f7099ec873517702"
-            ],
-            "openingStockLocation": "6a61b3e2cfc2809fe2131420",
-            "productType": "Goods",
-            "preferredVendor": "6a61ba0ccfc2809fe21319b7",
-            "prices": [
-              {
-                "min": 1,
-                "max": 10,
-                "price": 19414,
-                "_id": "6a61bd427fa9a863741850c1"
-              },
-              {
-                "min": 11,
-                "max": 50,
-                "price": 18443,
-                "_id": "6a61bd427fa9a863741850c2"
-              }
-            ],
-            "variants": [
-              {
-                "name": "Color",
-                "value": "White",
-                "_id": "6a61bd427fa9a863741850c3"
-              },
-              {
-                "name": "Material",
-                "value": "Engineered Wood",
-                "_id": "6a61bd427fa9a863741850c4"
-              }
-            ],
-            "taxes": [
-              {
-                "name": "GST",
-                "value": 18,
-                "_id": "6a61bd427fa9a863741850c5"
-              }
-            ],
-            "fields": [
-              {
-                "label": "Warranty",
-                "value": "5 Years",
-                "_id": "6a61bd427fa9a863741850c6"
-              },
-              {
-                "label": "Brand",
-                "value": "Next Web Furniture",
-                "_id": "6a61bd427fa9a863741850c7"
-              }
-            ],
-            "discountType": "percentage",
-            "discountValue": 0,
-            "hidden": false,
-            "status": "active",
-            "user": "6953a7427d58c62932d2c80b",
-            "isDeleted": false,
-            "createdAt": "2026-01-01T00:00:00.000Z",
-            "updatedAt": "2026-07-22T00:00:00.000Z"
-          },
-          "name": "Walnut Office Desks 11",
-          "quantity": 1,
-          "price": 19414,
-          "unit": {
-            "_id": "6a60fdfbf7099ec873517a81",
-            "name": "Nos",
-            "value": "Nos",
-            "status": "active",
-            "user": "6953a7427d58c62932d2c80b",
-            "isDeleted": false,
-            "createdAt": "2026-07-22T17:29:31.528Z",
-            "updatedAt": "2026-07-22T17:30:28.706Z"
-          },
-          "discountType": "fixed",
-          "discountValue": 0,
-          "discountAmount": 0,
-          "taxes": [
+          "taxAmount": 27,
+          "taxableAmount": 150,
+          "amount": 177,
+          "_id": "6a6ec24559b3315a69f6d04f",
+          "baseAmount": 150,
+          "computedTaxes": [
             {
-              "name": "GST 12%",
-              "value": 12,
-              "_id": "6a61be54cfc2809fe2131bfe"
-            }
-          ],
-          "taxAmount": 2329.68,
-          "taxableAmount": 19414,
-          "amount": 21743.68,
-          "_id": "6a61bd427fa9a863741850c0"
-        },
-        {
-          "product": {
-            "_id": "6a61bd427fa9a863741850d0",
-            "images": [
-              "white-conference-tables-13.jpg"
-            ],
-            "name": "White Conference Tables 13",
-            "description": "Custom conference tables manufactured to order.",
-            "slug": "white-conference-tables-13",
-            "sku": "NWF-CON-013",
-            "sortPriority": 13,
-            "views": 411,
-            "sales": 440,
-            "purchasePrice": 42280,
-            "price": 57078,
-            "stock": 4,
-            "stockAlert": 2,
-            "category": "6a60fc68f7099ec873517707",
-            "unit": "6a60fdfbf7099ec873517a81",
-            "featured": false,
-            "categories": [
-              "6a60fc68f7099ec8735176e4",
-              "6a60fc68f7099ec873517707"
-            ],
-            "openingStockLocation": "6a61006bcfc2809fe2130029",
-            "productType": "Goods",
-            "preferredVendor": "6a61ba0ccfc2809fe21319bd",
-            "prices": [
-              {
-                "min": 1,
-                "max": 10,
-                "price": 57078,
-                "_id": "6a61bd427fa9a863741850d1"
-              },
-              {
-                "min": 11,
-                "max": 50,
-                "price": 54224,
-                "_id": "6a61bd427fa9a863741850d2"
-              }
-            ],
-            "variants": [
-              {
-                "name": "Color",
-                "value": "Teak",
-                "_id": "6a61bd427fa9a863741850d3"
-              },
-              {
-                "name": "Material",
-                "value": "Engineered Wood",
-                "_id": "6a61bd427fa9a863741850d4"
-              }
-            ],
-            "taxes": [
-              {
-                "name": "GST",
-                "value": 18,
-                "_id": "6a61bd427fa9a863741850d5"
-              }
-            ],
-            "fields": [
-              {
-                "label": "Warranty",
-                "value": "5 Years",
-                "_id": "6a61bd427fa9a863741850d6"
-              },
-              {
-                "label": "Brand",
-                "value": "Next Web Furniture",
-                "_id": "6a61bd427fa9a863741850d7"
-              }
-            ],
-            "discountType": "percentage",
-            "discountValue": 0,
-            "hidden": false,
-            "status": "active",
-            "user": "6953a7427d58c62932d2c80b",
-            "isDeleted": false,
-            "createdAt": "2026-01-01T00:00:00.000Z",
-            "updatedAt": "2026-07-22T00:00:00.000Z"
-          },
-          "name": "White Conference Tables 13",
-          "quantity": 1,
-          "price": 57078,
-          "unit": {
-            "_id": "6a60fdfbf7099ec873517a81",
-            "name": "Nos",
-            "value": "Nos",
-            "status": "active",
-            "user": "6953a7427d58c62932d2c80b",
-            "isDeleted": false,
-            "createdAt": "2026-07-22T17:29:31.528Z",
-            "updatedAt": "2026-07-22T17:30:28.706Z"
-          },
-          "discountType": "fixed",
-          "discountValue": 0,
-          "discountAmount": 0,
-          "taxes": [
+              "name": "CGST",
+              "amount": 13.5,
+              "type": "percentage",
+              "value": 9
+            },
             {
-              "name": "GST 28%",
-              "value": 28,
-              "_id": "6a61be54cfc2809fe2131c00"
+              "name": "SGST",
+              "amount": 13.5,
+              "type": "percentage",
+              "value": 9
             }
-          ],
-          "taxAmount": 15981.84,
-          "taxableAmount": 57078,
-          "amount": 73059.84,
-          "_id": "6a61bd427fa9a863741850d0"
-        },
-        {
-          "product": {
-            "_id": "6a61bd427fa9a86374185070",
-            "images": [
-              "white-sofas-1.jpg"
-            ],
-            "name": "White Sofas 1",
-            "description": "Custom sofas manufactured to order.",
-            "slug": "white-sofas-1",
-            "sku": "NWF-SOF-001",
-            "sortPriority": 1,
-            "views": 2917,
-            "sales": 20,
-            "purchasePrice": 6007,
-            "price": 8109,
-            "stock": 16,
-            "stockAlert": 4,
-            "category": "6a60fc68f7099ec8735176eb",
-            "unit": "6a60fdfbf7099ec873517a81",
-            "featured": false,
-            "categories": [
-              "6a60fc68f7099ec8735176e1",
-              "6a60fc68f7099ec8735176eb"
-            ],
-            "openingStockLocation": "6a61b3d7cfc2809fe2131416",
-            "productType": "Goods",
-            "preferredVendor": "6a61ba0ccfc2809fe21319b7",
-            "prices": [
-              {
-                "min": 1,
-                "max": 10,
-                "price": 8109,
-                "_id": "6a61bd427fa9a86374185071"
-              },
-              {
-                "min": 11,
-                "max": 50,
-                "price": 7703,
-                "_id": "6a61bd427fa9a86374185072"
-              }
-            ],
-            "variants": [
-              {
-                "name": "Color",
-                "value": "Black",
-                "_id": "6a61bd427fa9a86374185073"
-              },
-              {
-                "name": "Material",
-                "value": "Plywood",
-                "_id": "6a61bd427fa9a86374185074"
-              }
-            ],
-            "taxes": [
-              {
-                "name": "GST",
-                "value": 18,
-                "_id": "6a61bd427fa9a86374185075"
-              }
-            ],
-            "fields": [
-              {
-                "label": "Warranty",
-                "value": "5 Years",
-                "_id": "6a61bd427fa9a86374185076"
-              },
-              {
-                "label": "Brand",
-                "value": "Next Web Furniture",
-                "_id": "6a61bd427fa9a86374185077"
-              }
-            ],
-            "discountType": "percentage",
-            "discountValue": 0,
-            "hidden": false,
-            "status": "active",
-            "user": "6953a7427d58c62932d2c80b",
-            "isDeleted": false,
-            "createdAt": "2026-01-01T00:00:00.000Z",
-            "updatedAt": "2026-07-22T00:00:00.000Z"
-          },
-          "name": "White Sofas 1",
-          "quantity": 1,
-          "price": 8109,
-          "unit": {
-            "_id": "6a60fdfbf7099ec873517a81",
-            "name": "Nos",
-            "value": "Nos",
-            "status": "active",
-            "user": "6953a7427d58c62932d2c80b",
-            "isDeleted": false,
-            "createdAt": "2026-07-22T17:29:31.528Z",
-            "updatedAt": "2026-07-22T17:30:28.706Z"
-          },
-          "discountType": "fixed",
-          "discountValue": 0,
-          "discountAmount": 0,
-          "taxes": [
-            {
-              "name": "GST 40%",
-              "value": 40,
-              "_id": "6a61be54cfc2809fe2131c02"
-            }
-          ],
-          "taxAmount": 3243.6,
-          "taxableAmount": 8109,
-          "amount": 11352.6,
-          "_id": "6a61bd427fa9a86374185070"
+          ]
         }
       ],
-      "notes": "These are my notes for my first sale",
-      "terms": "NEED IMMEDIATE CHEQUE",
-      "cost": [
-        {
-          "name": "Freight Inward",
-          "value": 8900,
-          "_id": "6a61be54cfc2809fe2131c03"
-        },
-        {
-          "name": "Data Backup Cost",
-          "value": 4000,
-          "_id": "6a61be54cfc2809fe2131c04"
-        }
-      ],
-      "discountType": "fixed",
-      "discountValue": 1000,
-      "signature": {
-        "_id": "696da971882daace40060c78",
-        "name": "Sample Signature",
-        "url": "https://next-web-erps-acls.s3.eu-north-1.amazonaws.com/uploads/6953a7427d58c62932d2c80b/signatures/signature.png",
-        "status": "active",
-        "user": "6953a7427d58c62932d2c80b",
+      "bank": {
+        "_id": "6a679e3b2b5bb158dc2878e6",
+        "name": "SARRAF INDUSTRIES",
+        "bankName": "ICICI Bank",
+        "branch": "KOVILPATTI",
+        "branchAddress": "ICICI BANK LTD., 168/16, STAR TOWER 2, NEW ROAD.628501",
+        "accountType": "Current",
+        "accountNumber": "350605003823",
+        "ifsc": "ICIC0003506",
+        "paymentPrefrence": "NEFT",
+        "balance": 0,
         "isDeleted": false,
-        "createdAt": "2026-01-19T03:48:01.160Z",
-        "updatedAt": "2026-01-19T03:48:01.160Z"
+        "user": "6a67984e832bbd4b741cc108",
+        "createdAt": "2026-07-27T18:06:51.574Z",
+        "updatedAt": "2026-07-27T18:06:51.574Z"
       },
-      "status": "Draft",
+      "cost": [],
+      "discountType": "fixed",
+      "discountValue": 0,
+      "signature": {
+        "_id": "6a67d581541fb1e1245d29c4",
+        "name": "My Signature",
+        "url": "https://next-web-erps-acls.s3.eu-north-1.amazonaws.com/uploads/6a67984e832bbd4b741cc108/signatures/signature.png",
+        "status": "active",
+        "user": "6a67984e832bbd4b741cc108",
+        "isDeleted": false,
+        "createdAt": "2026-07-27T22:02:41.938Z",
+        "updatedAt": "2026-07-27T22:02:41.938Z"
+      },
+      "status": "Approved",
       "paymentStatus": "Unpaid",
-      "subtotal": 94906,
-      "totalDiscountAmount": 1000,
-      "totalTaxAmount": 22070.37,
-      "totalCostAmount": 12900,
-      "grandTotal": 128876.37,
-      "roundOff": 0,
+      "totalDiscount": 0,
+      "totalTaxableAmount": 150,
+      "totalTaxAmount": 27,
+      "totalAmount": 177,
+      "amountInWords": "Rupees One Hundred and Seventy Seven Only",
+      "totalTaxAmountInWords": "Rupees Twenty Seven Only",
       "type": "Sale",
-      "user": "6953a7427d58c62932d2c80b",
       "isDeleted": false,
-      "createdAt": "2026-07-23T07:10:12.230Z",
-      "updatedAt": "2026-07-23T07:10:12.230Z"
+      "summary": [
+        {
+          "hsn": "9969",
+          "taxableValue": 150,
+          "totalTaxAmount": 27,
+          "computedTaxes": [
+            {
+              "name": "CGST",
+              "amount": 13.5,
+              "type": "percentage",
+              "value": 9
+            },
+            {
+              "name": "SGST",
+              "amount": 13.5,
+              "type": "percentage",
+              "value": 9
+            }
+          ]
+        }
+      ],
+      "createdAt": "2026-08-02T18:34:23.954Z",
+      "updatedAt": "2026-08-02T22:19:57.759Z",
+      "isPublicalyShared": true
     },
     "business": {
-      "_id": "6953b3d78bd5fcc7f33e87e0",
-      "status": "active",
-      "user": "6953a7427d58c62932d2c80b",
-      "isDeleted": false,
-      "createdAt": "2025-12-30T11:13:27.931Z",
-      "updatedAt": "2026-07-23T09:18:56.556Z",
+      "_id": "6a679baab34e60bbcaa13869",
+      "name": "SARRAF INDUSTRIES",
+      "description": "MANUFACTURER OF SAFETY MATCHES",
+      "email": "sarrafindustries1985@gmail.com",
+      "phone": "+91 9443152578",
+      "phoneNumbers": [
+        "+91 9791363749",
+        "+91 7000782675"
+      ],
+      "website": "www.aadisarrafinternational.com",
       "address": {
-        "streetAddress": "Sadhu Vaswani Nagar, Behind B. K. Sindhi Colony",
-        "apartment": "617",
-        "city": "Indore",
-        "state": "Madhya Pradesh",
-        "stateCode": "23",
-        "postalCode": "452001",
+        "streetAddress": "Sidco Industrial Estate",
+        "apartment": "Plot no. 61",
+        "city": "Kovilpati",
+        "state": "Tamil Nadu",
+        "stateCode": "33",
+        "postalCode": "628501",
         "country": "India",
-        "createdAt": "2026-07-23T09:18:56.556Z",
-        "updatedAt": "2026-07-23T09:18:56.556Z"
+        "createdAt": "2026-07-27T17:55:54.721Z",
+        "updatedAt": "2026-07-27T17:55:54.721Z"
       },
-      "description": "Distributors of High Class Safty Matches, Detergent Powder, Soap & Other Journal Items\n",
-      "email": "dilip.khetwani@gmail.com",
-      "gst": "23BLNPK4456R1ZD",
-      "logo": "https://next-web-erps-acls.s3.eu-north-1.amazonaws.com/uploads/6953a7427d58c62932d2c80b/business/logo/product-jpeg-500x500.webp",
-      "name": "DEVANSH ENTERPRISES",
-      "phone": "+91 9826927265",
-      "baseCurrency": "INR"
+      "logo": "https://next-web-erps-acls.s3.eu-north-1.amazonaws.com/uploads/6a67984e832bbd4b741cc108/business/logo/savera-matches.jpg",
+      "gst": "33ABRPJ6963H1Z8",
+      "status": "active",
+      "user": "6a67984e832bbd4b741cc108",
+      "isDeleted": false,
+      "baseCurrency": "INR",
+      "createdAt": "2026-07-27T17:55:54.721Z",
+      "updatedAt": "2026-07-27T17:55:54.721Z"
+    },
+    "location": {
+      "_id": "6a6de0cd59b3315a69f6b659",
+      "name": "Ram Offset",
+      "business": "6a679baab34e60bbcaa13869",
+      "user": "6a67984e832bbd4b741cc108",
+      "isDeleted": false,
+      "createdAt": "2026-08-01T12:04:29.077Z",
+      "updatedAt": "2026-08-01T12:04:29.077Z"
     },
     "settings": {
-      "_id": "695f30dbc7f54e47a1153b27",
+      "_id": "6a6cc34b59b3315a69f696f5",
       "name": "Default Sale Settings",
-      "template": "classic",
+      "logo": "https://next-web-erps-acls.s3.eu-north-1.amazonaws.com/uploads/6a67984e832bbd4b741cc108/business/logo/savera-matches.jpg",
       "defaults": {
         "terms": "",
-        "notes": ""
+        "notes": "",
+        "bank": "6a679e3b2b5bb158dc2878e6",
+        "signature": "6a67d581541fb1e1245d29c4"
       },
+      "pdf_template": "Standard",
+      "template": "{{prefix}}-{{counter}}",
       "prefix": "S",
-      "counter": 1,
+      "counter": 4,
       "type": "Sale",
       "status": "active",
-      "user": "6953a7427d58c62932d2c80b",
+      "user": "6a67984e832bbd4b741cc108",
+      "business": "6a679baab34e60bbcaa13869",
       "isDeleted": false,
-      "createdAt": "2026-01-08T04:21:47.259Z",
-      "updatedAt": "2026-01-08T04:21:47.259Z"
+      "createdAt": "2026-07-31T15:46:19.751Z",
+      "updatedAt": "2026-08-02T19:09:53.202Z"
     }
   },
   "message": "Retrieved successfully for print",

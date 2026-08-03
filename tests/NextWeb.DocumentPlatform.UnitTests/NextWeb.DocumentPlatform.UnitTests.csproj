@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\NextWeb.DocumentPlatform.Application\NextWeb.DocumentPlatform.Application.csproj" />
     <ProjectReference Include="..\..\src\NextWeb.DocumentPlatform.Engine\NextWeb.DocumentPlatform.Engine.csproj" />
+    <ProjectReference Include="..\..\src\NextWeb.DocumentPlatform.Infrastructure\NextWeb.DocumentPlatform.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\NextWeb.DocumentPlatform.Renderers\NextWeb.DocumentPlatform.Renderers.csproj" />
   </ItemGroup>
 

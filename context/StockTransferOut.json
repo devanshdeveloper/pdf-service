@@ -1,0 +1,64 @@
+{
+  "errors": [],
+  "success": true,
+  "data": {
+    "document": {
+      "_id": "6a703b1f71e1f079f2ac90d1",
+      "name": "STO-2026-001",
+      "description": "Dispatch to branch location",
+      "fromLocation": {
+        "_id": "6a6de0cd59b3315a69f6b659",
+        "name": "Main Warehouse"
+      },
+      "toLocation": {
+        "_id": "6a6de0cd59b3315a69f6b660",
+        "name": "Ram Offset"
+      },
+      "items": [
+        {
+          "_id": "6a703b1f71e1f079f2ac90d2",
+          "product": {
+            "_id": "6a6ec24559b3315a69f6d056",
+            "name": "LABLE KALASH GANGA",
+            "sku": "LKG-001",
+            "hsn": "9969"
+          },
+          "quantity": 25
+        }
+      ],
+      "attachments": [],
+      "requestedBy": {
+        "_id": "6a67984e832bbd4b741cc108",
+        "username": "admin",
+        "firstName": "Admin",
+        "lastName": "User"
+      },
+      "approvedBy": null,
+      "rejectedBy": null,
+      "comments": [],
+      "status": "pending",
+      "createdAt": "2026-08-03T07:00:00.000Z",
+      "updatedAt": "2026-08-03T07:00:00.000Z"
+    },
+    "business": {
+      "_id": "6a679baab34e60bbcaa13869",
+      "name": "SARRAF INDUSTRIES",
+      "description": "MANUFACTURER OF SAFETY MATCHES",
+      "email": "sarrafindustries1985@gmail.com",
+      "phone": "+91 9443152578",
+      "website": "www.aadisarrafinternational.com",
+      "address": {
+        "streetAddress": "Sidco Industrial Estate",
+        "apartment": "Plot no. 61",
+        "city": "Kovilpati",
+        "state": "Tamil Nadu",
+        "postalCode": "628501",
+        "country": "India"
+      },
+      "gst": "33ABRPJ6963H1Z8",
+      "baseCurrency": "INR"
+    }
+  },
+  "message": "Retrieved successfully for print",
+  "pagination": {}
+}

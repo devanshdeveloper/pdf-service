@@ -12,6 +12,9 @@ public class MaterialEntryDataModel
     [JsonPropertyName("business")]
     public BusinessDto? Business { get; set; }
 
+    [JsonPropertyName("location")]
+    public LocationDto? Location { get; set; }
+
     [JsonPropertyName("settings")]
     public MaterialEntrySettingsDto? Settings { get; set; }
 }
@@ -28,22 +31,22 @@ public class MaterialEntryDto
     public DateTime Date { get; set; }
 
     [JsonPropertyName("referenceNumber")]
-    public string ReferenceNumber { get; set; } = string.Empty;
+    public string? ReferenceNumber { get; set; }
 
     [JsonPropertyName("location")]
-    public string Location { get; set; } = string.Empty;
+    public LocationDto? Location { get; set; }
 
     [JsonPropertyName("products")]
     public List<MaterialEntryProductDto> Products { get; set; } = new();
 
     [JsonPropertyName("notes")]
-    public string Notes { get; set; } = string.Empty;
+    public string? Notes { get; set; }
 
     [JsonPropertyName("terms")]
-    public string Terms { get; set; } = string.Empty;
+    public string? Terms { get; set; }
 
     [JsonPropertyName("signature")]
-    public string Signature { get; set; } = string.Empty;
+    public SignatureDto? Signature { get; set; }
 
     [JsonPropertyName("status")]
     public string Status { get; set; } = string.Empty;
@@ -54,6 +57,9 @@ public class MaterialEntryDto
 
 public class MaterialEntryProductDto
 {
+    [JsonPropertyName("_id")]
+    public string Id { get; set; } = string.Empty;
+
     [JsonPropertyName("product")]
     public ProductDto? Product { get; set; }
 

@@ -12,11 +12,11 @@ public class VoucherDataModel
     [JsonPropertyName("business")]
     public BusinessDto? Business { get; set; }
 
+    [JsonPropertyName("location")]
+    public LocationDto? Location { get; set; }
+
     [JsonPropertyName("settings")]
     public VoucherSettingsDto? Settings { get; set; }
-
-    [JsonPropertyName("taxSummary")]
-    public List<TaxSummaryDto> TaxSummary { get; set; } = new();
 }
 
 public class DocumentDto
@@ -24,10 +24,32 @@ public class DocumentDto
     [JsonPropertyName("_id")]
     public string Id { get; set; } = string.Empty;
 
-    
-
     [JsonPropertyName("number")]
     public string Number { get; set; } = string.Empty;
+
+    [JsonPropertyName("currency")]
+    public string Currency { get; set; } = string.Empty;
+
+    [JsonPropertyName("exchangeRate")]
+    public decimal ExchangeRate { get; set; }
+
+    [JsonPropertyName("taxType")]
+    public string TaxType { get; set; } = string.Empty;
+
+    [JsonPropertyName("placeOfSupplyStateCode")]
+    public string PlaceOfSupplyStateCode { get; set; } = string.Empty;
+
+    [JsonPropertyName("sellerStateCode")]
+    public string SellerStateCode { get; set; } = string.Empty;
+
+    [JsonPropertyName("user")]
+    public string User { get; set; } = string.Empty;
+
+    [JsonPropertyName("business")]
+    public BusinessDto? Business { get; set; }
+
+    [JsonPropertyName("location")]
+    public LocationDto? Location { get; set; }
 
     [JsonPropertyName("party")]
     public PartyDto? Party { get; set; }
@@ -42,35 +64,34 @@ public class DocumentDto
     public DateTime DueDate { get; set; }
 
     [JsonPropertyName("referenceNumber")]
-    public string ReferenceNumber { get; set; } = string.Empty;
+    public string? ReferenceNumber { get; set; }
 
     [JsonPropertyName("referenceDate")]
     public DateTime? ReferenceDate { get; set; }
 
     [JsonPropertyName("dispatchDocNo")]
-    public string DispatchDocNo { get; set; } = string.Empty;
+    public string? DispatchDocNo { get; set; }
 
     [JsonPropertyName("deliveryNote")]
-    public string DeliveryNote { get; set; } = string.Empty;
-
+    public string? DeliveryNote { get; set; }
 
     [JsonPropertyName("deliveryNoteDate")]
     public DateTime? DeliveryNoteDate { get; set; }
 
     [JsonPropertyName("buyersOrderNo")]
-    public string BuyersOrderNo { get; set; } = string.Empty;
+    public string? BuyersOrderNo { get; set; }
 
     [JsonPropertyName("buyersOrderDate")]
     public DateTime? BuyersOrderDate { get; set; }
 
     [JsonPropertyName("dispatchedThrough")]
-    public string DispatchedThrough { get; set; } = string.Empty;
+    public string? DispatchedThrough { get; set; }
 
     [JsonPropertyName("destination")]
-    public string Destination { get; set; } = string.Empty;
+    public string? Destination { get; set; }
 
     [JsonPropertyName("termsOfDelivery")]
-    public string TermsOfDelivery { get; set; } = string.Empty;
+    public string? TermsOfDelivery { get; set; }
 
     [JsonPropertyName("paymentMethod")]
     public string PaymentMethod { get; set; } = string.Empty;
@@ -81,11 +102,14 @@ public class DocumentDto
     [JsonPropertyName("products")]
     public List<VoucherProductDto> Products { get; set; } = new();
 
+    [JsonPropertyName("bank")]
+    public BankDto? Bank { get; set; }
+
     [JsonPropertyName("notes")]
-    public string Notes { get; set; } = string.Empty;
+    public string? Notes { get; set; }
 
     [JsonPropertyName("terms")]
-    public string Terms { get; set; } = string.Empty;
+    public string? Terms { get; set; }
 
     [JsonPropertyName("cost")]
     public List<CostDto> Cost { get; set; } = new();
@@ -96,6 +120,9 @@ public class DocumentDto
     [JsonPropertyName("discountValue")]
     public decimal DiscountValue { get; set; }
 
+    [JsonPropertyName("couponCode")]
+    public string? CouponCode { get; set; }
+
     [JsonPropertyName("signature")]
     public SignatureDto? Signature { get; set; }
 
@@ -105,35 +132,41 @@ public class DocumentDto
     [JsonPropertyName("paymentStatus")]
     public string PaymentStatus { get; set; } = string.Empty;
 
-    [JsonPropertyName("subtotal")]
-    public decimal Subtotal { get; set; }
+    [JsonPropertyName("totalDiscount")]
+    public decimal TotalDiscount { get; set; }
 
-    [JsonPropertyName("totalDiscountAmount")]
-    public decimal TotalDiscountAmount { get; set; }
+    [JsonPropertyName("totalTaxableAmount")]
+    public decimal TotalTaxableAmount { get; set; }
 
     [JsonPropertyName("totalTaxAmount")]
     public decimal TotalTaxAmount { get; set; }
 
-    [JsonPropertyName("totalCostAmount")]
-    public decimal TotalCostAmount { get; set; }
+    [JsonPropertyName("totalAmount")]
+    public decimal TotalAmount { get; set; }
 
-    [JsonPropertyName("grandTotal")]
-    public decimal GrandTotal { get; set; }
-
-    [JsonPropertyName("roundOff")]
-    public decimal RoundOff { get; set; }
-
-    [JsonPropertyName("type")]
-    public string Type { get; set; } = string.Empty;
-
-    [JsonPropertyName("taxType")]
-    public string TaxType { get; set; } = string.Empty;
+    [JsonPropertyName("summary")]
+    public List<VoucherSummaryDto> Summary { get; set; } = new();
 
     [JsonPropertyName("amountInWords")]
     public string AmountInWords { get; set; } = string.Empty;
 
     [JsonPropertyName("totalTaxAmountInWords")]
     public string TotalTaxAmountInWords { get; set; } = string.Empty;
+
+    [JsonPropertyName("type")]
+    public string Type { get; set; } = string.Empty;
+
+    [JsonPropertyName("isPublicalyShared")]
+    public bool IsPublicalyShared { get; set; }
+
+    [JsonPropertyName("isDeleted")]
+    public bool IsDeleted { get; set; }
+
+    [JsonPropertyName("createdAt")]
+    public DateTime? CreatedAt { get; set; }
+
+    [JsonPropertyName("updatedAt")]
+    public DateTime? UpdatedAt { get; set; }
 }
 
 public class BusinessDto
@@ -153,11 +186,65 @@ public class BusinessDto
     [JsonPropertyName("phone")]
     public string Phone { get; set; } = string.Empty;
 
+    [JsonPropertyName("phoneNumbers")]
+    public List<string> PhoneNumbers { get; set; } = new();
+
+    [JsonPropertyName("website")]
+    public string Website { get; set; } = string.Empty;
+
+    [JsonPropertyName("logo")]
+    public string Logo { get; set; } = string.Empty;
+
     [JsonPropertyName("gst")]
     public string Gst { get; set; } = string.Empty;
 
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = string.Empty;
+
+    [JsonPropertyName("user")]
+    public string User { get; set; } = string.Empty;
+
+    [JsonPropertyName("isDeleted")]
+    public bool IsDeleted { get; set; }
+
+    [JsonPropertyName("baseCurrency")]
+    public string BaseCurrency { get; set; } = string.Empty;
+
     [JsonPropertyName("address")]
     public AddressDto? Address { get; set; }
+
+    [JsonPropertyName("createdAt")]
+    public DateTime? CreatedAt { get; set; }
+
+    [JsonPropertyName("updatedAt")]
+    public DateTime? UpdatedAt { get; set; }
+}
+
+public class LocationDto
+{
+    [JsonPropertyName("_id")]
+    public string Id { get; set; } = string.Empty;
+
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
+
+    [JsonPropertyName("business")]
+    public string Business { get; set; } = string.Empty;
+
+    [JsonPropertyName("user")]
+    public string User { get; set; } = string.Empty;
+
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = string.Empty;
+
+    [JsonPropertyName("isDeleted")]
+    public bool IsDeleted { get; set; }
+
+    [JsonPropertyName("createdAt")]
+    public DateTime? CreatedAt { get; set; }
+
+    [JsonPropertyName("updatedAt")]
+    public DateTime? UpdatedAt { get; set; }
 }
 
 public class VoucherSettingsDto
@@ -194,6 +281,21 @@ public class VoucherSettingsDto
 
     [JsonPropertyName("defaults")]
     public DefaultsDto? Defaults { get; set; }
+
+    [JsonPropertyName("user")]
+    public string User { get; set; } = string.Empty;
+
+    [JsonPropertyName("business")]
+    public string Business { get; set; } = string.Empty;
+
+    [JsonPropertyName("isDeleted")]
+    public bool IsDeleted { get; set; }
+
+    [JsonPropertyName("createdAt")]
+    public DateTime? CreatedAt { get; set; }
+
+    [JsonPropertyName("updatedAt")]
+    public DateTime? UpdatedAt { get; set; }
 }
 
 public class DefaultsDto
@@ -203,6 +305,12 @@ public class DefaultsDto
 
     [JsonPropertyName("notes")]
     public string Notes { get; set; } = string.Empty;
+
+    [JsonPropertyName("bank")]
+    public string Bank { get; set; } = string.Empty;
+
+    [JsonPropertyName("signature")]
+    public string Signature { get; set; } = string.Empty;
 }
 
 public class PartyDto
@@ -212,6 +320,12 @@ public class PartyDto
 
     [JsonPropertyName("businessType")]
     public string BusinessType { get; set; } = string.Empty;
+
+    [JsonPropertyName("partyType")]
+    public string PartyType { get; set; } = string.Empty;
+
+    [JsonPropertyName("avatar")]
+    public string Avatar { get; set; } = string.Empty;
 
     [JsonPropertyName("firstName")]
     public string FirstName { get; set; } = string.Empty;
@@ -239,6 +353,42 @@ public class PartyDto
 
     [JsonPropertyName("gst")]
     public string Gst { get; set; } = string.Empty;
+
+    [JsonPropertyName("fields")]
+    public List<LabelValueDto> Fields { get; set; } = new();
+
+    [JsonPropertyName("documents")]
+    public List<PartyDocumentDto> Documents { get; set; } = new();
+
+    [JsonPropertyName("business")]
+    public string Business { get; set; } = string.Empty;
+
+    [JsonPropertyName("user")]
+    public string User { get; set; } = string.Empty;
+
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = string.Empty;
+
+    [JsonPropertyName("isDeleted")]
+    public bool IsDeleted { get; set; }
+
+    [JsonPropertyName("createdAt")]
+    public DateTime? CreatedAt { get; set; }
+
+    [JsonPropertyName("updatedAt")]
+    public DateTime? UpdatedAt { get; set; }
+}
+
+public class PartyDocumentDto
+{
+    [JsonPropertyName("label")]
+    public string Label { get; set; } = string.Empty;
+
+    [JsonPropertyName("value")]
+    public string Value { get; set; } = string.Empty;
+
+    [JsonPropertyName("identifier")]
+    public string Identifier { get; set; } = string.Empty;
 }
 
 public class AddressDto
@@ -252,6 +402,9 @@ public class AddressDto
     [JsonPropertyName("city")]
     public string City { get; set; } = string.Empty;
 
+    [JsonPropertyName("district")]
+    public string District { get; set; } = string.Empty;
+
     [JsonPropertyName("state")]
     public string State { get; set; } = string.Empty;
 
@@ -263,10 +416,22 @@ public class AddressDto
 
     [JsonPropertyName("country")]
     public string Country { get; set; } = string.Empty;
+
+    [JsonPropertyName("fullAddress")]
+    public string FullAddress { get; set; } = string.Empty;
+
+    [JsonPropertyName("createdAt")]
+    public DateTime? CreatedAt { get; set; }
+
+    [JsonPropertyName("updatedAt")]
+    public DateTime? UpdatedAt { get; set; }
 }
 
 public class BankDto
 {
+    [JsonPropertyName("_id")]
+    public string Id { get; set; } = string.Empty;
+
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 
@@ -276,6 +441,9 @@ public class BankDto
     [JsonPropertyName("branch")]
     public string Branch { get; set; } = string.Empty;
 
+    [JsonPropertyName("branchAddress")]
+    public string BranchAddress { get; set; } = string.Empty;
+
     [JsonPropertyName("accountType")]
     public string AccountType { get; set; } = string.Empty;
 
@@ -284,6 +452,24 @@ public class BankDto
 
     [JsonPropertyName("ifsc")]
     public string Ifsc { get; set; } = string.Empty;
+
+    [JsonPropertyName("paymentPrefrence")]
+    public string PaymentPrefrence { get; set; } = string.Empty;
+
+    [JsonPropertyName("balance")]
+    public decimal Balance { get; set; }
+
+    [JsonPropertyName("isDeleted")]
+    public bool IsDeleted { get; set; }
+
+    [JsonPropertyName("user")]
+    public string User { get; set; } = string.Empty;
+
+    [JsonPropertyName("createdAt")]
+    public DateTime? CreatedAt { get; set; }
+
+    [JsonPropertyName("updatedAt")]
+    public DateTime? UpdatedAt { get; set; }
 }
 
 public class VoucherProductDto
@@ -296,6 +482,9 @@ public class VoucherProductDto
 
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
+
+    [JsonPropertyName("hsn")]
+    public string Hsn { get; set; } = string.Empty;
 
     [JsonPropertyName("quantity")]
     public decimal Quantity { get; set; }
@@ -326,6 +515,12 @@ public class VoucherProductDto
 
     [JsonPropertyName("amount")]
     public decimal Amount { get; set; }
+
+    [JsonPropertyName("baseAmount")]
+    public decimal BaseAmount { get; set; }
+
+    [JsonPropertyName("computedTaxes")]
+    public List<ComputedTaxDto> ComputedTaxes { get; set; } = new();
 }
 
 public class ProductDto
@@ -333,17 +528,95 @@ public class ProductDto
     [JsonPropertyName("_id")]
     public string Id { get; set; } = string.Empty;
 
+    [JsonPropertyName("images")]
+    public List<string> Images { get; set; } = new();
+
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 
     [JsonPropertyName("description")]
     public string Description { get; set; } = string.Empty;
 
+    [JsonPropertyName("slug")]
+    public string Slug { get; set; } = string.Empty;
+
+    [JsonPropertyName("categories")]
+    public List<string> Categories { get; set; } = new();
+
     [JsonPropertyName("sku")]
     public string Sku { get; set; } = string.Empty;
 
     [JsonPropertyName("hsn")]
     public string Hsn { get; set; } = string.Empty;
+
+    [JsonPropertyName("unit")]
+    public string Unit { get; set; } = string.Empty;
+
+    [JsonPropertyName("featured")]
+    public bool Featured { get; set; }
+
+    [JsonPropertyName("productType")]
+    public string ProductType { get; set; } = string.Empty;
+
+    [JsonPropertyName("taxes")]
+    public List<TaxDto> Taxes { get; set; } = new();
+
+    [JsonPropertyName("fields")]
+    public List<LabelValueDto> Fields { get; set; } = new();
+
+    [JsonPropertyName("discountType")]
+    public string DiscountType { get; set; } = string.Empty;
+
+    [JsonPropertyName("hidden")]
+    public bool Hidden { get; set; }
+
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = string.Empty;
+
+    [JsonPropertyName("business")]
+    public string Business { get; set; } = string.Empty;
+
+    [JsonPropertyName("user")]
+    public string User { get; set; } = string.Empty;
+
+    [JsonPropertyName("isDeleted")]
+    public bool IsDeleted { get; set; }
+
+    [JsonPropertyName("prices")]
+    public List<ProductPriceDto> Prices { get; set; } = new();
+
+    [JsonPropertyName("variants")]
+    public List<ProductVariantDto> Variants { get; set; } = new();
+
+    [JsonPropertyName("createdAt")]
+    public DateTime? CreatedAt { get; set; }
+
+    [JsonPropertyName("updatedAt")]
+    public DateTime? UpdatedAt { get; set; }
+}
+
+public class ProductPriceDto
+{
+    [JsonPropertyName("min")]
+    public decimal Min { get; set; }
+
+    [JsonPropertyName("max")]
+    public decimal Max { get; set; }
+
+    [JsonPropertyName("price")]
+    public decimal Price { get; set; }
+}
+
+public class ProductVariantDto
+{
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
+
+    [JsonPropertyName("value")]
+    public string Value { get; set; } = string.Empty;
+
+    [JsonPropertyName("product")]
+    public string Product { get; set; } = string.Empty;
 }
 
 public class UnitDto
@@ -356,12 +629,39 @@ public class UnitDto
 
     [JsonPropertyName("value")]
     public string Value { get; set; } = string.Empty;
+
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = string.Empty;
+
+    [JsonPropertyName("user")]
+    public string User { get; set; } = string.Empty;
+
+    [JsonPropertyName("business")]
+    public string Business { get; set; } = string.Empty;
+
+    [JsonPropertyName("isPredefined")]
+    public bool IsPredefined { get; set; }
+
+    [JsonPropertyName("conversionFactor")]
+    public decimal ConversionFactor { get; set; }
+
+    [JsonPropertyName("isDeleted")]
+    public bool IsDeleted { get; set; }
+
+    [JsonPropertyName("createdAt")]
+    public DateTime? CreatedAt { get; set; }
+
+    [JsonPropertyName("updatedAt")]
+    public DateTime? UpdatedAt { get; set; }
 }
 
 public class TaxDto
 {
     [JsonPropertyName("_id")]
     public string Id { get; set; } = string.Empty;
+
+    [JsonPropertyName("taxId")]
+    public string TaxId { get; set; } = string.Empty;
 
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
@@ -379,6 +679,24 @@ public class TaxDto
     public decimal Amount { get; set; }
 }
 
+public class ComputedTaxDto
+{
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
+
+    [JsonPropertyName("type")]
+    public string Type { get; set; } = string.Empty;
+
+    [JsonPropertyName("value")]
+    public decimal Value { get; set; }
+
+    [JsonPropertyName("amount")]
+    public decimal Amount { get; set; }
+
+    [JsonPropertyName("taxId")]
+    public string TaxId { get; set; } = string.Empty;
+}
+
 public class CostDto
 {
     [JsonPropertyName("_id")]
@@ -386,6 +704,9 @@ public class CostDto
 
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
+
+    [JsonPropertyName("type")]
+    public string Type { get; set; } = string.Empty;
 
     [JsonPropertyName("value")]
     public decimal Value { get; set; }
@@ -401,43 +722,46 @@ public class SignatureDto
 
     [JsonPropertyName("url")]
     public string Url { get; set; } = string.Empty;
+
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = string.Empty;
+
+    [JsonPropertyName("user")]
+    public string User { get; set; } = string.Empty;
+
+    [JsonPropertyName("isDeleted")]
+    public bool IsDeleted { get; set; }
+
+    [JsonPropertyName("createdAt")]
+    public DateTime? CreatedAt { get; set; }
+
+    [JsonPropertyName("updatedAt")]
+    public DateTime? UpdatedAt { get; set; }
 }
 
-public class TaxSummaryDto
+public class VoucherSummaryDto
 {
     [JsonPropertyName("hsn")]
     public string Hsn { get; set; } = string.Empty;
 
-    [JsonPropertyName("taxableAmount")]
-    public decimal TaxableAmount { get; set; }
+    [JsonPropertyName("taxableValue")]
+    public decimal TaxableValue { get; set; }
 
-    [JsonPropertyName("cgstRate")]
-    public decimal CgstRate { get; set; }
+    [JsonPropertyName("totalTaxAmount")]
+    public decimal TotalTaxAmount { get; set; }
 
-    [JsonPropertyName("cgstAmount")]
-    public decimal CgstAmount { get; set; }
+    [JsonPropertyName("computedTaxes")]
+    public List<ComputedTaxDto> ComputedTaxes { get; set; } = new();
+}
 
-    [JsonPropertyName("sgstRate")]
-    public decimal SgstRate { get; set; }
+public class LabelValueDto
+{
+    [JsonPropertyName("_id")]
+    public string Id { get; set; } = string.Empty;
 
-    [JsonPropertyName("sgstAmount")]
-    public decimal SgstAmount { get; set; }
+    [JsonPropertyName("label")]
+    public string Label { get; set; } = string.Empty;
 
-    [JsonPropertyName("igstRate")]
-    public decimal IgstRate { get; set; }
-
-    [JsonPropertyName("igstAmount")]
-    public decimal IgstAmount { get; set; }
-
-    [JsonPropertyName("utgstRate")]
-    public decimal UtgstRate { get; set; }
-
-    [JsonPropertyName("utgstAmount")]
-    public decimal UtgstAmount { get; set; }
-
-    [JsonPropertyName("cessAmount")]
-    public decimal CessAmount { get; set; }
-
-    [JsonPropertyName("totalAmount")]
-    public decimal TotalAmount { get; set; }
+    [JsonPropertyName("value")]
+    public string Value { get; set; } = string.Empty;
 }
