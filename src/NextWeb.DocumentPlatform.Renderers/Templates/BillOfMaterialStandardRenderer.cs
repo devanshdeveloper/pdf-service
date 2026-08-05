@@ -214,7 +214,7 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
                     row.RelativeItem().Column(c =>
                     {
                         c.Item().Text("To Produce").FontSize(8).FontColor(TextMuted);
-                        c.Item().PaddingTop(2).Text(doc.ToProduce?.Name ?? "—").FontSize(10).SemiBold();
+                        c.Item().PaddingTop(2).Text(ProductDisplayHelper.FormatLineItemName(null, doc.ToProduce) ?? "—").FontSize(10).SemiBold();
                     });
 
                     row.RelativeItem().AlignRight().Column(c =>
