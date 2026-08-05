@@ -44,6 +44,7 @@ builder.Services.AddTransient<IDocumentRenderer, VoucherStandardRenderer>();
 builder.Services.AddTransient<IDocumentRenderer, MaterialEntryStandardRenderer>();
 builder.Services.AddTransient<IDocumentRenderer, StockTransferInStandardRenderer>();
 builder.Services.AddTransient<IDocumentRenderer, StockTransferOutStandardRenderer>();
+builder.Services.AddTransient<IDocumentRenderer, BillOfMaterialStandardRenderer>();
 
 // Health Checks
 builder.Services.AddHealthChecks();

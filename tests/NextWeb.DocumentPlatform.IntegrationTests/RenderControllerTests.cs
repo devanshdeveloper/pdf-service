@@ -130,6 +130,15 @@ public class RenderControllerTests : IClassFixture<WebApplicationFactory<Program
             "stock-transfer-out-standard.pdf");
     }
 
+    [Fact]
+    public async Task Generate_BillOfMaterial_Standard()
+    {
+        await GenerateFromMockFile(
+            new BillOfMaterialMockErpForwardingService(),
+            "/render/bill-of-material/test-doc-id",
+            "bill-of-material-standard.pdf");
+    }
+
     private async Task GenerateFromMockFile(IErpForwardingService mockService, string endpoint, string outputFileName)
     {
         var customFactory = _factory.WithWebHostBuilder(builder =>
@@ -319,6 +328,15 @@ public class StockTransferOutMockErpForwardingService : IErpForwardingService
     public async Task<string> GetDocumentDataAsync(HttpRequestContext requestContext, CancellationToken cancellationToken)
     {
         var path = @"c:\code\next-web-works\pdf-service\context\StockTransferOut.json";
+        return await File.ReadAllTextAsync(path, cancellationToken);
+    }
+}
+
+public class BillOfMaterialMockErpForwardingService : IErpForwardingService
+{
+    public async Task<string> GetDocumentDataAsync(HttpRequestContext requestContext, CancellationToken cancellationToken)
+    {
+        var path = @"c:\code\next-web-works\pdf-service\context\BillOfMaterial.json";
         return await File.ReadAllTextAsync(path, cancellationToken);
     }
 }

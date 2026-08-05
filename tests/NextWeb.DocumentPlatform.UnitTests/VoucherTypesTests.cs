@@ -25,6 +25,15 @@ public class VoucherTypesTests
     }
 
     [Fact]
+    public void PurchaseVoucher_ShowsActualQuantityColumns()
+    {
+        VoucherTypes.ShouldShowActualQuantity(VoucherTypes.Purchase).Should().BeTrue();
+        VoucherTypes.ShouldShowActualQuantity(VoucherTypes.PurchaseOrder).Should().BeTrue();
+        VoucherTypes.ShouldShowActualQuantity(VoucherTypes.CashPurchaseReturn).Should().BeTrue();
+        VoucherTypes.ShouldShowActualQuantity(VoucherTypes.Sale).Should().BeFalse();
+    }
+
+    [Fact]
     public void QuotationVoucher_HidesShippingAndPaymentStatus()
     {
         VoucherTypes.ShouldShowShipping(VoucherTypes.Quotation).Should().BeFalse();

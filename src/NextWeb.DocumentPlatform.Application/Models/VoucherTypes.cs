@@ -29,4 +29,12 @@ public static class VoucherTypes
 
     public static bool ShouldShowPaymentStatus(string? type) =>
         type is Sale or Purchase or PurchaseReturn or SaleReturn;
+
+    public static bool ShouldShowActualQuantity(string? type) =>
+        type is PurchaseOrder
+            or Purchase
+            or PurchaseReturn
+            or CashPurchase
+            or CashPurchaseReturn
+            or CashPurchaseOrder;
 }

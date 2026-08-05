@@ -12,6 +12,7 @@ public class UpstreamApiRouteResolverTests
     [InlineData("voucher", "voucher")]
     [InlineData("StockTransferIn", "stock-transfer-in")]
     [InlineData("StockTransferOut", "stock-transfer-out")]
+    [InlineData("BillOfMaterial", "bill-of-material")]
     [InlineData("voucher/sale", "voucher/sale")]
     public void Resolve_ConvertsDocumentTypeToKebabCase(string input, string expected)
     {

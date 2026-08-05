@@ -10,6 +10,7 @@ using QuestPDF.Infrastructure;
 using NextWeb.DocumentPlatform.Engine;
 using NextWeb.DocumentPlatform.Domain;
 using NextWeb.DocumentPlatform.Application.Models;
+using NextWeb.DocumentPlatform.Renderers;
 
 namespace NextWeb.DocumentPlatform.Renderers.Templates;
 
@@ -316,8 +317,23 @@ public class VoucherStandardRenderer : IDocumentRenderer
     private static string FormatOptionalDate(string text, DateTime? date) =>
         date.HasValue ? $"{text} ({date.Value:dd MMM yyyy})" : text;
 
+    private static string GetUnitLabel(UnitDto? unit)
+    {
+        if (unit == null) return string.Empty;
+        if (!string.IsNullOrWhiteSpace(unit.Value)) return unit.Value;
+        return unit.Name;
+    }
+
+    private static string TaxPercentHeader(ComputedTaxDto? tax, string fallback) =>
+        $"{(string.IsNullOrWhiteSpace(tax?.Name) ? fallback : tax.Name)} %";
+
+    private static string TaxAmountHeader(ComputedTaxDto? tax, string fallback) =>
+        $"{(string.IsNullOrWhiteSpace(tax?.Name) ? fallback : tax.Name)} Amt";
+
     private void ComposeLineItems(IContainer container, DocumentDto doc, string currency)
     {
+        bool showActual = VoucherTypes.ShouldShowActualQuantity(doc.Type);
+
         container.Table(table =>
         {
             table.ColumnsDefinition(columns =>
@@ -326,6 +342,12 @@ public class VoucherStandardRenderer : IDocumentRenderer
                 columns.RelativeColumn(3);
                 columns.RelativeColumn();
                 columns.RelativeColumn();
+                if (showActual)
+                {
+                    columns.RelativeColumn();
+                    columns.RelativeColumn();
+                    columns.RelativeColumn();
+                }
                 columns.RelativeColumn();
                 columns.RelativeColumn();
                 columns.RelativeColumn();
@@ -338,6 +360,12 @@ public class VoucherStandardRenderer : IDocumentRenderer
                 header.Cell().Element(HeaderCell).Text("Description");
                 header.Cell().Element(HeaderCell).Text("HSN/SAC");
                 header.Cell().Element(HeaderCell).AlignRight().Text("Qty");
+                if (showActual)
+                {
+                    header.Cell().Element(HeaderCell).Text("Unit");
+                    header.Cell().Element(HeaderCell).AlignRight().Text("Actual Qty");
+                    header.Cell().Element(HeaderCell).Text("Actual Unit");
+                }
                 header.Cell().Element(HeaderCell).AlignRight().Text("Rate");
                 header.Cell().Element(HeaderCell).AlignRight().Text("Disc");
                 header.Cell().Element(HeaderCell).AlignRight().Text("Tax%");
@@ -370,10 +398,21 @@ public class VoucherStandardRenderer : IDocumentRenderer
                     .Sum(t => t.Value) ?? 0;
 
                 table.Cell().Element(c => RowCell(c, shaded)).Text(index.ToString());
-                table.Cell().Element(c => RowCell(c, shaded)).Text(item.Name);
+                table.Cell().Element(c => RowCell(c, shaded))
+                    .Text(ProductDisplayHelper.FormatLineItemName(item.Name, item.Product));
                 table.Cell().Element(c => RowCell(c, shaded)).Text(hsn);
                 table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
-                    .Text($"{item.Quantity:0.##} {item.Unit?.Name}".Trim());
+                    .Text(showActual
+                        ? $"{item.Quantity:0.##}"
+                        : $"{item.Quantity:0.##} {GetUnitLabel(item.Unit)}".Trim());
+                if (showActual)
+                {
+                    table.Cell().Element(c => RowCell(c, shaded)).Text(GetUnitLabel(item.Unit));
+                    table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
+                        .Text(item.TransactionQuantity.HasValue ? $"{item.TransactionQuantity:0.##}" : "—");
+                    table.Cell().Element(c => RowCell(c, shaded))
+                        .Text(GetUnitLabel(item.TransactionUnit));
+                }
                 table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
                     .Text(FormatCurrency(item.Price, currency));
                 table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
@@ -389,9 +428,10 @@ public class VoucherStandardRenderer : IDocumentRenderer
                     ? c.Background(SurfaceMuted).PaddingVertical(5).PaddingHorizontal(6)
                     : c.PaddingVertical(5).PaddingHorizontal(6);
 
+            uint trailingSpan = showActual ? 6u : 3u;
             table.Cell().ColumnSpan(3).Element(FooterCell).AlignRight().Text("Items Total").SemiBold();
             table.Cell().Element(FooterCell).AlignRight().Text($"{totalQty:0.##}").SemiBold();
-            table.Cell().ColumnSpan(3).Element(FooterCell);
+            table.Cell().ColumnSpan(trailingSpan).Element(FooterCell);
             table.Cell().Element(FooterCell).AlignRight()
                 .Text(FormatCurrency(productsTotal, currency)).SemiBold();
 
@@ -463,6 +503,14 @@ public class VoucherStandardRenderer : IDocumentRenderer
 
         bool isIgst = doc.TaxType == "IGST";
         bool isUtgst = doc.TaxType == "CGST_UTGST";
+        var referenceTaxes = doc.Summary.FirstOrDefault()?.ComputedTaxes ?? new List<ComputedTaxDto>();
+        var referenceCgst = FindTax(referenceTaxes, "CGST");
+        var referenceSgst = FindTax(referenceTaxes, "SGST");
+        var referenceUtgst = FindTax(referenceTaxes, "UTGST");
+        var referenceIgst = FindTax(referenceTaxes, "IGST");
+        string centralTaxName = referenceCgst?.Name ?? "CGST";
+        string stateTaxName = isUtgst ? referenceUtgst?.Name ?? "UTGST" : referenceSgst?.Name ?? "SGST";
+        string igstTaxName = referenceIgst?.Name ?? "IGST";
 
         container.Column(col =>
         {
@@ -494,15 +542,15 @@ public class VoucherStandardRenderer : IDocumentRenderer
                     header.Cell().Element(TaxHeader).AlignRight().Text("Taxable Value");
                     if (isIgst)
                     {
-                        header.Cell().Element(TaxHeader).AlignRight().Text("IGST %");
-                        header.Cell().Element(TaxHeader).AlignRight().Text("IGST Amt");
+                        header.Cell().Element(TaxHeader).AlignRight().Text(TaxPercentHeader(referenceIgst, igstTaxName));
+                        header.Cell().Element(TaxHeader).AlignRight().Text(TaxAmountHeader(referenceIgst, igstTaxName));
                     }
                     else
                     {
-                        header.Cell().Element(TaxHeader).AlignRight().Text("Central %");
-                        header.Cell().Element(TaxHeader).AlignRight().Text("Central Amt");
-                        header.Cell().Element(TaxHeader).AlignRight().Text(isUtgst ? "UT %" : "State %");
-                        header.Cell().Element(TaxHeader).AlignRight().Text(isUtgst ? "UT Amt" : "State Amt");
+                        header.Cell().Element(TaxHeader).AlignRight().Text(TaxPercentHeader(referenceCgst, centralTaxName));
+                        header.Cell().Element(TaxHeader).AlignRight().Text(TaxAmountHeader(referenceCgst, centralTaxName));
+                        header.Cell().Element(TaxHeader).AlignRight().Text(TaxPercentHeader(isUtgst ? referenceUtgst : referenceSgst, stateTaxName));
+                        header.Cell().Element(TaxHeader).AlignRight().Text(TaxAmountHeader(isUtgst ? referenceUtgst : referenceSgst, stateTaxName));
                     }
                     header.Cell().Element(TaxHeader).AlignRight().Text("Total Tax");
 

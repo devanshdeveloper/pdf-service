@@ -495,6 +495,12 @@ public class VoucherProductDto
     [JsonPropertyName("unit")]
     public UnitDto? Unit { get; set; }
 
+    [JsonPropertyName("transactionQuantity")]
+    public decimal? TransactionQuantity { get; set; }
+
+    [JsonPropertyName("transactionUnit")]
+    public UnitDto? TransactionUnit { get; set; }
+
     [JsonPropertyName("discountType")]
     public string DiscountType { get; set; } = string.Empty;
 

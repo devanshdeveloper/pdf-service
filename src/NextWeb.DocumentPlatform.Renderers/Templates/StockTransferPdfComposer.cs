@@ -10,6 +10,7 @@ using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using NextWeb.DocumentPlatform.Domain;
 using NextWeb.DocumentPlatform.Application.Models;
+using NextWeb.DocumentPlatform.Renderers;
 
 namespace NextWeb.DocumentPlatform.Renderers.Templates;
 
@@ -30,13 +31,17 @@ internal static class StockTransferPdfComposer
         var response = JsonSerializer.Deserialize<ApiResponse<StockTransferDataModel>>(jsonPayload, options);
         var model = response?.Data;
 
-        if (model?.Document == null || model.Business == null)
+        if (model?.Document == null)
         {
-            throw new Exception($"Invalid JSON payload or missing document/business data for {documentTitle}.");
+            throw new Exception($"Invalid JSON payload or missing document data for {documentTitle}.");
         }
 
         var doc = model.Document;
-        var biz = model.Business;
+        var biz = model.Business ?? doc.Business;
+        if (biz == null)
+        {
+            throw new Exception($"Invalid JSON payload or missing business data for {documentTitle}.");
+        }
 
         var document = Document.Create(container =>
         {
@@ -94,7 +99,7 @@ internal static class StockTransferPdfComposer
         date.HasValue ? date.Value.ToString("dd MMM yyyy HH:mm", CultureInfo.InvariantCulture) : string.Empty;
 
     private static string GetProductName(StockTransferItemDto item) =>
-        item.Product?.Name ?? string.Empty;
+        ProductDisplayHelper.FormatLineItemName(null, item.Product);
 
     private static void ComposeHeader(
         IContainer container,

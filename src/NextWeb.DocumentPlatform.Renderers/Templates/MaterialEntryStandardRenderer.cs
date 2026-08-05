@@ -11,6 +11,7 @@ using QuestPDF.Infrastructure;
 using NextWeb.DocumentPlatform.Engine;
 using NextWeb.DocumentPlatform.Domain;
 using NextWeb.DocumentPlatform.Application.Models;
+using NextWeb.DocumentPlatform.Renderers;
 
 namespace NextWeb.DocumentPlatform.Renderers.Templates;
 
@@ -99,32 +100,19 @@ public class MaterialEntryStandardRenderer : IDocumentRenderer
         return settings?.Defaults?.Terms ?? string.Empty;
     }
 
-    private static string GetProductName(MaterialEntryProductDto item)
-    {
-        if (!string.IsNullOrWhiteSpace(item.Name)) return item.Name;
-        return item.Product?.Name ?? string.Empty;
-    }
+    private static string GetProductName(MaterialEntryProductDto item) =>
+        ProductDisplayHelper.FormatLineItemName(
+            !string.IsNullOrWhiteSpace(item.Name) ? item.Name : null,
+            item.Product);
 
-    private static string GetHsn(MaterialEntryProductDto item)
-    {
-        return item.Product?.Hsn ?? string.Empty;
-    }
+    private static string GetHsn(MaterialEntryProductDto item) =>
+        item.Product?.Hsn ?? string.Empty;
 
     private static string GetUnitLabel(UnitDto? unit)
     {
         if (unit == null) return string.Empty;
         if (!string.IsNullOrWhiteSpace(unit.Value)) return unit.Value;
         return unit.Name;
-    }
-
-    private static string GetProductDetails(MaterialEntryProductDto item)
-    {
-        var fields = item.Product?.Fields?
-            .Where(f => !string.IsNullOrWhiteSpace(f.Value))
-            .Select(f => $"{f.Label}: {f.Value}")
-            .ToList() ?? new List<string>();
-
-        return string.Join(" · ", fields);
     }
 
     private void ComposeHeader(
@@ -234,9 +222,8 @@ public class MaterialEntryStandardRenderer : IDocumentRenderer
                 table.ColumnsDefinition(columns =>
                 {
                     columns.ConstantColumn(24);
-                    columns.RelativeColumn(3);
+                    columns.RelativeColumn(4);
                     columns.ConstantColumn(52);
-                    columns.RelativeColumn(2);
                     columns.ConstantColumn(48);
                     columns.ConstantColumn(44);
                 });
@@ -246,7 +233,6 @@ public class MaterialEntryStandardRenderer : IDocumentRenderer
                     header.Cell().Element(HeaderCell).Text("#");
                     header.Cell().Element(HeaderCell).Text("Product");
                     header.Cell().Element(HeaderCell).Text("HSN");
-                    header.Cell().Element(HeaderCell).Text("Details");
                     header.Cell().Element(HeaderCell).AlignRight().Text("Qty");
                     header.Cell().Element(HeaderCell).AlignRight().Text("Unit");
 
@@ -266,7 +252,6 @@ public class MaterialEntryStandardRenderer : IDocumentRenderer
                     totalQty += item.Quantity;
                     bool shaded = index % 2 == 0;
                     var productName = GetProductName(item);
-                    var details = GetProductDetails(item);
 
                     table.Cell().Element(c => RowCell(c, shaded)).Text(index.ToString());
                     table.Cell().Element(c => RowCell(c, shaded)).Column(cell =>
@@ -274,8 +259,6 @@ public class MaterialEntryStandardRenderer : IDocumentRenderer
                         cell.Item().Text(productName).SemiBold();
                     });
                     table.Cell().Element(c => RowCell(c, shaded)).Text(GetHsn(item));
-                    table.Cell().Element(c => RowCell(c, shaded)).Text(
-                        string.IsNullOrWhiteSpace(details) ? "—" : details).FontColor(TextMuted);
                     table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
                         .Text($"{item.Quantity:0.##}");
                     table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
@@ -289,7 +272,7 @@ public class MaterialEntryStandardRenderer : IDocumentRenderer
 
                 if (doc.Products.Count > 0)
                 {
-                    table.Cell().ColumnSpan(4).Element(FooterCell).AlignRight().Text("Total Quantity").SemiBold();
+                    table.Cell().ColumnSpan(3).Element(FooterCell).AlignRight().Text("Total Quantity").SemiBold();
                     table.Cell().Element(FooterCell).AlignRight().Text($"{totalQty:0.##}").SemiBold();
                     table.Cell().Element(FooterCell);
 

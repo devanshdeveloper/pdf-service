@@ -21,7 +21,11 @@
             "_id": "6a6ec24559b3315a69f6d056",
             "name": "LABLE KALASH GANGA",
             "sku": "LKG-001",
-            "hsn": "9969"
+            "hsn": "9969",
+            "fields": [
+              { "label": "Size", "value": "100x50" },
+              { "label": "GSM", "value": "80" }
+            ]
           },
           "quantity": 50
         },

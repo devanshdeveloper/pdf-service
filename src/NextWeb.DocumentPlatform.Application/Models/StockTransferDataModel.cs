@@ -11,6 +11,15 @@ public class StockTransferDataModel
 
     [JsonPropertyName("business")]
     public BusinessDto? Business { get; set; }
+
+    [JsonPropertyName("settings")]
+    public StockTransferSettingsDto? Settings { get; set; }
+}
+
+public class StockTransferSettingsDto
+{
+    [JsonPropertyName("pdf_template")]
+    public string PdfTemplate { get; set; } = "Standard";
 }
 
 public class StockTransferDto
@@ -50,6 +59,9 @@ public class StockTransferDto
 
     [JsonPropertyName("status")]
     public string Status { get; set; } = string.Empty;
+
+    [JsonPropertyName("business")]
+    public BusinessDto? Business { get; set; }
 
     [JsonPropertyName("isPublicalyShared")]
     public bool IsPublicalyShared { get; set; }
