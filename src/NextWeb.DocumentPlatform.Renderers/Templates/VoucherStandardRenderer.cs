@@ -10,17 +10,13 @@ using QuestPDF.Infrastructure;
 using NextWeb.DocumentPlatform.Engine;
 using NextWeb.DocumentPlatform.Domain;
 using NextWeb.DocumentPlatform.Application.Models;
-using NextWeb.DocumentPlatform.Renderers;
+using NextWeb.DocumentPlatform.Renderers.Design;
 
 namespace NextWeb.DocumentPlatform.Renderers.Templates;
 
 public class VoucherStandardRenderer : IDocumentRenderer
 {
-    private const string AccentColor = "#4338CA";
-    private const string AccentLight = "#EEF2FF";
-    private const string SurfaceMuted = "#F3F4F6";
-    private const string TextMuted = "#6B7280";
-    private const string BorderLight = "#E5E7EB";
+    private static readonly PdfSemantics S = new(PdfThemes.Voucher);
 
     public string DocumentType => "Voucher";
     public string TemplateName => "Standard";
@@ -45,23 +41,20 @@ public class VoucherStandardRenderer : IDocumentRenderer
         {
             container.Page(page =>
             {
-                page.Size(PageSizes.A4);
-                page.Margin(1.2f, Unit.Centimetre);
-                page.PageColor(Colors.White);
-                page.DefaultTextStyle(x => x.FontSize(9).FontFamily("Arial").FontColor(Colors.Black));
+                PdfPageSetup.ConfigureA4(page, S);
 
                 page.Content().Column(col =>
                 {
-                    col.Item().Element(c => ComposeHeader(c, doc, biz, settings));
-                    col.Item().PaddingTop(16).Element(c => ComposeParties(c, doc));
-                    col.Item().PaddingTop(12).Element(c => ComposeOptionalMeta(c, doc));
-                    col.Item().PaddingTop(16).Element(c => ComposeLineItems(c, doc, currency));
-                    col.Item().PaddingTop(12).Element(c => ComposeTotalsBlock(c, doc, currency));
+                    ComposeHeader(col.Item(), doc, biz, settings);
+                    col.Item().PaddingTop(PdfPrimitives.SectionGap).Element(c => ComposeParties(c, doc));
+                    col.Item().PaddingTop(PdfPrimitives.SectionGap).Element(c => ComposeOptionalMeta(c, doc));
+                    col.Item().PaddingTop(PdfPrimitives.SectionGap).Element(c => ComposeLineItems(c, doc, currency));
+                    col.Item().PaddingTop(PdfPrimitives.SectionGap).Element(c => ComposeTotalsBlock(c, doc, currency));
                     if (ShouldShowTaxes(doc))
                     {
-                        col.Item().PaddingTop(16).Element(c => ComposeTaxSummary(c, doc, currency));
+                        col.Item().PaddingTop(PdfPrimitives.SectionGap).Element(c => ComposeTaxSummary(c, doc, currency));
                     }
-                    col.Item().PaddingTop(16).Element(c => ComposeFooter(c, doc, biz, settings));
+                    col.Item().PaddingTop(PdfPrimitives.SectionGap).Element(c => ComposeFooter(c, doc, biz, settings));
                 });
             });
         });
@@ -83,40 +76,17 @@ public class VoucherStandardRenderer : IDocumentRenderer
         return "INR";
     }
 
-    private static string FormatCurrency(decimal amount, string currencyCode)
-    {
-        string symbol = currencyCode switch
-        {
-            "USD" => "$",
-            "EUR" => "€",
-            "GBP" => "£",
-            "INR" => "₹",
-            _ => currencyCode + " "
-        };
-        return $"{symbol}{amount:N2}";
-    }
+    private static string FormatCurrency(decimal amount, string currencyCode) =>
+        PdfFormat.Currency(amount, currencyCode);
+
+    private static string FormatAddressLines(AddressDto? address) =>
+        PdfFormat.AddressLines(address);
 
     private static string GetPartyName(PartyDto? party)
     {
         if (party == null) return string.Empty;
         if (!string.IsNullOrWhiteSpace(party.BusinessName)) return party.BusinessName;
         return $"{party.FirstName} {party.LastName}".Trim();
-    }
-
-    private static string FormatAddressLines(AddressDto? address)
-    {
-        if (address == null) return string.Empty;
-        if (!string.IsNullOrWhiteSpace(address.FullAddress)) return address.FullAddress;
-
-        var lines = new List<string>();
-        var street = $"{address.StreetAddress} {address.Apartment}".Trim();
-        if (!string.IsNullOrWhiteSpace(street)) lines.Add(street);
-
-        var cityLine = $"{address.City}, {address.State} {address.PostalCode}".Trim(',', ' ');
-        if (!string.IsNullOrWhiteSpace(cityLine)) lines.Add(cityLine);
-        if (!string.IsNullOrWhiteSpace(address.Country)) lines.Add(address.Country);
-
-        return string.Join("\n", lines);
     }
 
     private static string GetNotes(DocumentDto doc, VoucherSettingsDto? settings)
@@ -142,9 +112,9 @@ public class VoucherStandardRenderer : IDocumentRenderer
             {
                 row.RelativeItem().Column(left =>
                 {
-                    left.Item().Text(biz.Name).FontFamily("Montserrat").FontSize(16).SemiBold().FontColor(AccentColor);
+                    left.Item().Text(biz.Name).FontFamily("Montserrat").FontSize(16).SemiBold().FontColor(S.TextAccent);
                     if (!string.IsNullOrWhiteSpace(biz.Description))
-                        left.Item().PaddingTop(2).Text(biz.Description).FontSize(8).FontColor(TextMuted);
+                        left.Item().PaddingTop(2).Text(biz.Description).FontSize(8).FontColor(S.TextMuted);
 
                     if (biz.Address != null)
                     {
@@ -160,20 +130,20 @@ public class VoucherStandardRenderer : IDocumentRenderer
                     if (!string.IsNullOrWhiteSpace(biz.Phone)) contactParts.Add(biz.Phone);
                     if (!string.IsNullOrWhiteSpace(biz.Email)) contactParts.Add(biz.Email);
                     if (contactParts.Count > 0)
-                        left.Item().PaddingTop(2).Text(string.Join(" · ", contactParts)).FontSize(8).FontColor(TextMuted);
+                        left.Item().PaddingTop(2).Text(string.Join(" · ", contactParts)).FontSize(8).FontColor(S.TextMuted);
                 });
 
                 row.ConstantItem(200).AlignRight().Column(right =>
                 {
-                    right.Item().Text(doc.Type).FontFamily("Montserrat").FontSize(20).SemiBold().FontColor(AccentColor);
+                    right.Item().Text(doc.Type).FontFamily("Montserrat").FontSize(20).SemiBold().FontColor(S.TextAccent);
                     right.Item().PaddingTop(4).Text($"#{doc.Number}").FontSize(11).SemiBold();
 
                     right.Item().PaddingTop(8).Row(chipRow =>
                     {
-                        chipRow.AutoItem().Element(c => ComposeStatusChip(c, doc.Status, false));
+                        PdfComponents.StatusChip(chipRow.AutoItem(), S, doc.Status);
                         if (ShouldShowPaymentStatus(doc) && !string.IsNullOrWhiteSpace(doc.PaymentStatus))
                         {
-                            chipRow.AutoItem().PaddingLeft(6).Element(c => ComposeStatusChip(c, doc.PaymentStatus, true));
+                            PdfComponents.StatusChip(chipRow.AutoItem().PaddingLeft(6), S, doc.PaymentStatus, isPayment: true);
                         }
                     });
 
@@ -187,7 +157,7 @@ public class VoucherStandardRenderer : IDocumentRenderer
 
                         void MetaRow(string label, string value)
                         {
-                            meta.Cell().PaddingVertical(2).Text(label).FontSize(8).FontColor(TextMuted);
+                            meta.Cell().PaddingVertical(2).Text(label).FontSize(8).FontColor(S.TextMuted);
                             meta.Cell().PaddingVertical(2).AlignRight().Text(value).FontSize(8).SemiBold();
                         }
 
@@ -200,39 +170,8 @@ public class VoucherStandardRenderer : IDocumentRenderer
                 });
             });
 
-            col.Item().PaddingTop(12).LineHorizontal(1).LineColor(BorderLight);
+            PdfComponents.HorizontalDivider(col.Item(), S);
         });
-    }
-
-    private void ComposeStatusChip(IContainer container, string label, bool isPayment)
-    {
-        var (bg, fg) = GetStatusColors(label, isPayment);
-        container
-            .Background(bg)
-            .PaddingVertical(3)
-            .PaddingHorizontal(8)
-            .Text(label)
-            .FontSize(8)
-            .SemiBold()
-            .FontColor(fg);
-    }
-
-    private static (string bg, string fg) GetStatusColors(string status, bool isPayment)
-    {
-        var normalized = status.Trim().ToLowerInvariant();
-        if (isPayment)
-        {
-            if (normalized is "paid") return ("#DCFCE7", "#166534");
-            if (normalized is "unpaid" or "overdue") return ("#FEF3C7", "#92400E");
-            if (normalized.Contains("partial")) return ("#FFEDD5", "#9A3412");
-        }
-        else
-        {
-            if (normalized is "approved") return (AccentLight, AccentColor);
-            if (normalized is "draft" or "pending") return ("#FEF3C7", "#92400E");
-            if (normalized is "rejected" or "cancelled") return ("#FEE2E2", "#991B1B");
-        }
-        return (SurfaceMuted, TextMuted);
     }
 
     private void ComposeParties(IContainer container, DocumentDto doc)
@@ -242,20 +181,20 @@ public class VoucherStandardRenderer : IDocumentRenderer
 
         container.Row(row =>
         {
-            row.RelativeItem().Element(c => ComposePartyCard(c, "Bill To", doc.Party));
+            ComposePartyCard(row.RelativeItem(), "Bill To", doc.Party);
             if (showShipping)
             {
                 row.ConstantItem(16);
-                row.RelativeItem().Element(c => ComposePartyCard(c, "Ship To", consignee));
+                ComposePartyCard(row.RelativeItem(), "Ship To", consignee);
             }
         });
     }
 
     private void ComposePartyCard(IContainer container, string title, PartyDto? party)
     {
-        container.Background(SurfaceMuted).Padding(12).Column(col =>
+        container.Background(S.SurfaceCard).Padding(PdfPrimitives.CardPadding).Column(col =>
         {
-            col.Item().Text(title).FontSize(8).SemiBold().FontColor(TextMuted);
+            col.Item().Text(title).FontSize(8).SemiBold().FontColor(S.TextMuted);
             col.Item().PaddingTop(4).Text(GetPartyName(party)).FontSize(10).SemiBold();
 
             var address = title == "Ship To" ? party?.ShippingAddress : party?.BillingAddress;
@@ -264,7 +203,7 @@ public class VoucherStandardRenderer : IDocumentRenderer
                 col.Item().PaddingTop(4).Text(addressText).FontSize(8).LineHeight(1.35f);
 
             if (address?.StateCode is { Length: > 0 })
-                col.Item().PaddingTop(2).Text($"State Code: {address.StateCode}").FontSize(8).FontColor(TextMuted);
+                col.Item().PaddingTop(2).Text($"State Code: {address.StateCode}").FontSize(8).FontColor(S.TextMuted);
 
             if (!string.IsNullOrWhiteSpace(party?.Gst))
                 col.Item().PaddingTop(2).Text($"GSTIN: {party.Gst}").FontSize(8);
@@ -296,7 +235,7 @@ public class VoucherStandardRenderer : IDocumentRenderer
 
         container.Column(col =>
         {
-            col.Item().Text("Additional Details").FontSize(8).SemiBold().FontColor(TextMuted);
+            col.Item().Text("Additional Details").FontSize(8).SemiBold().FontColor(S.TextMuted);
             col.Item().PaddingTop(6).Table(table =>
             {
                 table.ColumnsDefinition(cols =>
@@ -307,7 +246,7 @@ public class VoucherStandardRenderer : IDocumentRenderer
 
                 foreach (var (label, value) in rows)
                 {
-                    table.Cell().PaddingVertical(2).Text(label).FontSize(8).FontColor(TextMuted);
+                    table.Cell().PaddingVertical(2).Text(label).FontSize(8).FontColor(S.TextMuted);
                     table.Cell().PaddingVertical(2).Text(value).FontSize(8);
                 }
             });
@@ -338,43 +277,41 @@ public class VoucherStandardRenderer : IDocumentRenderer
         {
             table.ColumnsDefinition(columns =>
             {
-                columns.ConstantColumn(24);
-                columns.RelativeColumn(3);
-                columns.RelativeColumn();
-                columns.RelativeColumn();
+                columns.ConstantColumn(PdfPrimitives.TableColIndex);
+                columns.RelativeColumn(5);
+                columns.ConstantColumn(PdfPrimitives.TableColHsn);
+                columns.ConstantColumn(PdfPrimitives.TableColQty);
                 if (showActual)
                 {
-                    columns.RelativeColumn();
-                    columns.RelativeColumn();
-                    columns.RelativeColumn();
+                    columns.ConstantColumn(PdfPrimitives.TableColUnit);
+                    columns.ConstantColumn(PdfPrimitives.TableColQty);
+                    columns.ConstantColumn(PdfPrimitives.TableColUnit);
                 }
-                columns.RelativeColumn();
-                columns.RelativeColumn();
-                columns.RelativeColumn();
-                columns.RelativeColumn();
+                columns.ConstantColumn(PdfPrimitives.TableColRate);
+                columns.ConstantColumn(PdfPrimitives.TableColDisc);
+                columns.ConstantColumn(PdfPrimitives.TableColTaxPct);
+                columns.ConstantColumn(PdfPrimitives.TableColAmount);
             });
 
             table.Header(header =>
             {
-                header.Cell().Element(HeaderCell).Text("#");
-                header.Cell().Element(HeaderCell).Text("Description");
-                header.Cell().Element(HeaderCell).Text("HSN/SAC");
-                header.Cell().Element(HeaderCell).AlignRight().Text("Qty");
+                HeaderCell(header.Cell()).Text("#");
+                HeaderCell(header.Cell()).Text("Description");
+                HeaderCell(header.Cell()).Text("HSN/SAC");
+                HeaderCell(header.Cell()).AlignRight().Text("Qty");
                 if (showActual)
                 {
-                    header.Cell().Element(HeaderCell).Text("Unit");
-                    header.Cell().Element(HeaderCell).AlignRight().Text("Actual Qty");
-                    header.Cell().Element(HeaderCell).Text("Actual Unit");
+                    HeaderCell(header.Cell()).Text("Unit");
+                    HeaderCell(header.Cell()).AlignRight().Text("Actual Qty");
+                    HeaderCell(header.Cell()).Text("Actual Unit");
                 }
-                header.Cell().Element(HeaderCell).AlignRight().Text("Rate");
-                header.Cell().Element(HeaderCell).AlignRight().Text("Disc");
-                header.Cell().Element(HeaderCell).AlignRight().Text("Tax%");
-                header.Cell().Element(HeaderCell).AlignRight().Text("Amount");
+                HeaderCell(header.Cell()).AlignRight().Text("Rate");
+                HeaderCell(header.Cell()).AlignRight().Text("Disc");
+                HeaderCell(header.Cell()).AlignRight().Text("Tax%");
+                HeaderCell(header.Cell()).AlignRight().Text("Amount");
 
-                static IContainer HeaderCell(IContainer c) =>
-                    c.Background(AccentColor)
-                        .PaddingVertical(6)
-                        .PaddingHorizontal(6)
+                IContainer HeaderCell(IContainer c) =>
+                    PdfTable.HeaderCellPrimary(c, S)
                         .DefaultTextStyle(x => x.FontSize(8).SemiBold().FontColor(Colors.White));
             });
 
@@ -397,66 +334,71 @@ public class VoucherStandardRenderer : IDocumentRenderer
                     .Where(t => t.Type == "percentage" || string.IsNullOrEmpty(t.Type))
                     .Sum(t => t.Value) ?? 0;
 
-                table.Cell().Element(c => RowCell(c, shaded)).Text(index.ToString());
-                table.Cell().Element(c => RowCell(c, shaded))
-                    .Text(ProductDisplayHelper.FormatLineItemName(item.Name, item.Product));
-                table.Cell().Element(c => RowCell(c, shaded)).Text(hsn);
-                table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
-                    .Text(showActual
+                PdfTable.RowSingleLine(table.Cell(), S, shaded, index.ToString());
+                PdfTable.RowDescription(table.Cell(), S, shaded, ProductDisplayHelper.FormatLineItemName(item.Name, item.Product));
+                PdfTable.RowSingleLine(table.Cell(), S, shaded, hsn);
+                PdfTable.RowSingleLine(
+                    table.Cell(), S, shaded,
+                    showActual
                         ? $"{item.Quantity:0.##}"
-                        : $"{item.Quantity:0.##} {GetUnitLabel(item.Unit)}".Trim());
+                        : $"{item.Quantity:0.##} {GetUnitLabel(item.Unit)}".Trim(),
+                    alignRight: true);
                 if (showActual)
                 {
-                    table.Cell().Element(c => RowCell(c, shaded)).Text(GetUnitLabel(item.Unit));
-                    table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
-                        .Text(item.TransactionQuantity.HasValue ? $"{item.TransactionQuantity:0.##}" : "—");
-                    table.Cell().Element(c => RowCell(c, shaded))
-                        .Text(GetUnitLabel(item.TransactionUnit));
+                    PdfTable.RowSingleLine(table.Cell(), S, shaded, GetUnitLabel(item.Unit));
+                    PdfTable.RowSingleLine(
+                        table.Cell(), S, shaded,
+                        item.TransactionQuantity.HasValue ? $"{item.TransactionQuantity:0.##}" : null,
+                        alignRight: true);
+                    PdfTable.RowSingleLine(table.Cell(), S, shaded, GetUnitLabel(item.TransactionUnit));
                 }
-                table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
-                    .Text(FormatCurrency(item.Price, currency));
-                table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
-                    .Text(item.DiscountValue > 0 ? $"{item.DiscountValue}" : "—");
-                table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
-                    .Text(totalTaxRate > 0 ? $"{totalTaxRate}%" : "—");
-                table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
-                    .Text(FormatCurrency(item.Amount, currency)).SemiBold();
+                PdfTable.TableAmountCell(table.Cell(), S, shaded, FormatCurrency(item.Price, currency));
+                PdfTable.RowSingleLine(
+                    table.Cell(), S, shaded,
+                    item.DiscountValue > 0 ? $"{item.DiscountValue}" : null,
+                    alignRight: true);
+                PdfTable.RowSingleLine(
+                    table.Cell(), S, shaded,
+                    totalTaxRate > 0 ? $"{totalTaxRate}%" : null,
+                    alignRight: true);
+                PdfTable.TableAmountCell(
+                    table.Cell(), S, shaded, FormatCurrency(item.Amount, currency), semiBold: true);
             }
 
-            static IContainer RowCell(IContainer c, bool shaded) =>
-                shaded
-                    ? c.Background(SurfaceMuted).PaddingVertical(5).PaddingHorizontal(6)
-                    : c.PaddingVertical(5).PaddingHorizontal(6);
-
             uint trailingSpan = showActual ? 6u : 3u;
-            table.Cell().ColumnSpan(3).Element(FooterCell).AlignRight().Text("Items Total").SemiBold();
-            table.Cell().Element(FooterCell).AlignRight().Text($"{totalQty:0.##}").SemiBold();
-            table.Cell().ColumnSpan(trailingSpan).Element(FooterCell);
-            table.Cell().Element(FooterCell).AlignRight()
-                .Text(FormatCurrency(productsTotal, currency)).SemiBold();
-
-            static IContainer FooterCell(IContainer c) =>
-                c.BorderTop(1).BorderColor(BorderLight).PaddingVertical(6).PaddingHorizontal(6);
+            PdfTable.FooterText(table.Cell().ColumnSpan(3), S, "Items Total", alignRight: true, semiBold: true, fontSize: 8);
+            PdfTable.FooterText(table.Cell(), S, $"{totalQty:0.##}", alignRight: true, semiBold: true, fontSize: 8);
+            PdfTable.FooterCell(table.Cell().ColumnSpan(trailingSpan), S);
+            PdfTable.TableAmountFooterCell(
+                table.Cell(), S, FormatCurrency(productsTotal, currency), semiBold: true);
         });
     }
 
     private void ComposeTotalsBlock(IContainer container, DocumentDto doc, string currency)
     {
-        container.AlignRight().Width(240).Background(AccentLight).Padding(12).Column(col =>
+        container.AlignRight().Width(PdfPrimitives.TotalsBlockWidth).Background(S.SurfaceAccent).Padding(PdfPrimitives.CardPadding).Column(col =>
         {
             void TotalRow(string label, string value, bool bold = false)
             {
-                col.Item().PaddingVertical(2).Row(row =>
+                col.Item().PaddingVertical(1).Row(row =>
                 {
                     if (bold)
                     {
                         row.RelativeItem().Text(label).FontSize(8).SemiBold();
-                        row.ConstantItem(90).AlignRight().Text(value).FontSize(10).SemiBold();
+                        PdfTable.Amount(
+                            row.ConstantItem(PdfPrimitives.TotalsValueWidth).ExtendHorizontal(),
+                            S,
+                            value,
+                            semiBold: true,
+                            fontSize: 10);
                     }
                     else
                     {
                         row.RelativeItem().Text(label).FontSize(8);
-                        row.ConstantItem(90).AlignRight().Text(value).FontSize(8);
+                        PdfTable.Amount(
+                            row.ConstantItem(PdfPrimitives.TotalsValueWidth).ExtendHorizontal(),
+                            S,
+                            value);
                     }
                 });
             }
@@ -475,22 +417,23 @@ public class VoucherStandardRenderer : IDocumentRenderer
                     TotalRow(cost.Name, FormatCurrency(cost.Value, currency));
             }
 
-            col.Item().PaddingTop(4).LineHorizontal(1).LineColor(AccentColor);
-            col.Item().PaddingTop(6).Row(row =>
+            col.Item().PaddingTop(4).LineHorizontal(1).LineColor(S.TextAccent);
+            col.Item().PaddingTop(4).Row(row =>
             {
-                row.RelativeItem().Text("Grand Total").FontSize(11).SemiBold().FontColor(AccentColor);
-                row.ConstantItem(90).AlignRight()
-                    .Text(FormatCurrency(doc.TotalAmount, currency))
-                    .FontSize(12)
-                    .SemiBold()
-                    .FontColor(AccentColor);
+                row.RelativeItem().Text("Grand Total").FontSize(11).SemiBold().FontColor(S.TextAccent);
+                PdfTable.Amount(
+                    row.ConstantItem(PdfPrimitives.TotalsValueWidth).ExtendHorizontal().DefaultTextStyle(x => x.FontColor(S.TextAccent)),
+                    S,
+                    FormatCurrency(doc.TotalAmount, currency),
+                    semiBold: true,
+                    fontSize: PdfPrimitives.FontSizeTotal);
             });
 
             if (!string.IsNullOrWhiteSpace(doc.AmountInWords))
             {
                 col.Item().PaddingTop(8).Text(text =>
                 {
-                    text.Span("In words: ").FontSize(7).SemiBold().FontColor(TextMuted);
+                    text.Span("In words: ").FontSize(7).SemiBold().FontColor(S.TextMuted);
                     text.Span(doc.AmountInWords).FontSize(7);
                 });
             }
@@ -514,7 +457,7 @@ public class VoucherStandardRenderer : IDocumentRenderer
 
         container.Column(col =>
         {
-            col.Item().Text("Tax Summary").FontSize(9).SemiBold().FontColor(AccentColor);
+            col.Item().Text("Tax Summary").FontSize(9).SemiBold().FontColor(S.TextAccent);
             col.Item().PaddingTop(6).Table(table =>
             {
                 table.ColumnsDefinition(columns =>
@@ -538,24 +481,24 @@ public class VoucherStandardRenderer : IDocumentRenderer
 
                 table.Header(header =>
                 {
-                    header.Cell().Element(TaxHeader).Text("HSN/SAC");
-                    header.Cell().Element(TaxHeader).AlignRight().Text("Taxable Value");
+                    TaxHeader(header.Cell()).Text("HSN/SAC");
+                    TaxHeader(header.Cell()).AlignRight().Text("Taxable Value");
                     if (isIgst)
                     {
-                        header.Cell().Element(TaxHeader).AlignRight().Text(TaxPercentHeader(referenceIgst, igstTaxName));
-                        header.Cell().Element(TaxHeader).AlignRight().Text(TaxAmountHeader(referenceIgst, igstTaxName));
+                        TaxHeader(header.Cell()).AlignRight().Text(TaxPercentHeader(referenceIgst, igstTaxName));
+                        TaxHeader(header.Cell()).AlignRight().Text(TaxAmountHeader(referenceIgst, igstTaxName));
                     }
                     else
                     {
-                        header.Cell().Element(TaxHeader).AlignRight().Text(TaxPercentHeader(referenceCgst, centralTaxName));
-                        header.Cell().Element(TaxHeader).AlignRight().Text(TaxAmountHeader(referenceCgst, centralTaxName));
-                        header.Cell().Element(TaxHeader).AlignRight().Text(TaxPercentHeader(isUtgst ? referenceUtgst : referenceSgst, stateTaxName));
-                        header.Cell().Element(TaxHeader).AlignRight().Text(TaxAmountHeader(isUtgst ? referenceUtgst : referenceSgst, stateTaxName));
+                        TaxHeader(header.Cell()).AlignRight().Text(TaxPercentHeader(referenceCgst, centralTaxName));
+                        TaxHeader(header.Cell()).AlignRight().Text(TaxAmountHeader(referenceCgst, centralTaxName));
+                        TaxHeader(header.Cell()).AlignRight().Text(TaxPercentHeader(isUtgst ? referenceUtgst : referenceSgst, stateTaxName));
+                        TaxHeader(header.Cell()).AlignRight().Text(TaxAmountHeader(isUtgst ? referenceUtgst : referenceSgst, stateTaxName));
                     }
-                    header.Cell().Element(TaxHeader).AlignRight().Text("Total Tax");
+                    TaxHeader(header.Cell()).AlignRight().Text("Total Tax");
 
                     static IContainer TaxHeader(IContainer c) =>
-                        c.Background(SurfaceMuted).Padding(5).DefaultTextStyle(x => x.FontSize(8).SemiBold());
+                        c.Background(S.SurfaceCard).Padding(5).DefaultTextStyle(x => x.FontSize(8).SemiBold());
                 });
 
                 decimal sumTaxable = 0;
@@ -581,65 +524,65 @@ public class VoucherStandardRenderer : IDocumentRenderer
                         sumState += isUtgst ? utgst?.Amount ?? 0 : sgst?.Amount ?? 0;
                     }
 
-                    table.Cell().Element(TaxCell).Text(item.Hsn);
-                    table.Cell().Element(TaxCell).AlignRight()
+                    TaxCell(table.Cell()).Text(item.Hsn);
+                    TaxCell(table.Cell()).AlignRight()
                         .Text(FormatCurrency(item.TaxableValue, currency));
 
                     if (isIgst)
                     {
-                        table.Cell().Element(TaxCell).AlignRight().Text(igst != null ? $"{igst.Value}%" : "—");
-                        table.Cell().Element(TaxCell).AlignRight()
+                        TaxCell(table.Cell()).AlignRight().Text(igst != null ? $"{igst.Value}%" : "—");
+                        TaxCell(table.Cell()).AlignRight()
                             .Text(FormatCurrency(igst?.Amount ?? 0, currency));
                     }
                     else
                     {
-                        table.Cell().Element(TaxCell).AlignRight().Text(cgst != null ? $"{cgst.Value}%" : "—");
-                        table.Cell().Element(TaxCell).AlignRight()
+                        TaxCell(table.Cell()).AlignRight().Text(cgst != null ? $"{cgst.Value}%" : "—");
+                        TaxCell(table.Cell()).AlignRight()
                             .Text(FormatCurrency(cgst?.Amount ?? 0, currency));
                         if (isUtgst)
                         {
-                            table.Cell().Element(TaxCell).AlignRight().Text(utgst != null ? $"{utgst.Value}%" : "—");
-                            table.Cell().Element(TaxCell).AlignRight()
+                            TaxCell(table.Cell()).AlignRight().Text(utgst != null ? $"{utgst.Value}%" : "—");
+                            TaxCell(table.Cell()).AlignRight()
                                 .Text(FormatCurrency(utgst?.Amount ?? 0, currency));
                         }
                         else
                         {
-                            table.Cell().Element(TaxCell).AlignRight().Text(sgst != null ? $"{sgst.Value}%" : "—");
-                            table.Cell().Element(TaxCell).AlignRight()
+                            TaxCell(table.Cell()).AlignRight().Text(sgst != null ? $"{sgst.Value}%" : "—");
+                            TaxCell(table.Cell()).AlignRight()
                                 .Text(FormatCurrency(sgst?.Amount ?? 0, currency));
                         }
                     }
 
-                    table.Cell().Element(TaxCell).AlignRight()
+                    TaxCell(table.Cell()).AlignRight()
                         .Text(FormatCurrency(item.TotalTaxAmount, currency));
                 }
 
-                table.Cell().Element(TaxFooter).AlignRight().Text("Total").SemiBold();
-                table.Cell().Element(TaxFooter).AlignRight()
+                TaxFooter(table.Cell()).AlignRight().Text("Total").SemiBold();
+                TaxFooter(table.Cell()).AlignRight()
                     .Text(FormatCurrency(sumTaxable, currency)).SemiBold();
                 if (isIgst)
                 {
-                    table.Cell().Element(TaxFooter);
-                    table.Cell().Element(TaxFooter).AlignRight()
+                    TaxFooter(table.Cell());
+                    TaxFooter(table.Cell()).AlignRight()
                         .Text(FormatCurrency(sumIgst, currency)).SemiBold();
                 }
                 else
                 {
-                    table.Cell().Element(TaxFooter);
-                    table.Cell().Element(TaxFooter).AlignRight()
+                    TaxFooter(table.Cell());
+                    TaxFooter(table.Cell()).AlignRight()
                         .Text(FormatCurrency(sumCentral, currency)).SemiBold();
-                    table.Cell().Element(TaxFooter);
-                    table.Cell().Element(TaxFooter).AlignRight()
+                    TaxFooter(table.Cell());
+                    TaxFooter(table.Cell()).AlignRight()
                         .Text(FormatCurrency(sumState, currency)).SemiBold();
                 }
-                table.Cell().Element(TaxFooter).AlignRight()
+                TaxFooter(table.Cell()).AlignRight()
                     .Text(FormatCurrency(sumTotalTax, currency)).SemiBold();
 
                 static IContainer TaxCell(IContainer c) =>
-                    c.BorderBottom(1).BorderColor(BorderLight).Padding(5).DefaultTextStyle(x => x.FontSize(8));
+                    c.BorderBottom(1).BorderColor(S.BorderDefault).Padding(5).DefaultTextStyle(x => x.FontSize(8));
 
                 static IContainer TaxFooter(IContainer c) =>
-                    c.BorderTop(1).BorderColor(BorderLight).Padding(5).DefaultTextStyle(x => x.FontSize(8));
+                    c.BorderTop(1).BorderColor(S.BorderDefault).Padding(5).DefaultTextStyle(x => x.FontSize(8));
             });
 
             if (!string.IsNullOrWhiteSpace(doc.TotalTaxAmountInWords))
@@ -665,7 +608,7 @@ public class VoucherStandardRenderer : IDocumentRenderer
             {
                 col.Item().PaddingTop(8).Column(b =>
                 {
-                    b.Item().Text("Bank Details").FontSize(8).SemiBold().FontColor(TextMuted);
+                    b.Item().Text("Bank Details").FontSize(8).SemiBold().FontColor(S.TextMuted);
                     b.Item().PaddingTop(4).DefaultTextStyle(x => x.FontSize(8)).Text(text =>
                     {
                         text.Span($"{bank.BankName}").SemiBold();
@@ -675,7 +618,7 @@ public class VoucherStandardRenderer : IDocumentRenderer
                     b.Item().PaddingTop(2).Text(
                         $"A/C: {bank.AccountNumber} · IFSC: {bank.Ifsc} · {bank.AccountType}").FontSize(8);
                     if (!string.IsNullOrWhiteSpace(bank.BranchAddress))
-                        b.Item().PaddingTop(2).Text(bank.BranchAddress).FontSize(7).FontColor(TextMuted);
+                        b.Item().PaddingTop(2).Text(bank.BranchAddress).FontSize(7).FontColor(S.TextMuted);
                 });
             }
 
@@ -683,7 +626,7 @@ public class VoucherStandardRenderer : IDocumentRenderer
             {
                 col.Item().PaddingTop(10).Column(c =>
                 {
-                    c.Item().Text("Notes").FontSize(8).SemiBold().FontColor(TextMuted);
+                    c.Item().Text("Notes").FontSize(8).SemiBold().FontColor(S.TextMuted);
                     c.Item().PaddingTop(2).Text(notes).FontSize(8);
                 });
             }
@@ -692,18 +635,18 @@ public class VoucherStandardRenderer : IDocumentRenderer
             {
                 col.Item().PaddingTop(10).Column(c =>
                 {
-                    c.Item().Text("Terms & Conditions").FontSize(8).SemiBold().FontColor(TextMuted);
+                    c.Item().Text("Terms & Conditions").FontSize(8).SemiBold().FontColor(S.TextMuted);
                     c.Item().PaddingTop(2).Text(terms).FontSize(8);
                 });
             }
 
-            col.Item().PaddingTop(20).Row(row =>
+            col.Item().PaddingTop(PdfPrimitives.FooterSignatoryGap).Row(row =>
             {
                 row.RelativeItem();
                 row.ConstantItem(180).AlignRight().Column(c =>
                 {
                     c.Item().Text($"For {biz.Name}").FontSize(8).SemiBold();
-                    c.Item().PaddingTop(24).Text("Authorised Signatory").FontSize(8).SemiBold().FontColor(TextMuted);
+                    c.Item().PaddingTop(24).Text("Authorised Signatory").FontSize(8).SemiBold().FontColor(S.TextMuted);
                 });
             });
         });

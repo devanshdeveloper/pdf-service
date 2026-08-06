@@ -31,17 +31,15 @@ public class DynamicTableComponent : IComponent
 
             table.Header(header =>
             {
-                header.Cell().Element(CellStyle).Text("#");
-                header.Cell().Element(CellStyle).Text("Item");
-                header.Cell().Element(CellStyle).AlignRight().Text("Qty");
-                header.Cell().Element(CellStyle).AlignRight().Text("Price");
-                header.Cell().Element(CellStyle).AlignRight().Text("Tax");
-                header.Cell().Element(CellStyle).AlignRight().Text("Total");
+                HeaderCell(header.Cell()).Text("#");
+                HeaderCell(header.Cell()).Text("Item");
+                HeaderCell(header.Cell()).AlignRight().Text("Qty");
+                HeaderCell(header.Cell()).AlignRight().Text("Price");
+                HeaderCell(header.Cell()).AlignRight().Text("Tax");
+                HeaderCell(header.Cell()).AlignRight().Text("Total");
 
-                static IContainer CellStyle(IContainer container)
-                {
-                    return container.DefaultTextStyle(x => x.SemiBold()).PaddingVertical(5).BorderBottom(1).BorderColor(Colors.Black);
-                }
+                static IContainer HeaderCell(IContainer c) =>
+                    c.DefaultTextStyle(x => x.SemiBold()).PaddingVertical(5).BorderBottom(1).BorderColor(Colors.Black);
             });
 
             if (_model.Products != null)
@@ -49,17 +47,15 @@ public class DynamicTableComponent : IComponent
                 int index = 1;
                 foreach (var item in _model.Products)
                 {
-                    table.Cell().Element(CellStyle).Text(index++.ToString());
-                    table.Cell().Element(CellStyle).Text(item.Name);
-                    table.Cell().Element(CellStyle).AlignRight().Text($"{item.Quantity} {item.Unit?.Name}");
-                    table.Cell().Element(CellStyle).AlignRight().Text($"${item.Price:N2}");
-                    table.Cell().Element(CellStyle).AlignRight().Text($"${item.TaxAmount:N2}");
-                    table.Cell().Element(CellStyle).AlignRight().Text($"${item.Amount:N2}");
-                    
-                    static IContainer CellStyle(IContainer container)
-                    {
-                        return container.BorderBottom(1).BorderColor(Colors.Grey.Lighten2).PaddingVertical(5);
-                    }
+                    RowCell(table.Cell()).Text(index++.ToString());
+                    RowCell(table.Cell()).Text(item.Name);
+                    RowCell(table.Cell()).AlignRight().Text($"{item.Quantity} {item.Unit?.Name}");
+                    RowCell(table.Cell()).AlignRight().Text($"${item.Price:N2}");
+                    RowCell(table.Cell()).AlignRight().Text($"${item.TaxAmount:N2}");
+                    RowCell(table.Cell()).AlignRight().Text($"${item.Amount:N2}");
+
+                    static IContainer RowCell(IContainer c) =>
+                        c.BorderBottom(1).BorderColor(Colors.Grey.Lighten2).PaddingVertical(5);
                 }
             }
         });

@@ -32,6 +32,13 @@ public class ErpForwardingService : IErpForwardingService
         // Construct target URL — upstream ERP routes use kebab-case (e.g. material-entry), not PascalCase.
         var upstreamModel = UpstreamApiRouteResolver.Resolve(model);
         var targetUrl = $"{_baseUpstreamUrl.TrimEnd('/')}/api/{upstreamModel}/{id}/print";
+        if (!string.IsNullOrEmpty(requestContext.QueryString))
+        {
+            var query = requestContext.QueryString;
+            if (!query.StartsWith('?'))
+                query = "?" + query;
+            targetUrl += query;
+        }
         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, targetUrl);
 
         // Forward headers

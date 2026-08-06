@@ -12,17 +12,13 @@ using QuestPDF.Infrastructure;
 using NextWeb.DocumentPlatform.Engine;
 using NextWeb.DocumentPlatform.Domain;
 using NextWeb.DocumentPlatform.Application.Models;
-using NextWeb.DocumentPlatform.Renderers;
+using NextWeb.DocumentPlatform.Renderers.Design;
 
 namespace NextWeb.DocumentPlatform.Renderers.Templates;
 
 public class BillOfMaterialStandardRenderer : IDocumentRenderer
 {
-    private const string AccentColor = "#2563EB";
-    private const string AccentLight = "#DBEAFE";
-    private const string SurfaceMuted = "#F3F4F6";
-    private const string TextMuted = "#6B7280";
-    private const string BorderLight = "#E5E7EB";
+    private static readonly PdfSemantics S = new(PdfThemes.BillOfMaterial);
 
     public string DocumentType => "BillOfMaterial";
     public string TemplateName => "Standard";
@@ -45,21 +41,18 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
         {
             container.Page(page =>
             {
-                page.Size(PageSizes.A4);
-                page.Margin(1.2f, Unit.Centimetre);
-                page.PageColor(Colors.White);
-                page.DefaultTextStyle(x => x.FontSize(9).FontFamily("Arial").FontColor(Colors.Black));
+                PdfPageSetup.ConfigureA4(page, S);
 
                 page.Content().Column(col =>
                 {
                     col.Item().Element(c => ComposeHeader(c, doc, biz));
-                    col.Item().PaddingTop(14).Element(c => ComposeOutputDetails(c, doc));
+                    col.Item().PaddingTop(PdfPrimitives.SectionGap).Element(c => ComposeOutputDetails(c, doc));
                     if (doc.Fields.Count > 0)
-                        col.Item().PaddingTop(14).Element(c => ComposeCustomFields(c, doc));
-                    col.Item().PaddingTop(16).Element(c => ComposeComponents(c, doc));
+                        col.Item().PaddingTop(PdfPrimitives.SectionGap).Element(c => ComposeCustomFields(c, doc));
+                    col.Item().PaddingTop(PdfPrimitives.SectionGap).Element(c => ComposeComponents(c, doc));
                     if (doc.Operations.Count > 0)
-                        col.Item().PaddingTop(16).Element(c => ComposeOperations(c, doc));
-                    col.Item().PaddingTop(16).Element(c => ComposeFooter(c, doc, biz));
+                        col.Item().PaddingTop(PdfPrimitives.SectionGap).Element(c => ComposeOperations(c, doc));
+                    col.Item().PaddingTop(PdfPrimitives.SectionGap).Element(c => ComposeFooter(c, doc, biz));
                 });
             });
         });
@@ -67,21 +60,7 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
         return Task.FromResult(document.GeneratePdf());
     }
 
-    private static string FormatAddressLines(AddressDto? address)
-    {
-        if (address == null) return string.Empty;
-        if (!string.IsNullOrWhiteSpace(address.FullAddress)) return address.FullAddress;
-
-        var lines = new List<string>();
-        var street = $"{address.StreetAddress} {address.Apartment}".Trim();
-        if (!string.IsNullOrWhiteSpace(street)) lines.Add(street);
-
-        var cityLine = $"{address.City}, {address.State} {address.PostalCode}".Trim(',', ' ');
-        if (!string.IsNullOrWhiteSpace(cityLine)) lines.Add(cityLine);
-        if (!string.IsNullOrWhiteSpace(address.Country)) lines.Add(address.Country);
-
-        return string.Join("\n", lines);
-    }
+    private static string FormatAddressLines(AddressDto? address) => PdfFormat.AddressLines(address);
 
     private static string FormatDate(DateTime? date) =>
         date.HasValue ? date.Value.ToString("dd MMM yyyy", CultureInfo.InvariantCulture) : string.Empty;
@@ -114,38 +93,38 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
             {
                 row.RelativeItem().Column(left =>
                 {
-                    left.Item().Text(biz.Name).FontFamily("Montserrat").FontSize(16).SemiBold().FontColor(AccentColor);
+                    left.Item().Text(biz.Name).FontFamily(S.FontFamilyDisplay).FontSize(S.FontDisplayMd).SemiBold().FontColor(S.TextAccent);
                     if (!string.IsNullOrWhiteSpace(biz.Description))
-                        left.Item().PaddingTop(2).Text(biz.Description).FontSize(8).FontColor(TextMuted);
+                        left.Item().PaddingTop(2).Text(biz.Description).FontSize(S.FontCaption).FontColor(S.TextMuted);
 
                     if (biz.Address != null)
                     {
                         var addrText = FormatAddressLines(biz.Address);
                         if (!string.IsNullOrWhiteSpace(addrText))
-                            left.Item().PaddingTop(6).Text(addrText).FontSize(8).LineHeight(1.3f);
+                            left.Item().PaddingTop(6).Text(addrText).FontSize(S.FontCaption).LineHeight(1.3f);
                     }
 
                     if (!string.IsNullOrWhiteSpace(biz.Gst))
-                        left.Item().PaddingTop(4).Text($"GSTIN: {biz.Gst}").FontSize(8);
+                        left.Item().PaddingTop(4).Text($"GSTIN: {biz.Gst}").FontSize(S.FontCaption);
 
                     var contactParts = new List<string>();
                     if (!string.IsNullOrWhiteSpace(biz.Phone)) contactParts.Add(biz.Phone);
                     if (!string.IsNullOrWhiteSpace(biz.Email)) contactParts.Add(biz.Email);
                     if (contactParts.Count > 0)
-                        left.Item().PaddingTop(2).Text(string.Join(" · ", contactParts)).FontSize(8).FontColor(TextMuted);
+                        left.Item().PaddingTop(2).Text(string.Join(" · ", contactParts)).FontSize(S.FontCaption).FontColor(S.TextMuted);
                 });
 
                 row.ConstantItem(210).AlignRight().Column(right =>
                 {
-                    right.Item().Text("Bill of Material").FontFamily("Montserrat").FontSize(18).SemiBold().FontColor(AccentColor);
+                    right.Item().Text("Bill of Material").FontFamily(S.FontFamilyDisplay).FontSize(S.FontDisplayLg).SemiBold().FontColor(S.TextAccent);
                     right.Item().PaddingTop(4).Text($"#{doc.Number}").FontSize(11).SemiBold();
                     if (!string.IsNullOrWhiteSpace(doc.Name))
-                        right.Item().PaddingTop(2).Text(doc.Name).FontSize(9).FontColor(TextMuted);
+                        right.Item().PaddingTop(2).Text(doc.Name).FontSize(S.FontCaption).FontColor(S.TextMuted);
 
                     if (!string.IsNullOrWhiteSpace(doc.Status))
                     {
                         right.Item().PaddingTop(8).AlignRight()
-                            .Element(c => ComposeStatusChip(c, doc.Status));
+                            .Element(c => PdfComponents.StatusChip(c, S, doc.Status));
                     }
 
                     right.Item().PaddingTop(10).Table(meta =>
@@ -158,8 +137,8 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
 
                         void MetaRow(string label, string value)
                         {
-                            meta.Cell().PaddingVertical(2).Text(label).FontSize(8).FontColor(TextMuted);
-                            meta.Cell().PaddingVertical(2).AlignRight().Text(value).FontSize(8).SemiBold();
+                            meta.Cell().PaddingVertical(2).Text(label).FontSize(S.FontCaption).FontColor(S.TextMuted);
+                            meta.Cell().PaddingVertical(2).AlignRight().Text(value).FontSize(S.FontCaption).SemiBold();
                         }
 
                         if (!string.IsNullOrWhiteSpace(doc.Type))
@@ -172,57 +151,32 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
                 });
             });
 
-            col.Item().PaddingTop(12).LineHorizontal(1).LineColor(BorderLight);
+            PdfComponents.HorizontalDivider(col.Item(), S);
         });
-    }
-
-    private void ComposeStatusChip(IContainer container, string label)
-    {
-        var (bg, fg) = GetStatusColors(label);
-        container
-            .Background(bg)
-            .PaddingVertical(3)
-            .PaddingHorizontal(8)
-            .Text(label)
-            .FontSize(8)
-            .SemiBold()
-            .FontColor(fg);
-    }
-
-    private static (string bg, string fg) GetStatusColors(string status)
-    {
-        var normalized = status.Trim().ToLowerInvariant();
-        return normalized switch
-        {
-            "approved" => (AccentLight, AccentColor),
-            "draft" or "pending" => ("#FEF3C7", "#92400E"),
-            "rejected" => ("#FEE2E2", "#991B1B"),
-            _ => (SurfaceMuted, TextMuted)
-        };
     }
 
     private void ComposeOutputDetails(IContainer container, BillOfMaterialDto doc)
     {
         container.Column(col =>
         {
-            col.Item().Text("Output Details").FontSize(9).SemiBold().FontColor(AccentColor);
+            PdfComponents.SectionTitle(col.Item(), S, "Output Details");
 
-            col.Item().PaddingTop(8).Background(SurfaceMuted).Padding(12).Column(details =>
+            col.Item().PaddingTop(8).Background(S.SurfaceCard).Padding(12).Column(details =>
             {
                 details.Item().Row(row =>
                 {
                     row.RelativeItem().Column(c =>
                     {
-                        c.Item().Text("To Produce").FontSize(8).FontColor(TextMuted);
+                        c.Item().Text("To Produce").FontSize(S.FontCaption).FontColor(S.TextMuted);
                         c.Item().PaddingTop(2).Text(ProductDisplayHelper.FormatLineItemName(null, doc.ToProduce) ?? "—").FontSize(10).SemiBold();
                     });
 
                     row.RelativeItem().AlignRight().Column(c =>
                     {
-                        c.Item().AlignRight().Text("Output Quantity").FontSize(8).FontColor(TextMuted);
+                        c.Item().AlignRight().Text("Output Quantity").FontSize(S.FontCaption).FontColor(S.TextMuted);
                         c.Item().PaddingTop(2).AlignRight()
                             .Text($"{doc.Quantity:0.##} {GetUnitLabel(doc.Unit)}".Trim())
-                            .FontSize(10).SemiBold().FontColor(AccentColor);
+                            .FontSize(10).SemiBold().FontColor(S.TextAccent);
                     });
                 });
 
@@ -230,10 +184,10 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
                 {
                     details.Item().PaddingTop(8).Row(row =>
                     {
-                        row.RelativeItem().Text("Actual Quantity").FontSize(8).FontColor(TextMuted);
+                        row.RelativeItem().Text("Actual Quantity").FontSize(S.FontCaption).FontColor(S.TextMuted);
                         row.RelativeItem().AlignRight()
                             .Text($"{doc.TransactionQuantity:0.##} {GetUnitLabel(doc.TransactionUnit)}".Trim())
-                            .FontSize(8).SemiBold();
+                            .FontSize(S.FontCaption).SemiBold();
                     });
                 }
             });
@@ -242,8 +196,8 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
             {
                 col.Item().PaddingTop(10).Column(desc =>
                 {
-                    desc.Item().Text("Description").FontSize(8).SemiBold().FontColor(TextMuted);
-                    desc.Item().PaddingTop(2).Text(doc.Description).FontSize(8);
+                    PdfComponents.SectionLabel(desc.Item(), S, "Description");
+                    desc.Item().PaddingTop(2).Text(doc.Description).FontSize(S.FontCaption);
                 });
             }
         });
@@ -253,7 +207,7 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
     {
         container.Column(col =>
         {
-            col.Item().Text("Custom Fields").FontSize(9).SemiBold().FontColor(AccentColor);
+            PdfComponents.SectionTitle(col.Item(), S, "Custom Fields");
 
             col.Item().PaddingTop(6).Table(table =>
             {
@@ -268,8 +222,8 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
                     var value = FormatFieldValue(field.Value);
                     if (string.IsNullOrWhiteSpace(value)) continue;
 
-                    table.Cell().PaddingVertical(3).Text(field.Label).FontSize(8).FontColor(TextMuted);
-                    table.Cell().PaddingVertical(3).Text(value).FontSize(8);
+                    table.Cell().PaddingVertical(3).Text(field.Label).FontSize(S.FontCaption).FontColor(S.TextMuted);
+                    table.Cell().PaddingVertical(3).Text(value).FontSize(S.FontCaption);
                 }
             });
         });
@@ -279,7 +233,7 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
     {
         container.Column(col =>
         {
-            col.Item().Text("Components").FontSize(9).SemiBold().FontColor(AccentColor);
+            PdfComponents.SectionTitle(col.Item(), S, "Components");
 
             col.Item().PaddingTop(6).Table(table =>
             {
@@ -296,19 +250,13 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
 
                 table.Header(header =>
                 {
-                    header.Cell().Element(HeaderCell).Text("#");
-                    header.Cell().Element(HeaderCell).Text("Component");
-                    header.Cell().Element(HeaderCell).AlignRight().Text("Qty");
-                    header.Cell().Element(HeaderCell).Text("Unit");
-                    header.Cell().Element(HeaderCell).AlignRight().Text("Actual");
-                    header.Cell().Element(HeaderCell).Text("Act. Unit");
-                    header.Cell().Element(HeaderCell).AlignRight().Text("Waste %");
-
-                    static IContainer HeaderCell(IContainer c) =>
-                        c.Background(SurfaceMuted)
-                            .PaddingVertical(6)
-                            .PaddingHorizontal(4)
-                            .DefaultTextStyle(x => x.FontSize(7).SemiBold());
+                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(7).SemiBold()).Text("#");
+                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(7).SemiBold()).Text("Component");
+                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(7).SemiBold()).AlignRight().Text("Qty");
+                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(7).SemiBold()).Text("Unit");
+                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(7).SemiBold()).AlignRight().Text("Actual");
+                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(7).SemiBold()).Text("Act. Unit");
+                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(7).SemiBold()).AlignRight().Text("Waste %");
                 });
 
                 int index = 0;
@@ -318,23 +266,19 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
                     bool shaded = index % 2 == 0;
                     var productName = ProductDisplayHelper.FormatLineItemName(null, item.Product);
 
-                    table.Cell().Element(c => RowCell(c, shaded)).Text(index.ToString());
-                    table.Cell().Element(c => RowCell(c, shaded)).Text(productName).SemiBold();
-                    table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
-                        .Text($"{item.Quantity:0.##}");
-                    table.Cell().Element(c => RowCell(c, shaded)).Text(GetUnitLabel(item.Unit));
-                    table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
-                        .Text(item.TransactionQuantity.HasValue ? $"{item.TransactionQuantity:0.##}" : "—");
-                    table.Cell().Element(c => RowCell(c, shaded))
-                        .Text(item.TransactionUnit != null ? GetUnitLabel(item.TransactionUnit) : "—");
-                    table.Cell().Element(c => RowCell(c, shaded)).AlignRight()
-                        .Text($"{item.WastagePercent:0.##}%");
+                    PdfTable.RowSingleLine(table.Cell(), S, shaded, index.ToString());
+                    PdfTable.RowDescription(table.Cell(), S, shaded, productName, semiBold: true);
+                    PdfTable.RowSingleLine(table.Cell(), S, shaded, $"{item.Quantity:0.##}", alignRight: true);
+                    PdfTable.RowSingleLine(table.Cell(), S, shaded, GetUnitLabel(item.Unit));
+                    PdfTable.RowSingleLine(
+                        table.Cell(), S, shaded,
+                        item.TransactionQuantity.HasValue ? $"{item.TransactionQuantity:0.##}" : null,
+                        alignRight: true);
+                    PdfTable.RowSingleLine(
+                        table.Cell(), S, shaded,
+                        item.TransactionUnit != null ? GetUnitLabel(item.TransactionUnit) : null);
+                    PdfTable.RowSingleLine(table.Cell(), S, shaded, $"{item.WastagePercent:0.##}%", alignRight: true);
                 }
-
-                static IContainer RowCell(IContainer c, bool shaded) =>
-                    shaded
-                        ? c.Background(SurfaceMuted).PaddingVertical(5).PaddingHorizontal(4)
-                        : c.PaddingVertical(5).PaddingHorizontal(4);
             });
         });
     }
@@ -343,7 +287,7 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
     {
         container.Column(col =>
         {
-            col.Item().Text("Manufacturing Operations").FontSize(9).SemiBold().FontColor(AccentColor);
+            PdfComponents.SectionTitle(col.Item(), S, "Manufacturing Operations");
 
             col.Item().PaddingTop(6).Table(table =>
             {
@@ -356,15 +300,9 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
 
                 table.Header(header =>
                 {
-                    header.Cell().Element(HeaderCell).Text("#");
-                    header.Cell().Element(HeaderCell).Text("Operation");
-                    header.Cell().Element(HeaderCell).Text("Blocked By");
-
-                    static IContainer HeaderCell(IContainer c) =>
-                        c.Background(SurfaceMuted)
-                            .PaddingVertical(6)
-                            .PaddingHorizontal(6)
-                            .DefaultTextStyle(x => x.FontSize(8).SemiBold());
+                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(S.FontCaption).SemiBold()).Text("#");
+                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(S.FontCaption).SemiBold()).Text("Operation");
+                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(S.FontCaption).SemiBold()).Text("Blocked By");
                 });
 
                 int index = 0;
@@ -376,15 +314,10 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
                         ? string.Join(", ", op.BlockedByOperations.Select(o => o.Name).Where(n => !string.IsNullOrWhiteSpace(n)))
                         : "—";
 
-                    table.Cell().Element(c => RowCell(c, shaded)).Text(index.ToString());
-                    table.Cell().Element(c => RowCell(c, shaded)).Text(op.Operation?.Name ?? "—").SemiBold();
-                    table.Cell().Element(c => RowCell(c, shaded)).Text(blockedBy).FontColor(TextMuted);
+                    PdfTable.RowSingleLine(table.Cell(), S, shaded, index.ToString());
+                    PdfTable.RowDescription(table.Cell(), S, shaded, op.Operation?.Name, semiBold: true);
+                    PdfTable.RowSingleLine(table.Cell(), S, shaded, blockedBy);
                 }
-
-                static IContainer RowCell(IContainer c, bool shaded) =>
-                    shaded
-                        ? c.Background(SurfaceMuted).PaddingVertical(5).PaddingHorizontal(6)
-                        : c.PaddingVertical(5).PaddingHorizontal(6);
             });
         });
     }
@@ -397,8 +330,8 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
             {
                 col.Item().Column(c =>
                 {
-                    c.Item().Text("Notes").FontSize(8).SemiBold().FontColor(TextMuted);
-                    c.Item().PaddingTop(2).Text(doc.Notes!).FontSize(8);
+                    c.Item().Text("Notes").FontSize(S.FontCaption).SemiBold().FontColor(S.TextMuted);
+                    c.Item().PaddingTop(2).Text(doc.Notes!).FontSize(S.FontCaption);
                 });
             }
 
@@ -406,8 +339,8 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
             {
                 col.Item().PaddingTop(10).Column(c =>
                 {
-                    c.Item().Text("Terms & Conditions").FontSize(8).SemiBold().FontColor(TextMuted);
-                    c.Item().PaddingTop(2).Text(doc.Terms!).FontSize(8);
+                    c.Item().Text("Terms & Conditions").FontSize(S.FontCaption).SemiBold().FontColor(S.TextMuted);
+                    c.Item().PaddingTop(2).Text(doc.Terms!).FontSize(S.FontCaption);
                 });
             }
 
@@ -416,7 +349,7 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
                 row.RelativeItem();
                 row.ConstantItem(180).AlignRight().Column(c =>
                 {
-                    c.Item().Text($"For {biz.Name}").FontSize(8).SemiBold();
+                    c.Item().Text($"For {biz.Name}").FontSize(S.FontCaption).SemiBold();
 
                     var signature = doc.Signature;
                     if (signature != null && !string.IsNullOrWhiteSpace(signature.Url))
@@ -435,7 +368,7 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
                     var signatoryLabel = !string.IsNullOrWhiteSpace(signature?.Name)
                         ? signature.Name
                         : "Authorised Signatory";
-                    c.Item().PaddingTop(4).Text(signatoryLabel).FontSize(8).SemiBold().FontColor(TextMuted);
+                    c.Item().PaddingTop(4).Text(signatoryLabel).FontSize(S.FontCaption).SemiBold().FontColor(S.TextMuted);
                 });
             });
         });
