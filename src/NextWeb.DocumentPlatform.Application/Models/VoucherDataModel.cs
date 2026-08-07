@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using NextWeb.DocumentPlatform.Application.Serialization;
 
 namespace NextWeb.DocumentPlatform.Application.Models;
 
@@ -556,7 +557,12 @@ public class ProductDto
     public string Hsn { get; set; } = string.Empty;
 
     [JsonPropertyName("unit")]
-    public string Unit { get; set; } = string.Empty;
+    [JsonConverter(typeof(UnitReferenceJsonConverter))]
+    public UnitDto? Unit { get; set; }
+
+    [JsonPropertyName("transactionUnit")]
+    [JsonConverter(typeof(UnitReferenceJsonConverter))]
+    public UnitDto? TransactionUnit { get; set; }
 
     [JsonPropertyName("featured")]
     public bool Featured { get; set; }

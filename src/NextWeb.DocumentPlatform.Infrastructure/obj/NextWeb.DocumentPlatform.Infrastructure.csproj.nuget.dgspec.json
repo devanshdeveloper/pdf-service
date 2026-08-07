@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure\\NextWeb.DocumentPlatform.Infrastructure.csproj": {}
+    "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure\\NextWeb.DocumentPlatform.Infrastructure.csproj": {}
   },
   "projects": {
-    "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj": {
+    "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj",
+        "projectUniqueName": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj",
         "projectName": "NextWeb.DocumentPlatform.Application",
-        "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj",
+        "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj",
         "packagesPath": "C:\\Users\\devan\\.nuget\\packages\\",
-        "outputPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\obj\\",
+        "outputPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\devan\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -27,11 +27,11 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj": {
-                "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj"
+              "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj": {
+                "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj"
               },
-              "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine\\NextWeb.DocumentPlatform.Engine.csproj": {
-                "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine\\NextWeb.DocumentPlatform.Engine.csproj"
+              "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine\\NextWeb.DocumentPlatform.Engine.csproj": {
+                "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine\\NextWeb.DocumentPlatform.Engine.csproj"
               }
             }
           }
@@ -352,14 +352,14 @@
         }
       }
     },
-    "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj": {
+    "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj",
+        "projectUniqueName": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj",
         "projectName": "NextWeb.DocumentPlatform.Domain",
-        "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj",
+        "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj",
         "packagesPath": "C:\\Users\\devan\\.nuget\\packages\\",
-        "outputPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\obj\\",
+        "outputPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\devan\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -687,14 +687,14 @@
         }
       }
     },
-    "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine\\NextWeb.DocumentPlatform.Engine.csproj": {
+    "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine\\NextWeb.DocumentPlatform.Engine.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine\\NextWeb.DocumentPlatform.Engine.csproj",
+        "projectUniqueName": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine\\NextWeb.DocumentPlatform.Engine.csproj",
         "projectName": "NextWeb.DocumentPlatform.Engine",
-        "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine\\NextWeb.DocumentPlatform.Engine.csproj",
+        "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine\\NextWeb.DocumentPlatform.Engine.csproj",
         "packagesPath": "C:\\Users\\devan\\.nuget\\packages\\",
-        "outputPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine\\obj\\",
+        "outputPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\devan\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -710,8 +710,8 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj": {
-                "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj"
+              "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj": {
+                "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj"
               }
             }
           }
@@ -1026,14 +1026,14 @@
         }
       }
     },
-    "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure\\NextWeb.DocumentPlatform.Infrastructure.csproj": {
+    "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure\\NextWeb.DocumentPlatform.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure\\NextWeb.DocumentPlatform.Infrastructure.csproj",
+        "projectUniqueName": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure\\NextWeb.DocumentPlatform.Infrastructure.csproj",
         "projectName": "NextWeb.DocumentPlatform.Infrastructure",
-        "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure\\NextWeb.DocumentPlatform.Infrastructure.csproj",
+        "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure\\NextWeb.DocumentPlatform.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\devan\\.nuget\\packages\\",
-        "outputPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure\\obj\\",
+        "outputPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\devan\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -1049,11 +1049,11 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj": {
-                "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj"
+              "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj": {
+                "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj"
               },
-              "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\NextWeb.DocumentPlatform.Renderers.csproj": {
-                "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\NextWeb.DocumentPlatform.Renderers.csproj"
+              "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\NextWeb.DocumentPlatform.Renderers.csproj": {
+                "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\NextWeb.DocumentPlatform.Renderers.csproj"
               }
             }
           }
@@ -1374,14 +1374,14 @@
         }
       }
     },
-    "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\NextWeb.DocumentPlatform.Renderers.csproj": {
+    "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\NextWeb.DocumentPlatform.Renderers.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\NextWeb.DocumentPlatform.Renderers.csproj",
+        "projectUniqueName": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\NextWeb.DocumentPlatform.Renderers.csproj",
         "projectName": "NextWeb.DocumentPlatform.Renderers",
-        "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\NextWeb.DocumentPlatform.Renderers.csproj",
+        "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\NextWeb.DocumentPlatform.Renderers.csproj",
         "packagesPath": "C:\\Users\\devan\\.nuget\\packages\\",
-        "outputPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\obj\\",
+        "outputPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\devan\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -1397,14 +1397,14 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj": {
-                "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj"
+              "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj": {
+                "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj"
               },
-              "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj": {
-                "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj"
+              "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj": {
+                "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Domain\\NextWeb.DocumentPlatform.Domain.csproj"
               },
-              "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine\\NextWeb.DocumentPlatform.Engine.csproj": {
-                "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine\\NextWeb.DocumentPlatform.Engine.csproj"
+              "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine\\NextWeb.DocumentPlatform.Engine.csproj": {
+                "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Engine\\NextWeb.DocumentPlatform.Engine.csproj"
               }
             }
           }

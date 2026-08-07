@@ -45,6 +45,7 @@ builder.Services.AddTransient<IDocumentRenderer, MaterialEntryStandardRenderer>(
 builder.Services.AddTransient<IDocumentRenderer, StockTransferInStandardRenderer>();
 builder.Services.AddTransient<IDocumentRenderer, StockTransferOutStandardRenderer>();
 builder.Services.AddTransient<IDocumentRenderer, BillOfMaterialStandardRenderer>();
+builder.Services.AddTransient<IDocumentRenderer, ReportsStudentAttendanceRenderer>();
 
 // Health Checks
 builder.Services.AddHealthChecks();

@@ -99,6 +99,24 @@ public class BomComponentDto
 
     [JsonPropertyName("transactionUnit")]
     public UnitDto? TransactionUnit { get; set; }
+
+    [JsonPropertyName("selectedByCondition")]
+    public string? SelectedByCondition { get; set; }
+
+    [JsonPropertyName("childBom")]
+    public BomChildReferenceDto? ChildBom { get; set; }
+}
+
+public class BomChildReferenceDto
+{
+    [JsonPropertyName("_id")]
+    public string Id { get; set; } = string.Empty;
+
+    [JsonPropertyName("number")]
+    public string Number { get; set; } = string.Empty;
+
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
 }
 
 public class BomOperationDto

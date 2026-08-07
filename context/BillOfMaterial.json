@@ -12,7 +12,17 @@
         "_id": "6a6ec24559b3315a69f6d056",
         "name": "SAVERA MATCH BOX",
         "sku": "SMB-001",
-        "hsn": "3605"
+        "hsn": "3605",
+        "unit": {
+          "_id": "6a6deed17be048f343e2027c",
+          "name": "Number",
+          "value": "nos"
+        },
+        "transactionUnit": {
+          "_id": "6a6deed17be048f343e2027c",
+          "name": "Number",
+          "value": "nos"
+        }
       },
       "quantity": 1000,
       "unit": {
