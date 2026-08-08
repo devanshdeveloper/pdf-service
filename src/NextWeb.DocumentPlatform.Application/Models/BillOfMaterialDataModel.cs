@@ -58,6 +58,9 @@ public class BillOfMaterialDto
     [JsonPropertyName("fields")]
     public List<BomCustomFieldDto> Fields { get; set; } = new();
 
+    [JsonPropertyName("currency")]
+    public string Currency { get; set; } = string.Empty;
+
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
 

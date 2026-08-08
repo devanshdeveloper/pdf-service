@@ -36,6 +36,7 @@ public class WorkOrderStandardRenderer : IDocumentRenderer
 
         var doc = model.Document;
         var biz = model.Business;
+        var currency = ResolveCurrency(doc, biz);
 
         var document = Document.Create(container =>
         {
@@ -53,7 +54,7 @@ public class WorkOrderStandardRenderer : IDocumentRenderer
                     if (doc.Operations.Count > 0)
                         col.Item().PaddingTop(PdfPrimitives.SectionGap).Element(c => ComposeOperations(c, doc));
                     if (doc.FrozenCostBreakdown.Count > 0)
-                        col.Item().PaddingTop(PdfPrimitives.SectionGap).Element(c => ComposeCostBreakdown(c, doc));
+                        col.Item().PaddingTop(PdfPrimitives.SectionGap).Element(c => ComposeCostBreakdown(c, doc, currency));
                     col.Item().PaddingTop(PdfPrimitives.SectionGap).Element(c => ComposeFooter(c, doc, biz));
                 });
             });
@@ -70,6 +71,16 @@ public class WorkOrderStandardRenderer : IDocumentRenderer
         if (!string.IsNullOrWhiteSpace(unit.Value)) return unit.Value;
         return unit.Name;
     }
+
+    private static string ResolveCurrency(WorkOrderDto doc, BusinessDto biz)
+    {
+        if (!string.IsNullOrWhiteSpace(doc.Currency)) return doc.Currency;
+        if (!string.IsNullOrWhiteSpace(biz.BaseCurrency)) return biz.BaseCurrency;
+        return "INR";
+    }
+
+    private static string FormatCurrency(decimal amount, string currencyCode) =>
+        PdfFormat.Currency(amount, currencyCode);
 
     private static string FormatFieldValue(JsonElement value)
     {
@@ -296,7 +307,7 @@ public class WorkOrderStandardRenderer : IDocumentRenderer
         });
     }
 
-    private void ComposeCostBreakdown(IContainer container, WorkOrderDto doc)
+    private void ComposeCostBreakdown(IContainer container, WorkOrderDto doc, string currency)
     {
         container.Column(col =>
         {
@@ -329,12 +340,12 @@ public class WorkOrderStandardRenderer : IDocumentRenderer
 
                     PdfTable.RowDescription(table.Cell(), S, shaded, productName, semiBold: true);
                     PdfTable.RowSingleLine(table.Cell(), S, shaded, $"{item.QuantityUsed:0.##}", alignRight: true);
-                    PdfTable.RowSingleLine(table.Cell(), S, shaded, $"{item.UnitCost:C2}", alignRight: true);
-                    PdfTable.RowSingleLine(table.Cell(), S, shaded, $"{item.TotalCost:C2}", alignRight: true);
+                    PdfTable.RowSingleLine(table.Cell(), S, shaded, FormatCurrency(item.UnitCost, currency), alignRight: true);
+                    PdfTable.RowSingleLine(table.Cell(), S, shaded, FormatCurrency(item.TotalCost, currency), alignRight: true);
                 }
             });
 
-            col.Item().PaddingTop(8).AlignRight().Text($"Frozen Total Cost: {doc.FrozenTotalCost:C2}").FontSize(10).SemiBold();
+            col.Item().PaddingTop(8).AlignRight().Text($"Frozen Total Cost: {FormatCurrency(doc.FrozenTotalCost, currency)}").FontSize(10).SemiBold();
         });
     }
 

@@ -60,6 +60,9 @@ public class WorkOrderDto
     [JsonPropertyName("operations")]
     public List<WorkOrderOperationDto> Operations { get; set; } = new();
 
+    [JsonPropertyName("currency")]
+    public string Currency { get; set; } = string.Empty;
+
     [JsonPropertyName("status")]
     public string Status { get; set; } = string.Empty;
 
