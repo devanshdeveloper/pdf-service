@@ -8,5 +8,6 @@ public static class PdfThemes
     public static readonly PdfTheme BillOfMaterial = new("#2563EB", "#DBEAFE", "bill-of-material");
     public static readonly PdfTheme StockTransferOut = new("#7C3AED", "#EDE9FE", "stock-transfer-out");
     public static readonly PdfTheme StockTransferIn = new("#059669", "#D1FAE5", "stock-transfer-in");
+    public static readonly PdfTheme WorkOrder = new("#2563EB", "#DBEAFE", "work-order");
     public static readonly PdfTheme Reports = new("#0F766E", "#CCFBF1", "reports");
 }

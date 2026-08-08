@@ -39,6 +39,15 @@ public class WorkOrderDto
     [JsonPropertyName("toProduce")]
     public ProductDto? ToProduce { get; set; }
 
+    [JsonPropertyName("transactionQuantity")]
+    public decimal? TransactionQuantity { get; set; }
+
+    [JsonPropertyName("transactionUnit")]
+    public UnitDto? TransactionUnit { get; set; }
+
+    [JsonPropertyName("fields")]
+    public List<WorkOrderCustomFieldDto> Fields { get; set; } = new();
+
     [JsonPropertyName("components")]
     public List<WorkOrderComponentDto> Components { get; set; } = new();
 
@@ -53,6 +62,15 @@ public class WorkOrderDto
 
     [JsonPropertyName("status")]
     public string Status { get; set; } = string.Empty;
+
+    [JsonPropertyName("notes")]
+    public string Notes { get; set; } = string.Empty;
+
+    [JsonPropertyName("terms")]
+    public string Terms { get; set; } = string.Empty;
+
+    [JsonPropertyName("signature")]
+    public SignatureDto? Signature { get; set; }
 }
 
 public class WorkOrderComponentDto
@@ -65,6 +83,12 @@ public class WorkOrderComponentDto
 
     [JsonPropertyName("unit")]
     public UnitDto? Unit { get; set; }
+
+    [JsonPropertyName("transactionQuantity")]
+    public decimal? TransactionQuantity { get; set; }
+
+    [JsonPropertyName("transactionUnit")]
+    public UnitDto? TransactionUnit { get; set; }
 }
 
 public class WorkOrderFrozenCostDto
@@ -110,4 +134,13 @@ public class WorkOrderSettingsDto
 
     [JsonPropertyName("types")]
     public List<string> Types { get; set; } = new();
+}
+
+public class WorkOrderCustomFieldDto
+{
+    [JsonPropertyName("label")]
+    public string Label { get; set; } = string.Empty;
+
+    [JsonPropertyName("value")]
+    public System.Text.Json.JsonElement Value { get; set; }
 }
