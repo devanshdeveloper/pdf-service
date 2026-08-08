@@ -1298,11 +1298,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure\\NextWeb.DocumentPlatform.Infrastructure.csproj",
+      "projectUniqueName": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure\\NextWeb.DocumentPlatform.Infrastructure.csproj",
       "projectName": "NextWeb.DocumentPlatform.Infrastructure",
-      "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure\\NextWeb.DocumentPlatform.Infrastructure.csproj",
+      "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure\\NextWeb.DocumentPlatform.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\devan\\.nuget\\packages\\",
-      "outputPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure\\obj\\",
+      "outputPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\devan\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -1318,11 +1318,11 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj": {
-              "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj"
+            "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj": {
+              "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Application\\NextWeb.DocumentPlatform.Application.csproj"
             },
-            "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\NextWeb.DocumentPlatform.Renderers.csproj": {
-              "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\NextWeb.DocumentPlatform.Renderers.csproj"
+            "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\NextWeb.DocumentPlatform.Renderers.csproj": {
+              "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Renderers\\NextWeb.DocumentPlatform.Renderers.csproj"
             }
           }
         }

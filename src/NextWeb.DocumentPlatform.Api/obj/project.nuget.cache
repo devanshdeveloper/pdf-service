@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "l6z3nYl1/Eg=",
+  "dgSpecHash": "92Feyxpk3Qg=",
   "success": true,
-  "projectFilePath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Api\\NextWeb.DocumentPlatform.Api.csproj",
+  "projectFilePath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Api\\NextWeb.DocumentPlatform.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\devan\\.nuget\\packages\\mediatr\\14.2.0\\mediatr.14.2.0.nupkg.sha512",
     "C:\\Users\\devan\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
@@ -22,9 +22,9 @@
       "code": "NU1903",
       "level": "Warning",
       "message": "Package 'Microsoft.OpenApi' 2.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
-      "projectPath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Api\\NextWeb.DocumentPlatform.Api.csproj",
+      "projectPath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Api\\NextWeb.DocumentPlatform.Api.csproj",
       "warningLevel": 1,
-      "filePath": "c:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Api\\NextWeb.DocumentPlatform.Api.csproj",
+      "filePath": "C:\\code\\next-web-works\\pdf-service\\src\\NextWeb.DocumentPlatform.Api\\NextWeb.DocumentPlatform.Api.csproj",
       "libraryId": "Microsoft.OpenApi",
       "targetGraphs": [
         "net10.0"
