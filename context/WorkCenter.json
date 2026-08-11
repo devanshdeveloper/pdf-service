@@ -1,0 +1,55 @@
+{
+  "message": "Retrieved successfully for print",
+  "data": {
+    "document": {
+      "_id": "64b0000000003",
+      "name": "Engine Assembly Station 1",
+      "status": "active",
+      "workCenterType": {
+        "_id": "64b0000000002",
+        "name": "Assembly Line Type"
+      },
+      "costTemplate": {
+        "_id": "c1",
+        "name": "Assembly Line Costing"
+      },
+      "workCenterTiming": {
+        "_id": "t1",
+        "name": "General Factory Shift"
+      },
+      "mapItems": [
+        {
+          "appliesToAllItems": true,
+          "setupTimeSeconds": 1800,
+          "cleanupTimeSeconds": 900,
+          "capacity": 5
+        },
+        {
+          "appliesToAllItems": false,
+          "product": {
+            "_id": "p1",
+            "name": "V8 Engine Block"
+          },
+          "setupTimeSeconds": 3600,
+          "cleanupTimeSeconds": 1800,
+          "capacity": 2
+        }
+      ],
+      "createdAt": "2023-11-01T10:00:00Z"
+    },
+    "business": {
+      "name": "Next Web Works",
+      "description": "IT Solutions",
+      "gst": "27AAACN1234F1Z9",
+      "address": {
+        "streetAddress": "123 Main St",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "postalCode": "400001"
+      }
+    },
+    "settings": {
+      "pdf_template": "Standard"
+    }
+  }
+}

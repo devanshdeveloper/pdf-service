@@ -139,6 +139,42 @@ public class RenderControllerTests : IClassFixture<WebApplicationFactory<Program
             "bill-of-material-standard.pdf");
     }
 
+    [Fact]
+    public async Task Generate_CostTemplate_Standard()
+    {
+        await GenerateFromMockFile(
+            new CostTemplateMockErpForwardingService(),
+            "/render/cost-template/test-doc-id",
+            "cost-template-standard.pdf");
+    }
+
+    [Fact]
+    public async Task Generate_WorkCenterTiming_Standard()
+    {
+        await GenerateFromMockFile(
+            new WorkCenterTimingMockErpForwardingService(),
+            "/render/work-center-timing/test-doc-id",
+            "work-center-timing-standard.pdf");
+    }
+
+    [Fact]
+    public async Task Generate_WorkCenterType_Standard()
+    {
+        await GenerateFromMockFile(
+            new WorkCenterTypeMockErpForwardingService(),
+            "/render/work-center-type/test-doc-id",
+            "work-center-type-standard.pdf");
+    }
+
+    [Fact]
+    public async Task Generate_WorkCenter_Standard()
+    {
+        await GenerateFromMockFile(
+            new WorkCenterMockErpForwardingService(),
+            "/render/work-center/test-doc-id",
+            "work-center-standard.pdf");
+    }
+
     private async Task GenerateFromMockFile(IErpForwardingService mockService, string endpoint, string outputFileName)
     {
         var customFactory = _factory.WithWebHostBuilder(builder =>
@@ -337,6 +373,42 @@ public class BillOfMaterialMockErpForwardingService : IErpForwardingService
     public async Task<string> GetDocumentDataAsync(HttpRequestContext requestContext, CancellationToken cancellationToken)
     {
         var path = @"c:\code\next-web-works\pdf-service\context\BillOfMaterial.json";
+        return await File.ReadAllTextAsync(path, cancellationToken);
+    }
+}
+
+public class CostTemplateMockErpForwardingService : IErpForwardingService
+{
+    public async Task<string> GetDocumentDataAsync(HttpRequestContext requestContext, CancellationToken cancellationToken)
+    {
+        var path = @"c:\code\next-web-works\pdf-service\context\CostTemplate.json";
+        return await File.ReadAllTextAsync(path, cancellationToken);
+    }
+}
+
+public class WorkCenterTimingMockErpForwardingService : IErpForwardingService
+{
+    public async Task<string> GetDocumentDataAsync(HttpRequestContext requestContext, CancellationToken cancellationToken)
+    {
+        var path = @"c:\code\next-web-works\pdf-service\context\WorkCenterTiming.json";
+        return await File.ReadAllTextAsync(path, cancellationToken);
+    }
+}
+
+public class WorkCenterTypeMockErpForwardingService : IErpForwardingService
+{
+    public async Task<string> GetDocumentDataAsync(HttpRequestContext requestContext, CancellationToken cancellationToken)
+    {
+        var path = @"c:\code\next-web-works\pdf-service\context\WorkCenterType.json";
+        return await File.ReadAllTextAsync(path, cancellationToken);
+    }
+}
+
+public class WorkCenterMockErpForwardingService : IErpForwardingService
+{
+    public async Task<string> GetDocumentDataAsync(HttpRequestContext requestContext, CancellationToken cancellationToken)
+    {
+        var path = @"c:\code\next-web-works\pdf-service\context\WorkCenter.json";
         return await File.ReadAllTextAsync(path, cancellationToken);
     }
 }

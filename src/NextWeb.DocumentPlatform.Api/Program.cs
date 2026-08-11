@@ -47,6 +47,11 @@ builder.Services.AddTransient<IDocumentRenderer, StockTransferOutStandardRendere
 builder.Services.AddTransient<IDocumentRenderer, BillOfMaterialStandardRenderer>();
 builder.Services.AddTransient<IDocumentRenderer, WorkOrderStandardRenderer>();
 builder.Services.AddTransient<IDocumentRenderer, ReportsStudentAttendanceRenderer>();
+builder.Services.AddTransient<IDocumentRenderer, CostTemplateStandardRenderer>();
+builder.Services.AddTransient<IDocumentRenderer, WorkCenterTimingStandardRenderer>();
+builder.Services.AddTransient<IDocumentRenderer, WorkCenterTypeStandardRenderer>();
+builder.Services.AddTransient<IDocumentRenderer, WorkCenterStandardRenderer>();
+builder.Services.AddTransient<IDocumentRenderer, StockAnalysisStandardRenderer>();
 
 // Health Checks
 builder.Services.AddHealthChecks();

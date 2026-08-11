@@ -1,0 +1,49 @@
+{
+  "message": "Retrieved successfully for print",
+  "data": {
+    "document": {
+      "_id": "64bcdef123456789",
+      "name": "Standard Wood Furniture Cost",
+      "status": "Active",
+      "items": [
+        {
+          "_id": "item1",
+          "name": "Wood Material",
+          "type": "fixed",
+          "value": 5000,
+          "ledger": {
+            "_id": "ledg1",
+            "name": "Raw Materials"
+          }
+        },
+        {
+          "_id": "item2",
+          "name": "Labor Cost",
+          "type": "variable",
+          "value": 2000,
+          "ledger": {
+            "_id": "ledg2",
+            "name": "Labor Expenses"
+          }
+        }
+      ],
+      "createdAt": "2023-10-01T10:00:00Z"
+    },
+    "business": {
+      "name": "Next Web Works",
+      "description": "IT Solutions",
+      "phone": "9876543210",
+      "email": "contact@nextwebworks.in",
+      "gst": "27AAACN1234F1Z9",
+      "address": {
+        "streetAddress": "123 Main St",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "postalCode": "400001"
+      }
+    },
+    "settings": {
+      "pdf_template": "Standard"
+    }
+  }
+}

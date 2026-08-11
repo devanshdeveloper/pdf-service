@@ -1,0 +1,30 @@
+{
+  "message": "Retrieved successfully for print",
+  "data": {
+    "document": {
+      "_id": "64b0000000002",
+      "name": "Assembly Line Type",
+      "description": "Standard assembly line centers for engines",
+      "status": "active",
+      "costTemplate": {
+        "_id": "c1",
+        "name": "Assembly Line Costing"
+      },
+      "createdAt": "2023-11-01T10:00:00Z"
+    },
+    "business": {
+      "name": "Next Web Works",
+      "description": "IT Solutions",
+      "gst": "27AAACN1234F1Z9",
+      "address": {
+        "streetAddress": "123 Main St",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "postalCode": "400001"
+      }
+    },
+    "settings": {
+      "pdf_template": "Standard"
+    }
+  }
+}

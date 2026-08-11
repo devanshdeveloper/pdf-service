@@ -1,0 +1,54 @@
+{
+  "message": "Retrieved successfully for print",
+  "data": {
+    "document": {
+      "_id": "64b0000000001",
+      "name": "General Factory Shift",
+      "timezone": "Asia/Kolkata",
+      "configuration": "standard",
+      "status": "active",
+      "standardHours": {
+        "from": "09:00",
+        "to": "18:00"
+      },
+      "workingDays": {
+        "Monday": { "isWorkingDay": true, "from": "09:00", "to": "18:00" },
+        "Tuesday": { "isWorkingDay": true, "from": "09:00", "to": "18:00" },
+        "Wednesday": { "isWorkingDay": true, "from": "09:00", "to": "18:00" },
+        "Thursday": { "isWorkingDay": true, "from": "09:00", "to": "18:00" },
+        "Friday": { "isWorkingDay": true, "from": "09:00", "to": "18:00" },
+        "Saturday": { "isWorkingDay": false },
+        "Sunday": { "isWorkingDay": false }
+      },
+      "breaks": [
+        {
+          "name": "Lunch Break",
+          "from": "13:00",
+          "to": "14:00",
+          "isPaid": false
+        },
+        {
+          "name": "Tea Break",
+          "from": "16:00",
+          "to": "16:15",
+          "isPaid": true
+        }
+      ],
+      "createdAt": "2023-11-01T10:00:00Z"
+    },
+    "business": {
+      "name": "Next Web Works",
+      "description": "IT Solutions",
+      "gst": "27AAACN1234F1Z9",
+      "address": {
+        "streetAddress": "123 Main St",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "postalCode": "400001"
+      }
+    },
+    "settings": {
+      "pdf_template": "Standard"
+    }
+  }
+}

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ZUQTKGmxbLg=",
+  "dgSpecHash": "BfJj8dy5Ejo=",
   "success": true,
-  "projectFilePath": "c:\\code\\next-web-works\\pdf-service\\tests\\NextWeb.DocumentPlatform.UnitTests\\NextWeb.DocumentPlatform.UnitTests.csproj",
+  "projectFilePath": "C:\\code\\next-web-works\\pdf-service\\tests\\NextWeb.DocumentPlatform.UnitTests\\NextWeb.DocumentPlatform.UnitTests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\devan\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
     "C:\\Users\\devan\\.nuget\\packages\\coverlet.collector\\6.0.4\\coverlet.collector.6.0.4.nupkg.sha512",
