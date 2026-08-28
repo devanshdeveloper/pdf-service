@@ -544,11 +544,15 @@ public class ProductDto
     [JsonPropertyName("description")]
     public string Description { get; set; } = string.Empty;
 
+    [JsonPropertyName("conversionFactor")]
+    public decimal? ConversionFactor { get; set; }
+
     [JsonPropertyName("slug")]
     public string Slug { get; set; } = string.Empty;
 
     [JsonPropertyName("categories")]
-    public List<string> Categories { get; set; } = new();
+    [JsonConverter(typeof(CategoryListJsonConverter))]
+    public List<CategoryDto> Categories { get; set; } = new();
 
     [JsonPropertyName("sku")]
     public string Sku { get; set; } = string.Empty;

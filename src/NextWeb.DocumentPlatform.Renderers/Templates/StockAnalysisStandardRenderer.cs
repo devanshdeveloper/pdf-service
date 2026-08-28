@@ -34,6 +34,7 @@ public class StockAnalysisStandardRenderer : IDocumentRenderer
 
         var doc = model.Document;
         var biz = model.Business;
+        var settings = model.Settings;
 
         var document = Document.Create(container =>
         {
@@ -45,13 +46,12 @@ public class StockAnalysisStandardRenderer : IDocumentRenderer
                 page.PageColor(S.SurfacePage);
                 page.DefaultTextStyle(x => x.FontSize(PdfPrimitives.FontSizeBody).FontFamily(S.FontFamilyBody).FontColor(S.TextPrimary));
 
-                page.Header().Element(c => ComposePageHeader(c, biz));
+                page.Header().Element(c => ComposePageHeader(c, biz, settings));
                 page.Footer().Element(c => ComposePageFooter(c, biz));
 
                 page.Content().PaddingVertical(PdfPrimitives.SectionGap).Column(col =>
                 {
-                    col.Item().Element(ComposeTitleBlock);
-                    col.Item().PaddingTop(PdfPrimitives.SectionGap).Element(c => ComposeTable(c, doc));
+                    col.Item().Element(c => ComposeTable(c, doc, biz));
                 });
             });
         });
@@ -61,7 +61,7 @@ public class StockAnalysisStandardRenderer : IDocumentRenderer
 
     private static string FormatAddressLines(AddressDto? address) => PdfFormat.AddressLines(address);
 
-    private void ComposePageHeader(IContainer container, BusinessDto? biz)
+    private void ComposePageHeader(IContainer container, BusinessDto? biz, StockAnalysisSettingsDto? settings)
     {
         container.Column(col =>
         {
@@ -81,6 +81,30 @@ public class StockAnalysisStandardRenderer : IDocumentRenderer
                         if (!string.IsNullOrWhiteSpace(addr))
                             left.Item().PaddingTop(4).Text(addr).FontSize(S.FontCaption).LineHeight(1.3f);
                     }
+                });
+
+                row.ConstantItem(250).AlignRight().Column(right => 
+                {
+                    right.Item().AlignRight().Text("STOCK ANALYSIS REPORT")
+                        .FontFamily(S.FontFamilyDisplay)
+                        .FontSize(14)
+                        .SemiBold()
+                        .FontColor(S.TextAccent);
+                        
+                    if (!string.IsNullOrWhiteSpace(settings?.LocationName))
+                    {
+                        right.Item().AlignRight().PaddingTop(4).Text($"Location: {settings.LocationName}")
+                            .FontSize(S.FontCaption).FontColor(S.TextMuted).SemiBold();
+                    }
+                    if (!string.IsNullOrWhiteSpace(settings?.CategoryName))
+                    {
+                        right.Item().AlignRight().PaddingTop(1).Text($"Category: {settings.CategoryName}")
+                            .FontSize(S.FontCaption).FontColor(S.TextMuted).SemiBold();
+                    }
+                        
+                    right.Item().AlignRight().PaddingTop(4).Text($"Generated: {DateTime.Now:yyyy-MM-dd HH:mm}")
+                        .FontSize(S.FontCaption)
+                        .FontColor(S.TextMuted);
                 });
             });
 
@@ -108,49 +132,24 @@ public class StockAnalysisStandardRenderer : IDocumentRenderer
         });
     }
 
-    private void ComposeTitleBlock(IContainer container)
+    private void ComposeTable(IContainer container, StockAnalysisDocumentDto doc, BusinessDto? biz)
     {
-        container.Column(col =>
-        {
-            col.Item().Text("Stock Analysis Report")
-                .FontFamily(S.FontFamilyDisplay)
-                .FontSize(S.FontDisplayLg)
-                .SemiBold()
-                .FontColor(S.TextAccent);
-            
-            col.Item().PaddingTop(4).Text($"Generated: {DateTime.Now:yyyy-MM-dd HH:mm}")
-                .FontSize(S.FontCaption)
-                .FontColor(S.TextMuted);
-        });
-    }
+        var currency = biz?.BaseCurrency ?? "";
 
-    private string ExtractUnitName(object? unitObj)
-    {
-        if (unitObj is JsonElement el && el.ValueKind == JsonValueKind.Object)
-        {
-            if (el.TryGetProperty("name", out var nameProp))
-            {
-                return nameProp.GetString() ?? string.Empty;
-            }
-        }
-        return string.Empty;
-    }
-
-    private void ComposeTable(IContainer container, StockAnalysisDocumentDto doc)
-    {
         container.Table(table =>
         {
             table.ColumnsDefinition(cols =>
             {
-                cols.RelativeColumn(2); // Name
-                cols.RelativeColumn();  // Type
-                cols.RelativeColumn();  // Unit
-                cols.RelativeColumn();  // Actual Stock
-                cols.RelativeColumn();  // Stock
-                cols.RelativeColumn();  // Avg Unit Price
-                cols.RelativeColumn();  // Total Value
-                cols.RelativeColumn();  // Avg Conv
-                cols.RelativeColumn();  // Avg Actual Price
+                cols.RelativeColumn(3); // Name
+                cols.RelativeColumn();  // Per Unit Price
+                cols.RelativeColumn();  // Min. Unit Price
+                cols.RelativeColumn();  // Max. Unit Price
+                cols.RelativeColumn();  // Avg Conv Fac
+                cols.RelativeColumn();  // Total Stock
+                cols.RelativeColumn();  // Total Stock Value (now Total Price)
+                cols.RelativeColumn();  // Location Stock
+                cols.RelativeColumn();  // Per Act. Unit Price
+                cols.RelativeColumn();  // Location Actual Stock
             });
 
             table.Header(header =>
@@ -158,54 +157,80 @@ public class StockAnalysisStandardRenderer : IDocumentRenderer
                 void HeaderCell(string text, bool right = false)
                 {
                     var cell = header.Cell().Background(S.SurfaceCard).Padding(4);
-                    if (right) cell.AlignRight();
-                    cell.Text(text).FontSize(8).SemiBold().FontColor(S.TextMuted);
+                    if (right) cell = cell.AlignRight();
+                    cell.Text(text).FontSize(7).SemiBold().FontColor(S.TextMuted);
                 }
 
                 HeaderCell("PRODUCT NAME");
-                HeaderCell("TYPE");
-                HeaderCell("UNIT");
-                HeaderCell("ACTUAL STOCK", true);
-                HeaderCell("STOCK", true);
-                HeaderCell("AVG UNIT PRICE", true);
-                HeaderCell("TOTAL VALUE", true);
-                HeaderCell("AVG CONV", true);
-                HeaderCell("AVG ACTUAL PRICE", true);
+                HeaderCell("PER UNIT PRICE", true);
+                HeaderCell("MIN. UNIT PRICE", true);
+                HeaderCell("MAX. UNIT PRICE", true);
+                HeaderCell("AVG CONV. FAC", true);
+                HeaderCell("TOTAL STOCK", true);
+                HeaderCell("TOTAL STOCK VALUE", true);
+                HeaderCell("LOCATION STOCK", true);
+                HeaderCell("PER ACT. UNIT PRICE", true);
+                HeaderCell("LOCATION ACT. STOCK", true);
             });
 
             if (doc.Items == null || doc.Items.Count == 0)
             {
-                table.Cell().ColumnSpan(9).Padding(8)
+                table.Cell().ColumnSpan(10).Padding(8)
                     .AlignCenter().Text("No products found for the selected filters.")
                     .FontSize(9).FontColor(S.TextMuted);
                 return;
             }
 
-            foreach (var item in doc.Items)
+            var groupedItems = doc.Items
+                .SelectMany(i => i.Categories != null && i.Categories.Any()
+                    ? i.Categories.Select(c => new { CategoryName = !string.IsNullOrWhiteSpace(c.Name) ? c.Name : "Uncategorized", Item = i })
+                    : new[] { new { CategoryName = "Uncategorized", Item = i } })
+                .GroupBy(x => x.CategoryName)
+                .OrderBy(g => g.Key);
+
+            foreach (var group in groupedItems)
             {
-                void TextCell(string text, bool right = false)
-                {
-                    var cell = table.Cell().BorderBottom(0.5f).BorderColor(Colors.Grey.Lighten2).Padding(4);
-                    if (right) cell.AlignRight();
-                    cell.Text(text).FontSize(8);
-                }
+                // Category Header
+                table.Cell().ColumnSpan(10).Background(Colors.Grey.Lighten4).PaddingVertical(4).PaddingHorizontal(4)
+                    .Text(group.Key.ToUpperInvariant())
+                    .FontSize(8).SemiBold().FontColor(S.TextAccent);
 
-                void DecimalCell(decimal? val)
+                foreach (var gItem in group)
                 {
-                    TextCell(val?.ToString("N2", CultureInfo.InvariantCulture) ?? "0.00", true);
-                }
+                    var item = gItem.Item;
+                    
+                    void TextCell(string text, bool right = false)
+                    {
+                        var cell = table.Cell().BorderBottom(0.5f).BorderColor(Colors.Grey.Lighten2).Padding(4);
+                        if (right) cell = cell.AlignRight();
+                        cell.Text(text).FontSize(7);
+                    }
 
-                TextCell(item.Name ?? string.Empty);
-                TextCell(item.ProductType ?? string.Empty);
-                TextCell(ExtractUnitName(item.Unit));
-                
-                DecimalCell(item.CurrentLocationActualStock);
-                DecimalCell(item.CurrentLocationStock);
-                DecimalCell(item.PerUnitPrice);
-                DecimalCell(item.TotalPrice);
-                DecimalCell(item.AverageConversionFactor);
-                DecimalCell(item.PerActualUnitPrice);
+                    string FormatMoney(decimal? val) => val.HasValue ? $"{currency} {val.Value.ToString("N2", CultureInfo.InvariantCulture)}" : "-";
+                    string FormatNumber(decimal? val) => val.HasValue ? val.Value.ToString("N2", CultureInfo.InvariantCulture) : "-";
+
+                    var productName = ProductDisplayHelper.FormatLineItemName(null, item);
+                    var unitName = item.Unit?.Name ?? "";
+                    bool hasTransUnit = item.TransactionUnit != null;
+                    var transUnitName = hasTransUnit ? item.TransactionUnit?.Name ?? unitName : "";
+
+                    TextCell(productName);
+                    TextCell(FormatMoney(item.PerUnitPrice), true);
+                    TextCell(FormatMoney(item.MinUnitPrice), true);
+                    TextCell(FormatMoney(item.MaxUnitPrice), true);
+                    
+                    TextCell(hasTransUnit ? FormatNumber(item.AverageConversionFactor) : "N/A", true);
+                    TextCell($"{FormatNumber(item.Stock)} {unitName}", true);
+                    
+                    // As requested: "Remove Total Price and Put Total Stock Value - ${business.currency} ${product.total_price}"
+                    TextCell(FormatMoney(item.TotalPrice), true);
+                    
+                    TextCell($"{FormatNumber(item.CurrentLocationStock)} {unitName}", true);
+                    TextCell(hasTransUnit ? FormatMoney(item.PerActualUnitPrice) : "N/A", true);
+                    TextCell(hasTransUnit ? $"{FormatNumber(item.CurrentLocationActualStock)} {transUnitName}" : "N/A", true);
+                }
             }
         });
     }
 }
+

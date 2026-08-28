@@ -180,17 +180,34 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
                     });
                 });
 
-                if (doc.TransactionQuantity.HasValue)
+                details.Item().PaddingTop(12).Table(table =>
                 {
-                    details.Item().PaddingTop(8).Row(row =>
+                    table.ColumnsDefinition(cols =>
                     {
-                        row.RelativeItem().Text("Actual Quantity").FontSize(S.FontCaption).FontColor(S.TextMuted);
-                        row.RelativeItem().AlignRight()
-                            .Text($"{doc.TransactionQuantity:0.##} {GetUnitLabel(doc.TransactionUnit)}".Trim())
-                            .FontSize(S.FontCaption).SemiBold();
+                        cols.RelativeColumn();
+                        cols.RelativeColumn();
+                        cols.RelativeColumn();
                     });
-                }
+
+                    void Metric(IContainer c, string label, string val)
+                    {
+                        c.Column(cc =>
+                        {
+                            cc.Item().Text(label).FontSize(S.FontCaption).FontColor(S.TextMuted);
+                            cc.Item().PaddingTop(2).Text(val).FontSize(9).SemiBold();
+                        });
+                    }
+
+                    table.Cell().Element(c => Metric(c, "Total Cost", FormatCurrency(doc.TotalCosts)));
+                    table.Cell().Element(c => Metric(c, "Cost Per Unit", FormatCurrency(doc.CostPerUnit)));
+                    table.Cell().Element(c => Metric(c, "Cost Per Actual Unit", FormatCurrency(doc.CostPerTransactionUnit)));
+
+                    table.Cell().PaddingTop(8).Element(c => Metric(c, "Total Material Cost", FormatCurrency(doc.TotalMaterialCosts)));
+                    table.Cell().PaddingTop(8).Element(c => Metric(c, "Total Operation Cost", FormatCurrency(doc.TotalOperationCosts)));
+                    table.Cell().PaddingTop(8).Element(c => Metric(c, "BOM Depth", doc.BomDepth?.ToString() ?? "0"));
+                });
             });
+
 
             if (!string.IsNullOrWhiteSpace(doc.Description))
             {
@@ -229,55 +246,94 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
         });
     }
 
+    private string FormatCurrency(decimal? val) => val.HasValue ? $"Rs. {val.Value:N2}" : "—";
+
     private void ComposeComponents(IContainer container, BillOfMaterialDto doc)
     {
         container.Column(col =>
         {
-            PdfComponents.SectionTitle(col.Item(), S, "Components");
+            PdfComponents.SectionTitle(col.Item(), S, "Cost Breakdown (Components)");
 
             col.Item().PaddingTop(6).Table(table =>
             {
                 table.ColumnsDefinition(columns =>
                 {
-                    columns.ConstantColumn(20);
-                    columns.RelativeColumn(3);
-                    columns.ConstantColumn(44);
-                    columns.ConstantColumn(40);
-                    columns.ConstantColumn(52);
-                    columns.ConstantColumn(52);
-                    columns.ConstantColumn(44);
+                    columns.RelativeColumn(3); // Component
+                    columns.RelativeColumn(1.2f); // Qty
+                    columns.RelativeColumn(1.2f); // Eff Qty
+                    columns.RelativeColumn(1.2f); // Unit Cost
+                    columns.RelativeColumn(1.2f); // Act Qty
+                    columns.RelativeColumn(1.2f); // Act Unit Cost
+                    columns.RelativeColumn(1.2f); // Total Cost
+                    columns.RelativeColumn(1); // Waste %
+                    columns.RelativeColumn(1); // Conv
+                    columns.RelativeColumn(1.5f); // Source
+                    columns.RelativeColumn(1); // Nested?
                 });
 
                 table.Header(header =>
                 {
-                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(7).SemiBold()).Text("#");
-                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(7).SemiBold()).Text("Component");
-                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(7).SemiBold()).AlignRight().Text("Qty");
-                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(7).SemiBold()).Text("Unit");
-                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(7).SemiBold()).AlignRight().Text("Actual");
-                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(7).SemiBold()).Text("Act. Unit");
-                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(7).SemiBold()).AlignRight().Text("Waste %");
+                    void H(IContainer c, string t, bool right = false)
+                    {
+                        var el = PdfTable.HeaderCellNeutral(c, S).DefaultTextStyle(x => x.FontSize(6).SemiBold());
+                        if (right) el.AlignRight().Text(t); else el.Text(t);
+                    }
+                    H(header.Cell(), "Component");
+                    H(header.Cell(), "Qty", true);
+                    H(header.Cell(), "Eff Qty", true);
+                    H(header.Cell(), "Unit Cost", true);
+                    H(header.Cell(), "Act Qty", true);
+                    H(header.Cell(), "Act Unit Cost", true);
+                    H(header.Cell(), "Total Cost", true);
+                    H(header.Cell(), "Waste %", true);
+                    H(header.Cell(), "Conv Fact", true);
+                    H(header.Cell(), "Source");
+                    H(header.Cell(), "Nested?");
                 });
 
                 int index = 0;
-                foreach (var item in doc.Components)
+                void RenderRow(BomComponentDto item, int depth)
                 {
                     index++;
                     bool shaded = index % 2 == 0;
                     var productName = ProductDisplayHelper.FormatLineItemName(null, item.Product);
+                    
+                    void C(IContainer c, string? text, bool right = false)
+                    {
+                        var cell = c.BorderBottom(1).BorderColor(Colors.Grey.Lighten2).PaddingVertical(3).PaddingHorizontal(4);
+                        if (shaded) cell = cell.Background(Colors.Grey.Lighten4);
+                        var textEl = cell.Text(text ?? "—").FontSize(6);
+                        if (right) textEl.AlignRight();
+                    }
 
-                    PdfTable.RowSingleLine(table.Cell(), S, shaded, index.ToString());
-                    PdfTable.RowDescription(table.Cell(), S, shaded, productName, semiBold: true);
-                    PdfTable.RowSingleLine(table.Cell(), S, shaded, $"{item.Quantity:0.##}", alignRight: true);
-                    PdfTable.RowSingleLine(table.Cell(), S, shaded, GetUnitLabel(item.Unit));
-                    PdfTable.RowSingleLine(
-                        table.Cell(), S, shaded,
-                        item.TransactionQuantity.HasValue ? $"{item.TransactionQuantity:0.##}" : null,
-                        alignRight: true);
-                    PdfTable.RowSingleLine(
-                        table.Cell(), S, shaded,
-                        item.TransactionUnit != null ? GetUnitLabel(item.TransactionUnit) : null);
-                    PdfTable.RowSingleLine(table.Cell(), S, shaded, $"{item.WastagePercent:0.##}%", alignRight: true);
+                    // Indent component name based on depth
+                    var nameCell = table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).PaddingVertical(3).PaddingHorizontal(4);
+                    if (shaded) nameCell = nameCell.Background(Colors.Grey.Lighten4);
+                    nameCell.PaddingLeft(depth * 10).Text(productName).FontSize(6).SemiBold();
+
+                    C(table.Cell(), $"{item.Quantity:0.##} {GetUnitLabel(item.Unit)}", true);
+                    C(table.Cell(), item.EffectiveQuantity.HasValue ? $"{item.EffectiveQuantity:0.##} {GetUnitLabel(item.Unit)}" : "—", true);
+                    C(table.Cell(), FormatCurrency(item.CostPerUnit), true);
+                    C(table.Cell(), item.TransactionQuantity.HasValue ? $"{item.TransactionQuantity:0.##} {GetUnitLabel(item.TransactionUnit)}" : "—", true);
+                    C(table.Cell(), FormatCurrency(item.CostPerTransactionUnit), true);
+                    C(table.Cell(), FormatCurrency(item.LineItemCost), true);
+                    C(table.Cell(), $"{item.WastagePercent:0.##}%", true);
+                    C(table.Cell(), item.Product?.ConversionFactor?.ToString() ?? "—", true);
+                    C(table.Cell(), item.CostSource ?? (item.LivePrice == true ? "Live" : "Stored"));
+                    C(table.Cell(), item.ChildBom != null ? "Yes" : "No");
+
+                    if (item.ChildBom != null && item.ChildBom.Components != null)
+                    {
+                        foreach (var child in item.ChildBom.Components)
+                        {
+                            RenderRow(child, depth + 1);
+                        }
+                    }
+                }
+
+                foreach (var item in doc.Components)
+                {
+                    RenderRow(item, 0);
                 }
             });
         });
@@ -296,6 +352,7 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
                     columns.ConstantColumn(24);
                     columns.RelativeColumn(2);
                     columns.RelativeColumn(3);
+                    columns.RelativeColumn(1.5f);
                 });
 
                 table.Header(header =>
@@ -303,6 +360,7 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
                     PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(S.FontCaption).SemiBold()).Text("#");
                     PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(S.FontCaption).SemiBold()).Text("Operation");
                     PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(S.FontCaption).SemiBold()).Text("Blocked By");
+                    PdfTable.HeaderCellNeutral(header.Cell(), S).DefaultTextStyle(x => x.FontSize(S.FontCaption).SemiBold()).AlignRight().Text("Cost");
                 });
 
                 int index = 0;
@@ -317,6 +375,7 @@ public class BillOfMaterialStandardRenderer : IDocumentRenderer
                     PdfTable.RowSingleLine(table.Cell(), S, shaded, index.ToString());
                     PdfTable.RowDescription(table.Cell(), S, shaded, op.Operation?.Name, semiBold: true);
                     PdfTable.RowSingleLine(table.Cell(), S, shaded, blockedBy);
+                    PdfTable.RowSingleLine(table.Cell(), S, shaded, FormatCurrency(op.ComputedCosts?.TotalCost), alignRight: true);
                 }
             });
         });

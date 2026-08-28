@@ -1,156 +1,190 @@
 {
-  "errors": [],
-  "success": true,
-  "data": {
-    "document": {
-      "_id": "6a704c1f71e1f079f2ac90e1",
-      "number": "BOM-1001",
-      "name": "Safety Match Box Assembly",
-      "type": "Finished Goods",
-      "description": "Standard BOM for producing retail match boxes from raw materials.",
-      "toProduce": {
-        "_id": "6a6ec24559b3315a69f6d056",
-        "name": "SAVERA MATCH BOX",
-        "sku": "SMB-001",
-        "hsn": "3605",
-        "unit": {
-          "_id": "6a6deed17be048f343e2027c",
-          "name": "Number",
-          "value": "nos"
-        },
-        "transactionUnit": {
-          "_id": "6a6deed17be048f343e2027c",
-          "name": "Number",
-          "value": "nos"
-        }
-      },
-      "quantity": 1000,
-      "unit": {
-        "_id": "6a6deed17be048f343e2027c",
-        "name": "Number",
-        "value": "nos"
-      },
-      "transactionQuantity": 1000,
-      "transactionUnit": {
-        "_id": "6a6deed17be048f343e2027c",
-        "name": "Number",
-        "value": "nos"
-      },
-      "components": [
-        {
-          "_id": "6a704c1f71e1f079f2ac90e2",
-          "product": {
-            "_id": "6a6ec24559b3315a69f6d04f",
-            "name": "MATCH STICKS",
-            "sku": "MS-100"
-          },
-          "quantity": 50000,
-          "wastagePercent": 2,
-          "unit": {
-            "_id": "6a6deed17be048f343e2027d",
-            "name": "Pieces",
-            "value": "pcs"
-          },
-          "transactionQuantity": 51000,
-          "transactionUnit": {
-            "_id": "6a6deed17be048f343e2027d",
-            "name": "Pieces",
-            "value": "pcs"
-          }
-        },
-        {
-          "_id": "6a704c1f71e1f079f2ac90e3",
-          "product": {
-            "_id": "6a6ec24559b3315a69f6d058",
-            "name": "OUTER CARTON",
-            "sku": "OC-200"
-          },
-          "quantity": 1000,
-          "wastagePercent": 1,
-          "unit": {
-            "_id": "6a6deed17be048f343e2027c",
-            "name": "Number",
-            "value": "nos"
-          },
-          "transactionQuantity": 1010,
-          "transactionUnit": {
-            "_id": "6a6deed17be048f343e2027c",
-            "name": "Number",
-            "value": "nos"
-          }
-        }
-      ],
-      "operations": [
-        {
-          "_id": "6a704c1f71e1f079f2ac90e4",
-          "operation": {
-            "_id": "6a704b1f71e1f079f2ac90d1",
-            "name": "Stick Coating"
-          },
-          "blockedByOperations": []
-        },
-        {
-          "_id": "6a704c1f71e1f079f2ac90e5",
-          "operation": {
-            "_id": "6a704b1f71e1f079f2ac90d2",
-            "name": "Box Packing"
-          },
-          "blockedByOperations": [
-            {
-              "_id": "6a704b1f71e1f079f2ac90d1",
-              "name": "Stick Coating"
-            }
-          ]
-        }
-      ],
-      "fields": [
-        {
-          "label": "Production Line",
-          "value": "Line A"
-        },
-        {
-          "label": "Batch Size",
-          "value": 1000
-        }
-      ],
-      "notes": "Use approved suppliers only for match sticks.",
-      "terms": "Internal manufacturing use only.",
-      "signature": {
-        "_id": "6a67d581541fb1e1245d29c4",
-        "name": "Production Manager",
-        "url": "https://next-web-erps-acls.s3.eu-north-1.amazonaws.com/uploads/6a67984e832bbd4b741cc108/signatures/signature.png"
-      },
-      "status": "Approved",
-      "createdAt": "2026-08-05T10:00:00.000Z",
-      "updatedAt": "2026-08-05T11:30:00.000Z"
-    },
-    "business": {
-      "_id": "6a679baab34e60bbcaa13869",
-      "name": "SARRAF INDUSTRIES",
-      "description": "MANUFACTURER OF SAFETY MATCHES",
-      "email": "sarrafindustries1985@gmail.com",
-      "phone": "+91 9443152578",
-      "website": "www.aadisarrafinternational.com",
-      "address": {
-        "streetAddress": "Sidco Industrial Estate",
-        "apartment": "Plot no. 61",
-        "city": "Kovilpati",
-        "state": "Tamil Nadu",
-        "postalCode": "628501",
-        "country": "India"
-      },
-      "gst": "33ABRPJ6963H1Z8",
-      "baseCurrency": "INR"
-    },
-    "settings": {
-      "_id": "6a704a1671e1f079f2ac9093",
-      "prefix": "BOM",
-      "counter": 1002,
-      "template": "{{prefix}}-{{counter}}",
-      "types": ["Finished Goods", "Semi Finished"],
-      "status": "active"
-    }
-  },
-  "message": "Retrieved successfully for print",
-  "pagination": {}
+    "errors":  [
+
+               ],
+    "success":  true,
+    "data":  {
+                 "document":  {
+                                  "_id":  "6a704c1f71e1f079f2ac90e1",
+                                  "number":  "BOM-1001",
+                                  "name":  "Safety Match Box Assembly",
+                                  "type":  "Finished Goods",
+                                  "description":  "Standard BOM for producing retail match boxes from raw materials.",
+                                  "toProduce":  {
+                                                    "_id":  "6a6ec24559b3315a69f6d056",
+                                                    "name":  "SAVERA MATCH BOX",
+                                                    "sku":  "SMB-001",
+                                                    "hsn":  "3605",
+                                                    "unit":  {
+                                                                 "_id":  "6a6deed17be048f343e2027c",
+                                                                 "name":  "Number",
+                                                                 "value":  "nos"
+                                                             },
+                                                    "transactionUnit":  {
+                                                                            "_id":  "6a6deed17be048f343e2027c",
+                                                                            "name":  "Number",
+                                                                            "value":  "nos"
+                                                                        }
+                                                },
+                                  "quantity":  1000,
+                                  "unit":  {
+                                               "_id":  "6a6deed17be048f343e2027c",
+                                               "name":  "Number",
+                                               "value":  "nos"
+                                           },
+                                  "transactionQuantity":  1000,
+                                  "transactionUnit":  {
+                                                          "_id":  "6a6deed17be048f343e2027c",
+                                                          "name":  "Number",
+                                                          "value":  "nos"
+                                                      },
+                                  "components":  [
+                                                     {
+                                                         "_id":  "6a704c1f71e1f079f2ac90e2",
+                                                         "product":  {
+                                                                         "_id":  "6a6ec24559b3315a69f6d04f",
+                                                                         "name":  "MATCH STICKS",
+                                                                         "sku":  "MS-100"
+                                                                     },
+                                                         "quantity":  50000,
+                                                         "wastagePercent":  2,
+                                                         "unit":  {
+                                                                      "_id":  "6a6deed17be048f343e2027d",
+                                                                      "name":  "Pieces",
+                                                                      "value":  "pcs"
+                                                                  },
+                                                         "transactionQuantity":  51000,
+                                                         "transactionUnit":  {
+                                                                                 "_id":  "6a6deed17be048f343e2027d",
+                                                                                 "name":  "Pieces",
+                                                                                 "value":  "pcs"
+                                                                             },
+                                                         "cost_per_unit":  10,
+                                                         "cost_per_transaction_unit":  10,
+                                                         "line_item_cost":  500,
+                                                         "cost_source":  "FIFO"
+                                                     },
+                                                     {
+                                                         "_id":  "6a704c1f71e1f079f2ac90e3",
+                                                         "product":  {
+                                                                         "_id":  "6a6ec24559b3315a69f6d058",
+                                                                         "name":  "OUTER CARTON",
+                                                                         "sku":  "OC-200"
+                                                                     },
+                                                         "quantity":  1000,
+                                                         "wastagePercent":  1,
+                                                         "unit":  {
+                                                                      "_id":  "6a6deed17be048f343e2027c",
+                                                                      "name":  "Number",
+                                                                      "value":  "nos"
+                                                                  },
+                                                         "transactionQuantity":  1010,
+                                                         "transactionUnit":  {
+                                                                                 "_id":  "6a6deed17be048f343e2027c",
+                                                                                 "name":  "Number",
+                                                                                 "value":  "nos"
+                                                                             },
+                                                         "cost_per_unit":  10,
+                                                         "cost_per_transaction_unit":  10,
+                                                         "line_item_cost":  500,
+                                                         "cost_source":  "FIFO"
+                                                     }
+                                                 ],
+                                  "operations":  [
+                                                     {
+                                                         "_id":  "6a704c1f71e1f079f2ac90e4",
+                                                         "operation":  {
+                                                                           "_id":  "6a704b1f71e1f079f2ac90d1",
+                                                                           "name":  "Stick Coating"
+                                                                       },
+                                                         "blockedByOperations":  [
+
+                                                                                 ],
+                                                         "computedCosts":  {
+                                                                               "totalCost":  5000
+                                                                           }
+                                                     },
+                                                     {
+                                                         "_id":  "6a704c1f71e1f079f2ac90e5",
+                                                         "operation":  {
+                                                                           "_id":  "6a704b1f71e1f079f2ac90d2",
+                                                                           "name":  "Box Packing"
+                                                                       },
+                                                         "blockedByOperations":  [
+                                                                                     {
+                                                                                         "_id":  "6a704b1f71e1f079f2ac90d1",
+                                                                                         "name":  "Stick Coating"
+                                                                                     }
+                                                                                 ],
+                                                         "computedCosts":  {
+                                                                               "totalCost":  5000
+                                                                           }
+                                                     }
+                                                 ],
+                                  "fields":  [
+                                                 {
+                                                     "label":  "Production Line",
+                                                     "value":  "Line A"
+                                                 },
+                                                 {
+                                                     "label":  "Batch Size",
+                                                     "value":  1000
+                                                 }
+                                             ],
+                                  "notes":  "Use approved suppliers only for match sticks.",
+                                  "terms":  "Internal manufacturing use only.",
+                                  "signature":  {
+                                                    "_id":  "6a67d581541fb1e1245d29c4",
+                                                    "name":  "Production Manager",
+                                                    "url":  "https://next-web-erps-acls.s3.eu-north-1.amazonaws.com/uploads/6a67984e832bbd4b741cc108/signatures/signature.png"
+                                                },
+                                  "status":  "Approved",
+                                  "createdAt":  "2026-08-05T10:00:00.000Z",
+                                  "updatedAt":  "2026-08-05T11:30:00.000Z",
+                                  "total_costs":  50000,
+                                  "cost_per_unit":  50,
+                                  "cost_per_transaction_unit":  50,
+                                  "total_material_costs":  40000,
+                                  "total_operation_costs":  10000,
+                                  "bom_depth":  2,
+                                  "reconciliation":  {
+                                                         "sumComponents":  40000,
+                                                         "isReconciled":  true,
+                                                         "reportedTotal":  40000
+                                                     }
+                              },
+                 "business":  {
+                                  "_id":  "6a679baab34e60bbcaa13869",
+                                  "name":  "SARRAF INDUSTRIES",
+                                  "description":  "MANUFACTURER OF SAFETY MATCHES",
+                                  "email":  "sarrafindustries1985@gmail.com",
+                                  "phone":  "+91 9443152578",
+                                  "website":  "www.aadisarrafinternational.com",
+                                  "address":  {
+                                                  "streetAddress":  "Sidco Industrial Estate",
+                                                  "apartment":  "Plot no. 61",
+                                                  "city":  "Kovilpati",
+                                                  "state":  "Tamil Nadu",
+                                                  "postalCode":  "628501",
+                                                  "country":  "India"
+                                              },
+                                  "gst":  "33ABRPJ6963H1Z8",
+                                  "baseCurrency":  "INR"
+                              },
+                 "settings":  {
+                                  "_id":  "6a704a1671e1f079f2ac9093",
+                                  "prefix":  "BOM",
+                                  "counter":  1002,
+                                  "template":  "{{prefix}}-{{counter}}",
+                                  "types":  [
+                                                "Finished Goods",
+                                                "Semi Finished"
+                                            ],
+                                  "status":  "active"
+                              }
+             },
+    "message":  "Retrieved successfully for print",
+    "pagination":  {
+
+                   }
 }

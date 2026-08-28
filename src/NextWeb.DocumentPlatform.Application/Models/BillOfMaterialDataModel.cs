@@ -78,7 +78,27 @@ public class BillOfMaterialDto
 
     [JsonPropertyName("updatedAt")]
     public DateTime? UpdatedAt { get; set; }
+
+    [JsonPropertyName("total_costs")]
+    public decimal? TotalCosts { get; set; }
+
+    [JsonPropertyName("cost_per_unit")]
+    public decimal? CostPerUnit { get; set; }
+
+    [JsonPropertyName("cost_per_transaction_unit")]
+    public decimal? CostPerTransactionUnit { get; set; }
+
+    [JsonPropertyName("total_material_costs")]
+    public decimal? TotalMaterialCosts { get; set; }
+
+    [JsonPropertyName("total_operation_costs")]
+    public decimal? TotalOperationCosts { get; set; }
+
+    [JsonPropertyName("bom_depth")]
+    public int? BomDepth { get; set; }
 }
+
+
 
 public class BomComponentDto
 {
@@ -107,7 +127,34 @@ public class BomComponentDto
     public string? SelectedByCondition { get; set; }
 
     [JsonPropertyName("childBom")]
-    public BomChildReferenceDto? ChildBom { get; set; }
+    public BillOfMaterialDto? ChildBom { get; set; }
+
+    [JsonPropertyName("effectiveQuantity")]
+    public decimal? EffectiveQuantity { get; set; }
+
+    [JsonPropertyName("transactionQuantityWastage")]
+    public decimal? TransactionQuantityWastage { get; set; }
+
+    [JsonPropertyName("effectiveTransactionQuantity")]
+    public decimal? EffectiveTransactionQuantity { get; set; }
+
+    [JsonPropertyName("cost_per_unit")]
+    public decimal? CostPerUnit { get; set; }
+
+    [JsonPropertyName("cost_per_transaction_unit")]
+    public decimal? CostPerTransactionUnit { get; set; }
+
+    [JsonPropertyName("line_item_cost")]
+    public decimal? LineItemCost { get; set; }
+
+    [JsonPropertyName("cost_source")]
+    public string? CostSource { get; set; }
+
+    [JsonPropertyName("price")]
+    public decimal? Price { get; set; }
+
+    [JsonPropertyName("livePrice")]
+    public bool? LivePrice { get; set; }
 }
 
 public class BomChildReferenceDto
@@ -132,6 +179,15 @@ public class BomOperationDto
 
     [JsonPropertyName("blockedByOperations")]
     public List<ManufacturingOperationDto> BlockedByOperations { get; set; } = new();
+
+    [JsonPropertyName("computedCosts")]
+    public BomOperationComputedCostsDto? ComputedCosts { get; set; }
+}
+
+public class BomOperationComputedCostsDto
+{
+    [JsonPropertyName("totalCost")]
+    public decimal TotalCost { get; set; }
 }
 
 public class ManufacturingOperationDto
